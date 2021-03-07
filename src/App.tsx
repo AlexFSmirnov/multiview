@@ -1,10 +1,14 @@
 import { createMuiTheme, ThemeProvider, CssBaseline } from '@material-ui/core';
-import { AppBar, PlaybackControlBar } from './components';
+import { red } from '@material-ui/core/colors';
+import { AppBar, PlaybackControlBar, VideoGridView } from './components';
 import { AppContainer, GlobalStyle } from './style';
 
 const theme = createMuiTheme({
     palette: {
         type: 'dark',
+        primary: {
+            main: red['700'],
+        },
     },
 });
 
@@ -17,6 +21,7 @@ const App = () => {
             <CssBaseline />
             <AppContainer>
                 <AppBar />
+                <VideoGridView />
                 <PlaybackControlBar />
             </AppContainer>
         </ThemeProvider>

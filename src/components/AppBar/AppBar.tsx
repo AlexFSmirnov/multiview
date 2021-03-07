@@ -1,11 +1,16 @@
-import { AppBar as MaterialAppBar, Toolbar, Typography } from '@material-ui/core';
+import { AppBar as MaterialAppBar, Button, Toolbar, Typography } from '@material-ui/core';
 import { ViewQuilt } from '@material-ui/icons';
 
 interface AppBarProps {
-
+    onAddVideoClick?: () => void;
 }
 
-const AppBar: React.FC<AppBarProps> = ({}) => {
+const AppBar: React.FC<AppBarProps> = ({ onAddVideoClick }) => {
+    const handleAddVideoClick = () => {
+        if (onAddVideoClick) {
+            onAddVideoClick();
+        }
+    };
 
     return (
         <MaterialAppBar position="static" color="inherit">
@@ -15,6 +20,8 @@ const AppBar: React.FC<AppBarProps> = ({}) => {
                 <Typography variant="h6">
                     Multiview
                 </Typography>
+                <div style={{ flex: 1 }} />
+                <Button variant="contained" color="primary" onClick={handleAddVideoClick}>Add video</Button>
             </Toolbar>
         </MaterialAppBar>
     );

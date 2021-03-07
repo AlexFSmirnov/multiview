@@ -35,10 +35,10 @@ const VolumeControl: React.FC<VolumeControlProps> = ({ volume, isMuted, onVolume
     const [isMouseOver, setIsMouseOver] = useState(false);
     const [isAdjustingVolume, setIsAdjustingVolume] = useState(false);
 
-    const handleVolumeChange = (_: React.ChangeEvent<{}>, v: any) => {
-        console.log(v);
+    const handleVolumeChange = (_: React.ChangeEvent<{}>, v: number | number[]) => {
+        const parsedVolume = Array.isArray(v) ? v[0] : v;
         if (onVolumeChange) {
-            onVolumeChange(v);
+            onVolumeChange(parsedVolume || 0);
         }
     };
 
