@@ -2,13 +2,13 @@ import { AppBar as MaterialAppBar, Button, Toolbar, Typography } from '@material
 import { ViewQuilt } from '@material-ui/icons';
 
 interface AppBarProps {
-    onAddVideoClick?: () => void;
+    onAddVideosClick?: () => void;
 }
 
-const AppBar: React.FC<AppBarProps> = ({ onAddVideoClick }) => {
-    const handleAddVideoClick = () => {
-        if (onAddVideoClick) {
-            onAddVideoClick();
+const AppBar: React.FC<AppBarProps> = ({ onAddVideosClick }) => {
+    const handleAddVideosClick = () => {
+        if (onAddVideosClick) {
+            onAddVideosClick();
         }
     };
 
@@ -21,7 +21,7 @@ const AppBar: React.FC<AppBarProps> = ({ onAddVideoClick }) => {
                     Multiview
                 </Typography>
                 <div style={{ flex: 1 }} />
-                <Button variant="contained" color="primary" onClick={handleAddVideoClick}>Add video</Button>
+                <Button variant="contained" color="primary" onClick={handleAddVideosClick}>Add videos</Button>
             </Toolbar>
         </MaterialAppBar>
     );
