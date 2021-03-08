@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createMuiTheme, ThemeProvider, CssBaseline } from '@material-ui/core';
+import { unstable_createMuiStrictModeTheme as createMuiTheme, ThemeProvider, CssBaseline } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { AddVideosDialog, AppBar, PlaybackControlBar, VideoGridView } from './components';
 import { AppContainer, GlobalStyle } from './style';

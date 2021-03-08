@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+export const UrlTextFieldContainer = styled.div`
+    padding-top: 8px;
+`;
+
 export const OrDividerContainer = styled.div`
     display: flex;
     flex-direction: row;
