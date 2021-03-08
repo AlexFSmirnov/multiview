@@ -45,9 +45,9 @@ const VideoGridView: React.FC<VideoGridViewProps> = ({ padding = 0 }) => {
     
     return (
         <VideoGridViewContainer ref={containerRef}>
-            {Array.from({ length: 4 }).map(v => (
+            {/* {Array.from({ length: 4 }).map(v => (
                 <VideoPlayer width={playerSize.width} height={playerSize.height} />
-            ))}
+            ))} */}
         </VideoGridViewContainer>
     );
 };
