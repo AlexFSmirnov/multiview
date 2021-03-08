@@ -21,7 +21,7 @@ const App = () => {
             <CssBaseline />
             <AppContainer>
                 <AppBar />
-                <VideoGridView />
+                <VideoGridView padding={8} />
                 <PlaybackControlBar />
             </AppContainer>
         </ThemeProvider>
