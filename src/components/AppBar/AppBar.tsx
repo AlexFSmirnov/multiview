@@ -21,7 +21,7 @@ const AppBar: React.FC<AppBarProps> = ({ onAddVideosClick }) => {
                     Multiview
                 </Typography>
                 <div style={{ flex: 1 }} />
-                <Button variant="contained" color="primary" onClick={handleAddVideosClick}>Add videos</Button>
+                <Button variant="outlined" color="default" onClick={handleAddVideosClick}>Add videos</Button>
             </Toolbar>
         </MaterialAppBar>
     );

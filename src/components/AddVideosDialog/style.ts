@@ -39,14 +39,12 @@ export const AddFilesContainer = styled.div<AddFilesContainerProps>`
     align-items: center;
 
     outline: none;
-    border-width: 1px;
     border-radius: 8px;
-    border-style: dashed;
-    border-color: ${props => {
-        if (props.isDragActive) {
-            return props.activeColor;
-        }
+    border: 1px dashed rgba(255, 255, 255, 0.7);
+    color: white;
 
-        return 'rgba(255, 255, 255, 0.7)';
-    }}
+    ${props => props.isDragActive && `
+        border-color: ${props.activeColor};
+        color: ${props.activeColor};
+    `}
 `;
