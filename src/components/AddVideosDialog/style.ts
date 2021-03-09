@@ -48,3 +48,15 @@ export const AddFilesContainer = styled.div<AddFilesContainerProps>`
         color: ${props.activeColor};
     `}
 `;
+
+export const FilesListContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+`;
+
+export const FileItemContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
