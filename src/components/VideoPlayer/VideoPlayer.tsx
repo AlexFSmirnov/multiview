@@ -1,14 +1,15 @@
 import ReactPlayer from 'react-player';
-import { Button } from '@material-ui/core';
+import { Video } from '../../redux/actions/videos';
 
 interface VideoPlayerProps {
+    video: Video;
     width: number;
     height: number;
 }
 
-const VideoPlayer: React.FC<VideoPlayerProps> = ({ width, height }) => {
+const VideoPlayer: React.FC<VideoPlayerProps> = ({ video, width, height }) => {
     const playerProps = {
-        url: 'https://www.youtube.com/watch?v=ODY6JWzS8WU',
+        url: video.url,
         controls: true,
         width,
         height,
@@ -23,7 +24,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({ width, height }) => {
 
     return (
         <ReactPlayer {...playerProps} />
-        // <div style={{ width, height, minWidth: width, minHeight: height, backgroundColor: 'white', border: '1px solid red' }} />
     );
 };
 

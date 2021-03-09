@@ -38,7 +38,6 @@ export const AddFilesContainer = styled.div<AddFilesContainerProps>`
     justify-content: center;
     align-items: center;
 
-    outline: none;
     border-radius: 8px;
     border: 1px dashed rgba(255, 255, 255, 0.7);
     color: white;

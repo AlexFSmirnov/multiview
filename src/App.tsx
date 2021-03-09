@@ -1,6 +1,9 @@
 import { useState } from 'react';
+import { connect } from 'react-redux';
 import { unstable_createMuiStrictModeTheme as createMuiTheme, ThemeProvider, CssBaseline } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
+import { State } from './redux/types';
+import { Video } from './redux/actions/videos';
 import { AddVideosDialog, AppBar, PlaybackControlBar, VideoGridView } from './components';
 import { AppContainer, GlobalStyle } from './style';
 
@@ -13,8 +16,11 @@ const theme = createMuiTheme({
     },
 });
 
+interface StateProps {
+    videos: Record<string, Video>;
+}
 
-const App = () => {
+const App: React.FC<StateProps> = ({ videos }) => {
     const [isAddVideosDialogOpen, setIsAddVideosDialogOpen] = useState(true);
 
     const openAddVideosDialog = () => setIsAddVideosDialogOpen(true);
@@ -26,7 +32,7 @@ const App = () => {
             <CssBaseline />
             <AppContainer>
                 <AppBar onAddVideosClick={openAddVideosDialog} />
-                <VideoGridView padding={8} />
+                <VideoGridView videos={videos} padding={8} />
                 <PlaybackControlBar />
             </AppContainer>
             <AddVideosDialog open={isAddVideosDialogOpen} onClose={closeAddVideosDialog} />
@@ -34,4 +40,8 @@ const App = () => {
     );
 };
 
-export default App;
+export default connect(
+    (state: State) => ({
+        videos: state.videos,
+    }),
+)(App);

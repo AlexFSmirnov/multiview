@@ -9,5 +9,5 @@ export const VideoGridViewContainer = styled.div`
     justify-content: space-around;
     align-items: center;
 
-    border: 1px solid blue;
+    overflow: hidden;
 `;
