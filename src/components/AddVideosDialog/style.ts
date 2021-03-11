@@ -46,6 +46,8 @@ export const AddFilesContainer = styled.div<AddFilesContainerProps>`
         border-color: ${props.activeColor};
         color: ${props.activeColor};
     `}
+
+    cursor: pointer;
 `;
 
 export const FilesListContainer = styled.div`

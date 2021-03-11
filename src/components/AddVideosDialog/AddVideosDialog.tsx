@@ -22,7 +22,7 @@ export type AddVideosDialogProps = OwnProps & DispatchProps;
 const AddVideosDialog: React.FC<AddVideosDialogProps> = ({ open, onClose, addVideos }) => {
     const theme = useTheme();
 
-    const [urls, setUrls] = useState<Record<string, Video>>({ [uuidv4()]: { url: '' } });
+    const [urls, setUrls] = useState<Record<string, Video>>({ [uuidv4()]: { url: 'https://www.youtube.com/watch?v=ODY6JWzS8WU' } });
     const [files, setFiles] = useState<Record<string, Video>>({});
     const [fileNames, setFileNames] = useState<Record<string, string>>({});
 
