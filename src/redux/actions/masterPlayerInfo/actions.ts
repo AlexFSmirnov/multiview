@@ -1,5 +1,6 @@
 import {
     MASTER_PLAYER_READY,
+    MASTER_PLAYER_NOT_READY,
     MASTER_PLAYER_STARTED_PLAYING,
     MASTER_PLAYER_STOPPED_PLAYING,
     MASTER_PLAYER_STARTED_BUFFERING,
@@ -11,6 +12,7 @@ import {
     MASTER_PLAYER_PROGRESS_UPDATED,
     MASTER_PLAYER_VOLUME_UPDATED,
     MasterPlayerReadyAction,
+    MasterPlayerNotReadyAction,
     MasterPlayerStartedPlayingAction,
     MasterPlayerStoppedPlayingAction,
     MasterPlayerStartedBufferingAction,
@@ -25,6 +27,10 @@ import {
 
 export const masterPlayerReady = (): MasterPlayerReadyAction => ({
     type: MASTER_PLAYER_READY,
+});
+
+export const masterPlayerNotReady = (): MasterPlayerNotReadyAction => ({
+    type: MASTER_PLAYER_NOT_READY,
 });
 
 export const masterPlayerStartPlaying = (): MasterPlayerStartedPlayingAction => ({

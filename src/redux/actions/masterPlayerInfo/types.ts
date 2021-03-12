@@ -1,4 +1,5 @@
 export const MASTER_PLAYER_READY = 'MASTER_PLAYER_READY';
+export const MASTER_PLAYER_NOT_READY = 'MASTER_PLAYER_NOT_READY';
 export const MASTER_PLAYER_STARTED_PLAYING = 'MASTER_PLAYER_STARTED_PLAYING';
 export const MASTER_PLAYER_STOPPED_PLAYING = 'MASTER_PLAYER_STOPPED_PLAYING';
 export const MASTER_PLAYER_STARTED_BUFFERING = 'MASTER_PLAYER_STARTED_BUFFERING';
@@ -12,6 +13,10 @@ export const MASTER_PLAYER_VOLUME_UPDATED = 'MASTER_PLAYER_VOLUME_UPDATED';
 
 export interface MasterPlayerReadyAction {
     type: typeof MASTER_PLAYER_READY;
+}
+
+export interface MasterPlayerNotReadyAction {
+    type: typeof MASTER_PLAYER_NOT_READY;
 }
 
 export interface MasterPlayerStartedPlayingAction {
@@ -75,7 +80,7 @@ export interface MasterPlayerVolumeUpdatedAction {
 }
 
 export type MasterPlayerInfoAction = (
-    MasterPlayerReadyAction | MasterPlayerStartedPlayingAction | MasterPlayerStoppedPlayingAction | MasterPlayerStartedBufferingAction |
-    MasterPlayerStoppedBufferingAction | MasterPlayerEndedAction | MasterPlayerDurationUpdatedAction | MasterPlayerPlayedTimeUpdatedAction |
-    MasterPlayerLoadedTimeUpdatedAction | MasterPlayerProgressUpdatedAction | MasterPlayerVolumeUpdatedAction
+    MasterPlayerReadyAction | MasterPlayerNotReadyAction | MasterPlayerStartedPlayingAction | MasterPlayerStoppedPlayingAction |
+    MasterPlayerStartedBufferingAction | MasterPlayerStoppedBufferingAction | MasterPlayerEndedAction | MasterPlayerDurationUpdatedAction |
+    MasterPlayerPlayedTimeUpdatedAction | MasterPlayerLoadedTimeUpdatedAction | MasterPlayerProgressUpdatedAction | MasterPlayerVolumeUpdatedAction
 );

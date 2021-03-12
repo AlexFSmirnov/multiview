@@ -14,12 +14,18 @@ import {
     playerUpdateProgress,
     playerUpdateVolume,
 } from '../../redux/actions/playersInfo';
+import { State } from '../../redux/types';
 
 interface OwnProps {
     id: string;
     video: Video;
     width: number;
     height: number;
+}
+
+interface StateProps {
+    isPlaying: boolean;
+    isMasterBuffering: boolean;
 }
 
 interface DispatchProps {
@@ -35,13 +41,15 @@ interface DispatchProps {
     playerUpdateVolume: typeof playerUpdateVolume;
 }
 
-type VideoPlayerProps = OwnProps & DispatchProps;
+type VideoPlayerProps = OwnProps & StateProps & DispatchProps;
 
 const VideoPlayer: React.FC<VideoPlayerProps> = ({
     id,
     video,
     width,
     height,
+    isPlaying,
+    isMasterBuffering,
     initializePlayer,
     playerReady,
     playerStartPlaying,
@@ -58,20 +66,19 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     }, [id, initializePlayer]);
 
     const handlePlayerReady = () => playerReady(id);
+    const handlePlayerBuffer = () => playerStartBuffering(id);
+    const handlePlayerEnded = () => playerEndVideo(id);
 
     const handlePlayerPlay = () => {
         playerStartPlaying(id);
         playerStopBuffering(id);
     };
 
-    const handlePlayerPause = () => playerStopPlaying(id);
-
-    const handlePlayerBuffer = () => {
-        playerStartBuffering(id);
-        playerStopPlaying(id);
+    const handlePlayerPause = () => {
+        if (!isMasterBuffering) {
+            playerStopPlaying(id);
+        }
     };
-
-    const handlePlayerEnded = () => playerEndVideo(id);
 
     const handlePlayerDuration = (durationSeconds: number) => playerUpdateDuration(id, { durationSeconds });
 
@@ -84,6 +91,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         controls: true,
         width,
         height,
+        playing: isPlaying && !isMasterBuffering,
         onReady: handlePlayerReady,
         onPlay: handlePlayerPlay,
         onPause: handlePlayerPause,
@@ -105,8 +113,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     );
 };
 
-export default connect(
-    null,
+export default connect<StateProps, DispatchProps, OwnProps, State>(
+    (state, ownProps) => ({
+        isPlaying: state.playersInfo[ownProps.id] ? state.playersInfo[ownProps.id].isPlaying : false,
+        isMasterBuffering: state.masterPlayerInfo.isBuffering,
+    }),
     {
         initializePlayer,
         playerReady,
