@@ -23,6 +23,7 @@ export const PLAYER_VIDEO_ENDED = 'PLAYER_VIDEO_ENDED';
 export const PLAYER_DURATION_UPDATED = 'PLAYER_DURATION_UPDATED';
 export const PLAYER_PLAYED_TIME_UPDATED = 'PLAYER_PLAYED_TIME_UPDATED';
 export const PLAYER_LOADED_TIME_UPDATED = 'PLAYER_LOADED_TIME_UPDATED';
+export const PLAYER_PROGRESS_UPDATED = 'PLAYER_PROGRESS_UPDATED';
 export const PLAYER_VOLUME_UPDATED = 'PLAYER_VOLUME_UPDATED';
 
 interface WithId {
@@ -87,6 +88,16 @@ export interface PlayerLoadedTimeUpdatedAction {
     };
 }
 
+export interface PlayerProgressUpdatedAction {
+    type: typeof PLAYER_PROGRESS_UPDATED;
+    payload: WithId & {
+        playedSeconds: number;
+        playedFraction: number;
+        loadedSeconds: number;
+        loadedFraction: number;
+    };
+}
+
 export interface PlayerVolumeUpdatedAction {
     type: typeof PLAYER_VOLUME_UPDATED;
     payload: WithId & {
@@ -97,5 +108,5 @@ export interface PlayerVolumeUpdatedAction {
 export type PlayersInfoAction = (
     PlayerInitializedAction | PlayerReadyAction | PlayerStartedPlayingAction | PlayerStoppedPlayingAction |
     PlayerStartedBufferingAction | PlayerStoppedBufferingAction | PlayerVideoEndedAction | PlayerDurationUpdatedAction |
-    PlayerPlayedTimeUpdatedAction | PlayerLoadedTimeUpdatedAction | PlayerVolumeUpdatedAction
+    PlayerPlayedTimeUpdatedAction | PlayerLoadedTimeUpdatedAction | PlayerProgressUpdatedAction | PlayerVolumeUpdatedAction
 );

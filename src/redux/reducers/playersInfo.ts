@@ -11,6 +11,7 @@ import {
     PLAYER_DURATION_UPDATED,
     PLAYER_PLAYED_TIME_UPDATED,
     PLAYER_LOADED_TIME_UPDATED,
+    PLAYER_PROGRESS_UPDATED,
     PLAYER_VOLUME_UPDATED,
 } from '../actions/playersInfo';
 
@@ -92,6 +93,13 @@ export const playersInfoReducer = (state = playersInfoInitialState, action: Play
                 ...state[action.payload.id],
                 loadedSeconds,
                 loadedFraction,
+            } };
+
+        case PLAYER_PROGRESS_UPDATED:
+            const { id, ...progress } = action.payload;
+            return { ...state, [action.payload.id]: {
+                ...state[action.payload.id],
+                ...progress,
             } };
 
         case PLAYER_VOLUME_UPDATED:

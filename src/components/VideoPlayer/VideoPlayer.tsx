@@ -11,8 +11,7 @@ import {
     playerStopBuffering,
     playerEndVideo,
     playerUpdateDuration,
-    playerUpdatePlayedTime,
-    playerUpdateLoadedTime,
+    playerUpdateProgress,
     playerUpdateVolume,
 } from '../../redux/actions/playersInfo';
 
@@ -32,8 +31,7 @@ interface DispatchProps {
     playerStopBuffering: typeof playerStopBuffering;
     playerEndVideo: typeof playerEndVideo;
     playerUpdateDuration: typeof playerUpdateDuration;
-    playerUpdatePlayedTime: typeof playerUpdatePlayedTime;
-    playerUpdateLoadedTime: typeof playerUpdateLoadedTime;
+    playerUpdateProgress: typeof playerUpdateProgress;
     playerUpdateVolume: typeof playerUpdateVolume;
 }
 
@@ -52,8 +50,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     playerStopBuffering,
     playerEndVideo,
     playerUpdateDuration,
-    playerUpdatePlayedTime,
-    playerUpdateLoadedTime,
+    playerUpdateProgress,
     playerUpdateVolume,
 }) => {
     useEffect(() => {
@@ -79,8 +76,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const handlePlayerDuration = (durationSeconds: number) => playerUpdateDuration(id, { durationSeconds });
 
     const handlePlayerProgress = ({ played, loaded, playedSeconds, loadedSeconds }: { played: number; loaded: number; playedSeconds: number; loadedSeconds: number }) => {
-        playerUpdatePlayedTime(id, { playedSeconds, playedFraction: played });
-        playerUpdateLoadedTime(id, { loadedSeconds, loadedFraction: loaded });
+        playerUpdateProgress(id, { playedSeconds, playedFraction: played, loadedSeconds, loadedFraction: loaded });
     };
 
     const playerProps = {
@@ -120,8 +116,7 @@ export default connect(
         playerStopBuffering,
         playerEndVideo,
         playerUpdateDuration,
-        playerUpdatePlayedTime,
-        playerUpdateLoadedTime,
+        playerUpdateProgress,
         playerUpdateVolume,
     },
 )(VideoPlayer);

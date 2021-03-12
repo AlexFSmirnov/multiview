@@ -9,6 +9,7 @@ import {
     PlayerDurationUpdatedAction,
     PlayerPlayedTimeUpdatedAction,
     PlayerLoadedTimeUpdatedAction,
+    PlayerProgressUpdatedAction,
     PlayerVolumeUpdatedAction,
     PLAYER_INITIALIZED,
     PLAYER_READY,
@@ -20,6 +21,7 @@ import {
     PLAYER_DURATION_UPDATED,
     PLAYER_PLAYED_TIME_UPDATED,
     PLAYER_LOADED_TIME_UPDATED,
+    PLAYER_PROGRESS_UPDATED,
     PLAYER_VOLUME_UPDATED,
 } from './types';
 
@@ -63,14 +65,29 @@ export const playerUpdateDuration = (id: string, { durationSeconds }: { duration
     payload: { id, durationSeconds },
 });
 
-export const playerUpdatePlayedTime = (id: string, { playedSeconds, playedFraction }: { playedSeconds: number; playedFraction: number }): PlayerPlayedTimeUpdatedAction => ({
+interface PlayedProgress {
+    playedSeconds: number;
+    playedFraction: number;
+}
+
+export const playerUpdatePlayedTime = (id: string, { playedSeconds, playedFraction }: PlayedProgress): PlayerPlayedTimeUpdatedAction => ({
     type: PLAYER_PLAYED_TIME_UPDATED,
     payload: { id, playedSeconds, playedFraction },
 });
 
-export const playerUpdateLoadedTime = (id: string, { loadedSeconds, loadedFraction }: { loadedSeconds: number; loadedFraction: number }): PlayerLoadedTimeUpdatedAction => ({
+interface LoadedProgress {
+    loadedSeconds: number;
+    loadedFraction: number;
+}
+
+export const playerUpdateLoadedTime = (id: string, { loadedSeconds, loadedFraction }: LoadedProgress): PlayerLoadedTimeUpdatedAction => ({
     type: PLAYER_LOADED_TIME_UPDATED,
     payload: { id, loadedSeconds, loadedFraction },
+});
+
+export const playerUpdateProgress = (id: string, progress: PlayedProgress & LoadedProgress): PlayerProgressUpdatedAction => ({
+    type: PLAYER_PROGRESS_UPDATED,
+    payload: { id, ...progress },
 });
 
 export const playerUpdateVolume = (id: string, { volume }: { volume: number }): PlayerVolumeUpdatedAction => ({
