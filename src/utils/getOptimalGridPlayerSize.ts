@@ -8,8 +8,6 @@ export const getOptimalGridPlayerSize = ({ containerWidth, containerHeight, numb
     let left = 0;
     let right = containerWidth;
 
-    console.log({ containerWidth, containerHeight });
-
     let iters = 0;
     while (Math.abs(left - right) >= 1e-5 && iters <= 1000) {
         let middle = Math.ceil((right + left) / 2);

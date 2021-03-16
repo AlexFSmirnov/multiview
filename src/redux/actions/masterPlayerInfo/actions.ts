@@ -92,10 +92,14 @@ export const masterPlayerUpdateVolume = (volume: number): MasterPlayerVolumeUpda
 
 export const startPlayback = (): AppThunkAction => (dispatch, getState) => {
     const state = getState();
-    Object.keys(state.playersInfo).forEach(id => dispatch(playerStartPlaying(id)));
+
+    if (state.masterPlayerInfo.isReady) {
+        Object.keys(state.playersInfo).forEach(id => dispatch(playerStartPlaying(id)));
+    }
 };
 
 export const stopPlayback = (): AppThunkAction => (dispatch, getState) => {
     const state = getState();
+
     Object.keys(state.playersInfo).forEach(id => dispatch(playerStopPlaying(id)));
 };

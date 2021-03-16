@@ -1,8 +1,10 @@
 import { Middleware } from 'redux';
 import { Action, State } from '../types';
 import { VIDEOS_ADDED, VIDEO_ADDED } from '../actions/videos';
+import { PLAYER_OFFSET_CHANGED } from '../actions/offsets';
 import {
     PlayerInfo,
+    PLAYER_DURATION_UPDATED,
     PLAYER_READY,
     PLAYER_STARTED_BUFFERING,
     PLAYER_STARTED_PLAYING,
@@ -16,6 +18,7 @@ import {
     masterPlayerStopPlaying,
     masterPlayerStartBuffering,
     masterPlayerStopBuffering,
+    masterPlayerUpdateDuration,
 } from '../actions/masterPlayerInfo';
 
 const everyOtherPlayer = (condition: (playerInfo: PlayerInfo) => boolean, state: State, currentId: string) => (
@@ -51,6 +54,33 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
             if (everyOtherPlayer(player => !player.isBuffering, state, action.payload.id)) {
                 dispatch(masterPlayerStopBuffering());
             }
+            break;
+
+        case PLAYER_DURATION_UPDATED:
+        case PLAYER_OFFSET_CHANGED:
+            // TODO: Rework this part once referencePlayerId always stores the highest duration.
+            const { maxDuration, maxDurationPlayerId } = Object.entries(state.playersInfo).reduce((acc, curr) => {
+                const [playerId, { durationSeconds }] = curr;
+
+                if (durationSeconds > acc.maxDuration) {
+                    return { maxDuration: durationSeconds, maxDurationPlayerId: playerId };
+                }
+
+                return acc;
+            }, { maxDuration: 0, maxDurationPlayerId: '' });
+
+            const maxDurationPlayerOffset = state.offsets.offsets[maxDurationPlayerId] || 0;
+
+            const maxOffsetUnderflow = -Object.values(state.offsets.offsets).reduce((acc, offset) => Math.min(acc, offset - maxDurationPlayerOffset), 0);
+            const maxOffsetOverflow = Object.entries(state.offsets.offsets).reduce((acc, curr) => {
+                const [playerId, offset] = curr;
+                const playerDuration = state.playersInfo[playerId].durationSeconds;
+
+                return Math.max(acc, offset - maxDurationPlayerOffset + playerDuration - maxDuration);
+            }, 0);
+            console.log({ maxDuration, maxOffsetOverflow, maxOffsetUnderflow });
+
+            dispatch(masterPlayerUpdateDuration(maxOffsetUnderflow + maxDuration + maxOffsetOverflow));
             break;
 
         case VIDEO_ADDED:

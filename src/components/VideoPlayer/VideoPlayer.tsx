@@ -67,6 +67,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
     const handlePlayerReady = () => playerReady(id);
     const handlePlayerBuffer = () => playerStartBuffering(id);
+    const handlePlayerBufferEnd = () => playerStopBuffering(id);
     const handlePlayerEnded = () => playerEndVideo(id);
 
     const handlePlayerPlay = () => {
@@ -96,6 +97,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         onPlay: handlePlayerPlay,
         onPause: handlePlayerPause,
         onBuffer: handlePlayerBuffer,
+        onBufferEnd: handlePlayerBufferEnd,
         onEnded: handlePlayerEnded,
         onDuration: handlePlayerDuration,
         onProgress: handlePlayerProgress,
