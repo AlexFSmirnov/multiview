@@ -4,7 +4,7 @@ import { unstable_createMuiStrictModeTheme as createMuiTheme, ThemeProvider, Css
 import { red } from '@material-ui/core/colors';
 import { State } from './redux/types';
 import { Video } from './redux/actions/videos';
-import { AddVideosDialog, AppBar, PlaybackControlBar, VideoGridView } from './components';
+import { AddVideosDialog, AppBar, MasterPlaybackControlBar, VideoGridView } from './components';
 import { AppContainer, GlobalStyle } from './style';
 
 const theme = createMuiTheme({
@@ -33,7 +33,7 @@ const App: React.FC<StateProps> = ({ videos }) => {
             <AppContainer>
                 <AppBar onAddVideosClick={openAddVideosDialog} />
                 <VideoGridView videos={videos} padding={8} />
-                <PlaybackControlBar />
+                <MasterPlaybackControlBar />
             </AppContainer>
             <AddVideosDialog open={isAddVideosDialogOpen} onClose={closeAddVideosDialog} />
         </ThemeProvider>

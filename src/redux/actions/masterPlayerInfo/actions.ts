@@ -1,3 +1,5 @@
+import { AppThunkAction } from '../../types';
+import { playerStartPlaying, playerStopPlaying } from '../playersInfo';
 import {
     MASTER_PLAYER_READY,
     MASTER_PLAYER_NOT_READY,
@@ -87,3 +89,13 @@ export const masterPlayerUpdateVolume = (volume: number): MasterPlayerVolumeUpda
     type: MASTER_PLAYER_VOLUME_UPDATED,
     payload: { volume },
 });
+
+export const startPlayback = (): AppThunkAction => (dispatch, getState) => {
+    const state = getState();
+    Object.keys(state.playersInfo).forEach(id => dispatch(playerStartPlaying(id)));
+};
+
+export const stopPlayback = (): AppThunkAction => (dispatch, getState) => {
+    const state = getState();
+    Object.keys(state.playersInfo).forEach(id => dispatch(playerStopPlaying(id)));
+};
