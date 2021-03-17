@@ -7,11 +7,11 @@ export interface PlaybackSliderProps {
     playedFraction: number;
     loadedFraction: number;
     isBuffering: boolean;
-    onSeekThrottle?: number;
+    onSeekCallbackThrottle?: number;
     onSeek?: (playedFraction: number) => void;
 }
 
-const PlaybackSlider: React.FC<PlaybackSliderProps> = ({ playedFraction, loadedFraction, isBuffering, onSeekThrottle = 200, onSeek }) => {
+const PlaybackSlider: React.FC<PlaybackSliderProps> = ({ playedFraction, loadedFraction, isBuffering, onSeekCallbackThrottle = 200, onSeek }) => {
     const theme = useTheme();
     const [isHovered, setIsHovered] = useState(false);
     const [isScrubberGrabbed, setIsScrubberGrabbed] = useState(false);
@@ -28,7 +28,7 @@ const PlaybackSlider: React.FC<PlaybackSliderProps> = ({ playedFraction, loadedF
     const handleMouseEnter = () => setIsHovered(true);
     const handleMouseLeave = () => setIsHovered(false);
 
-    const debouncedHandleSeek = throttle(onSeekThrottle, (playedFraction: number) => {
+    const debouncedHandleSeek = throttle(onSeekCallbackThrottle, (playedFraction: number) => {
         if (onSeek) {
             onSeek(playedFraction);
         }
