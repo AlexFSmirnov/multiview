@@ -79,7 +79,7 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
                     const [playerId, playerInfo] = curr;
                     const { isBuffering, isReady, hasEnded, playedSeconds } = playerInfo;
 
-                    if (isBuffering || !isReady || hasEnded || playedSeconds < 1) {
+                    if (isBuffering || !isReady || hasEnded || playedSeconds < 0.0001) {
                         return acc;
                     }
 
@@ -102,7 +102,7 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
                     const [playerId, playerInfo] = curr;
                     const { isBuffering, isReady, hasEnded, loadedSeconds, playedSeconds } = playerInfo;
 
-                    if (isBuffering || !isReady || hasEnded || playedSeconds < 1) {
+                    if (isBuffering || !isReady || hasEnded || playedSeconds < 0.0001) {
                         return acc;
                     }
 

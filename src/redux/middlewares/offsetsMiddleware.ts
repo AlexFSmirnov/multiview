@@ -24,7 +24,7 @@ export const offsetsMiddleware: Middleware<{}, State> = store => next => (action
 
             if (id === referencePlayerId) {
                 Object.entries(state.playersInfo).forEach(([playerId, playerInfo]) => {
-                    if (playerId !== referencePlayerId && playerInfo.playedSeconds >= 1 && !playerInfo.hasEnded) {
+                    if (playerId !== referencePlayerId && playerInfo.playedSeconds >= 0.0001 && !playerInfo.hasEnded) {
                         dispatch(changePlayerOffset(playerId, {
                             offset: playerInfo.playedSeconds - playedSeconds,
                         }));
@@ -33,7 +33,7 @@ export const offsetsMiddleware: Middleware<{}, State> = store => next => (action
                 break;
             }
 
-            if (state.playersInfo[referencePlayerId].playedSeconds < 1 || state.playersInfo[referencePlayerId].hasEnded) {
+            if (state.playersInfo[referencePlayerId].playedSeconds < 0.0001 || state.playersInfo[referencePlayerId].hasEnded) {
                 break;
             }
 
@@ -43,12 +43,13 @@ export const offsetsMiddleware: Middleware<{}, State> = store => next => (action
             break;
 
         case PLAYER_DURATION_UPDATED:
+            next(action);
             id = action.payload.id;
 
             if (referencePlayerId === null) {
                 dispatch(changeOffsetsReferencePlayerId(id));
                 dispatch(changePlayerOffset(id, { offset: 0 }));
-                break;
+                return;
             }
 
             const { durationSeconds: playerDuration } = action.payload;
@@ -70,10 +71,9 @@ export const offsetsMiddleware: Middleware<{}, State> = store => next => (action
                 });
 
                 dispatch(changePlayerOffset(id, { offset: 0 }));
-                break;
             }
 
-            break;
+            return;
     }
 
     next(action);
