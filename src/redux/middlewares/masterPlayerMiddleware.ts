@@ -100,9 +100,9 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
             if (action.type === PLAYER_LOADED_TIME_UPDATED || action.type === PLAYER_PROGRESS_UPDATED) {
                 const masterLoadedSeconds = Object.entries(state.playersInfo).reduce((acc, curr) => {
                     const [playerId, playerInfo] = curr;
-                    const { isBuffering, isReady, hasEnded, loadedSeconds, playedSeconds } = playerInfo;
+                    const { isBuffering, isReady, hasEnded, loadedSeconds, playedSeconds, durationSeconds } = playerInfo;
 
-                    if (isBuffering || !isReady || hasEnded || playedSeconds < 0.0001) {
+                    if (isBuffering || !isReady || hasEnded || playedSeconds < 0.0001 || loadedSeconds >= (durationSeconds - 0.01)) {
                         return acc;
                     }
 
