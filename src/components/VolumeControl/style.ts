@@ -18,6 +18,5 @@ export const VolumeControlIconContainer = styled.div`
 
 export const VolumeControlSliderContainer = styled.div`
     width: 62px;
-    padding-right: 8px;
     height: 28px;
 `;

@@ -1,11 +1,17 @@
 import { connect } from 'react-redux';
-import { IconButton } from '@material-ui/core';
+import { IconButton, Typography } from '@material-ui/core';
 import { PlayArrow, Pause, Settings, Fullscreen } from '@material-ui/icons';
 import { State } from '../../redux/types';
 import { startPlayback, stopPlayback } from '../../redux/actions/masterPlayerInfo';
 import { PlaybackSlider } from '../PlaybackSlider';
 import { VolumeControl } from '../VolumeControl';
-import { MasterPlaybackControlBarButtonsContainer, MasterPlaybackControlBarContainer, MasterPlaybackControlBarButtonsSpacer } from './style';
+import {
+    MasterPlaybackControlBarContainer,
+    MasterPlaybackControlBarOuterWrapper,
+    MasterPlaybackControlBarInnerWrapper,
+    MasterPlaybackControlBarProgressTextWrapper,
+    MasterPlaybackControlBarButtonsSpacer,
+} from './style';
 
 interface OwnProps {
 
@@ -13,6 +19,8 @@ interface OwnProps {
 
 interface StateProps {
     isPlaying: boolean;
+    durationSeconds: number;
+    playedSeconds: number;
     playedFraction: number;
     loadedFraction: number;
 }
@@ -24,8 +32,22 @@ interface DispatchProps {
 
 type MasterPlaybackControlBarProps = OwnProps & StateProps & DispatchProps;
 
+const formatSeconds = (totalSeconds: number) => {
+    const roundedSeconds = Math.round(totalSeconds);
+
+    const hours = Math.floor(roundedSeconds / (60 * 60));
+    const minutes = Math.floor((roundedSeconds % (60 * 60)) / 60);
+    const seconds = roundedSeconds % 60;
+
+    const paddedSeconds = seconds < 10 ? `0${seconds}` : seconds;
+
+    return `${hours > 0 ? `${hours}:` : ''}${minutes}:${paddedSeconds}`
+};
+
 const MasterPlaybackControlBar: React.FC<MasterPlaybackControlBarProps> = ({
     isPlaying,
+    durationSeconds,
+    playedSeconds,
     playedFraction,
     loadedFraction,
     startPlayback,
@@ -42,14 +64,22 @@ const MasterPlaybackControlBar: React.FC<MasterPlaybackControlBarProps> = ({
     return (
         <MasterPlaybackControlBarContainer>
             <PlaybackSlider playedFraction={playedFraction} loadedFraction={loadedFraction} />
-            <MasterPlaybackControlBarButtonsContainer>
+            <MasterPlaybackControlBarOuterWrapper>
                 <IconButton size="small" onClick={handlePlayPauseClick}>
                     {isPlaying ? <Pause fontSize="large" /> : <PlayArrow fontSize="large" />}
                 </IconButton>
-                <div style={{ height: '30px', flex: 1, display: 'flex', flexDirection: 'row' }}>
+                <MasterPlaybackControlBarInnerWrapper>
                     <div style={{ width: '10px' }} />
 
                     <VolumeControl volume={1} />
+
+                    <MasterPlaybackControlBarProgressTextWrapper>
+                        <Typography variant="body2">{formatSeconds(playedSeconds)}</Typography>
+                        <div style={{ width: '4px' }} />
+                        <Typography variant="body2"> / </Typography>
+                        <div style={{ width: '4px' }} />
+                        <Typography variant="body2">{formatSeconds(durationSeconds)}</Typography>
+                    </MasterPlaybackControlBarProgressTextWrapper>
 
                     <MasterPlaybackControlBarButtonsSpacer />
 
@@ -61,8 +91,8 @@ const MasterPlaybackControlBar: React.FC<MasterPlaybackControlBarProps> = ({
                     <IconButton size="small">
                         <Fullscreen />
                     </IconButton>
-                </div>
-            </MasterPlaybackControlBarButtonsContainer>
+                </MasterPlaybackControlBarInnerWrapper>
+            </MasterPlaybackControlBarOuterWrapper>
         </MasterPlaybackControlBarContainer>
     );
 };
@@ -70,6 +100,8 @@ const MasterPlaybackControlBar: React.FC<MasterPlaybackControlBarProps> = ({
 export default connect<StateProps, DispatchProps, OwnProps, State>(
     state => ({
         isPlaying: state.masterPlayerInfo.isPlaying,
+        durationSeconds: state.masterPlayerInfo.durationSeconds,
+        playedSeconds: state.masterPlayerInfo.playedSeconds,
         playedFraction: state.masterPlayerInfo.playedFraction,
         loadedFraction: state.masterPlayerInfo.loadedFraction,
     }),
