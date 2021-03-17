@@ -1,18 +1,20 @@
 import { Middleware } from 'redux';
 import { Action, State } from '../types';
 import { changeOffsetsReferencePlayerId, changePlayerOffset } from '../actions/offsets';
-import { PLAYER_PLAYED_TIME_UPDATED, PLAYER_PROGRESS_UPDATED } from '../actions/playersInfo';
+import { PLAYER_DURATION_UPDATED, PLAYER_PLAYED_TIME_UPDATED, PLAYER_PROGRESS_UPDATED } from '../actions/playersInfo';
 
 export const offsetsMiddleware: Middleware<{}, State> = store => next => (action: Action) => {
     const { dispatch, getState } = store;
     const state = getState();
 
     const referencePlayerId = state.offsets.referencePlayerId;
+    let id = '';
 
     switch (action.type) {
         case PLAYER_PLAYED_TIME_UPDATED:
         case PLAYER_PROGRESS_UPDATED:
-            const { id, playedSeconds } = action.payload;
+            id = action.payload.id;
+            const { playedSeconds } = action.payload;
 
             if (referencePlayerId === null) {
                 dispatch(changeOffsetsReferencePlayerId(id));
@@ -20,10 +22,9 @@ export const offsetsMiddleware: Middleware<{}, State> = store => next => (action
                 break;
             }
 
-            // TODO: Rework this part, since stopped / not started players should not change their offset while the other players are playing.
             if (id === referencePlayerId) {
                 Object.entries(state.playersInfo).forEach(([playerId, playerInfo]) => {
-                    if (playerId !== referencePlayerId) {
+                    if (playerId !== referencePlayerId && playerInfo.playedSeconds >= 1 && !playerInfo.hasEnded) {
                         dispatch(changePlayerOffset(playerId, {
                             offset: playerInfo.playedSeconds - playedSeconds,
                         }));
@@ -32,23 +33,38 @@ export const offsetsMiddleware: Middleware<{}, State> = store => next => (action
                 break;
             }
 
-            const playerDuration = state.playersInfo[id].durationSeconds || 0;
-            const referencePlayerDuration = state.playersInfo[referencePlayerId].durationSeconds || 0;
+            const offset = playedSeconds - state.playersInfo[referencePlayerId].playedSeconds;
+            dispatch(changePlayerOffset(id, { offset }));
 
-            // Reference player should always have the highest duration.
-            if (playerDuration > referencePlayerDuration) {
-                Object.entries(state.playersInfo).forEach(([playerId, playerInfo]) => {
-                    if (playerId !== id) {
-                        // dispatch(changePlayerOffset())
-                    }
-                });
+            break;
 
+        case PLAYER_DURATION_UPDATED:
+            if (referencePlayerId === null) {
                 break;
             }
 
-            const referencePlayedSeconds = state.playersInfo[referencePlayerId].playedSeconds;
-            const offset = playedSeconds - referencePlayedSeconds;
-            dispatch(changePlayerOffset(id, { offset }));
+            id = action.payload.id;
+            const { durationSeconds: playerDuration } = action.payload;
+            const {
+                durationSeconds: referencePlayerDuration,
+                playedSeconds: referencePlayedSeconds,
+            } = state.playersInfo[referencePlayerId];
+
+            // Reference player should always have the highest duration.
+            if (playerDuration > referencePlayerDuration) {
+                dispatch(changeOffsetsReferencePlayerId(id));
+
+                Object.keys(state.playersInfo).forEach(playerId => {
+                    if (playerId !== id) {
+                        dispatch(changePlayerOffset(playerId, {
+                            offset: state.offsets.offsets[playerId] - referencePlayedSeconds,
+                        }));
+                    }
+                });
+
+                dispatch(changePlayerOffset(id, { offset: 0 }));
+                break;
+            }
 
             break;
     }

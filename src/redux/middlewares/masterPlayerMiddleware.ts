@@ -56,28 +56,22 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
             }
             break;
 
-        case PLAYER_DURATION_UPDATED:
         case PLAYER_OFFSET_CHANGED:
-            // TODO: Rework this part once referencePlayerId always stores the highest duration.
-            const { maxDuration, maxDurationPlayerId } = Object.entries(state.playersInfo).reduce((acc, curr) => {
-                const [playerId, { durationSeconds }] = curr;
+            const maxDurationPlayerId = state.offsets.referencePlayerId;
+            if (!maxDurationPlayerId) {
+                break;
+            }
 
-                if (durationSeconds > acc.maxDuration) {
-                    return { maxDuration: durationSeconds, maxDurationPlayerId: playerId };
-                }
+            const maxDuration = state.playersInfo[maxDurationPlayerId].durationSeconds;
 
-                return acc;
-            }, { maxDuration: 0, maxDurationPlayerId: '' });
-
-            const maxDurationPlayerOffset = state.offsets.offsets[maxDurationPlayerId] || 0;
-
-            const maxOffsetUnderflow = -Object.values(state.offsets.offsets).reduce((acc, offset) => Math.min(acc, offset - maxDurationPlayerOffset), 0);
+            const maxOffsetUnderflow = -Object.values(state.offsets.offsets).reduce((acc, offset) => Math.min(acc, offset), 0);
             const maxOffsetOverflow = Object.entries(state.offsets.offsets).reduce((acc, curr) => {
                 const [playerId, offset] = curr;
                 const playerDuration = state.playersInfo[playerId].durationSeconds;
 
-                return Math.max(acc, offset - maxDurationPlayerOffset + playerDuration - maxDuration);
+                return Math.max(acc, offset + playerDuration - maxDuration);
             }, 0);
+
             console.log({ maxDuration, maxOffsetOverflow, maxOffsetUnderflow });
 
             dispatch(masterPlayerUpdateDuration(maxOffsetUnderflow + maxDuration + maxOffsetOverflow));

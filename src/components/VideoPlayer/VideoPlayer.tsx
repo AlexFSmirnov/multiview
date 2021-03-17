@@ -65,10 +65,14 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         initializePlayer(id);
     }, [id, initializePlayer]);
 
-    const handlePlayerReady = () => playerReady(id);
     const handlePlayerBuffer = () => playerStartBuffering(id);
     const handlePlayerBufferEnd = () => playerStopBuffering(id);
     const handlePlayerEnded = () => playerEndVideo(id);
+
+    const handlePlayerReady = () => {
+        playerReady(id);
+        playerStopBuffering(id);
+    };
 
     const handlePlayerPlay = () => {
         playerStartPlaying(id);
