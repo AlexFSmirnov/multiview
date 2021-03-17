@@ -19,6 +19,7 @@ interface OwnProps {
 
 interface StateProps {
     isPlaying: boolean;
+    isBuffering: boolean;
     durationSeconds: number;
     playedSeconds: number;
     playedFraction: number;
@@ -46,6 +47,7 @@ const formatSeconds = (totalSeconds: number) => {
 
 const MasterPlaybackControlBar: React.FC<MasterPlaybackControlBarProps> = ({
     isPlaying,
+    isBuffering,
     durationSeconds,
     playedSeconds,
     playedFraction,
@@ -61,9 +63,15 @@ const MasterPlaybackControlBar: React.FC<MasterPlaybackControlBarProps> = ({
         }
     };
 
+    const playbackSliderProps = {
+        playedFraction,
+        loadedFraction,
+        isBuffering,
+    };
+
     return (
         <MasterPlaybackControlBarContainer>
-            <PlaybackSlider playedFraction={playedFraction} loadedFraction={loadedFraction} />
+            <PlaybackSlider {...playbackSliderProps} />
             <MasterPlaybackControlBarOuterWrapper>
                 <IconButton size="small" onClick={handlePlayPauseClick}>
                     {isPlaying ? <Pause fontSize="large" /> : <PlayArrow fontSize="large" />}
@@ -100,6 +108,7 @@ const MasterPlaybackControlBar: React.FC<MasterPlaybackControlBarProps> = ({
 export default connect<StateProps, DispatchProps, OwnProps, State>(
     state => ({
         isPlaying: state.masterPlayerInfo.isPlaying,
+        isBuffering: state.masterPlayerInfo.isBuffering,
         durationSeconds: state.masterPlayerInfo.durationSeconds,
         playedSeconds: state.masterPlayerInfo.playedSeconds,
         playedFraction: state.masterPlayerInfo.playedFraction,

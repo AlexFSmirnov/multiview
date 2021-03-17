@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const PlaybackSliderHoverContainer = styled.div`
+export const PlaybackSliderInteractionContainer = styled.div`
     height: 13px;
     margin-left: 8px;
     margin-right: 8px;
