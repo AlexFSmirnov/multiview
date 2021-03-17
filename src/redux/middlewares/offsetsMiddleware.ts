@@ -33,17 +33,24 @@ export const offsetsMiddleware: Middleware<{}, State> = store => next => (action
                 break;
             }
 
+            if (state.playersInfo[referencePlayerId].playedSeconds < 1 || state.playersInfo[referencePlayerId].hasEnded) {
+                break;
+            }
+
             const offset = playedSeconds - state.playersInfo[referencePlayerId].playedSeconds;
             dispatch(changePlayerOffset(id, { offset }));
 
             break;
 
         case PLAYER_DURATION_UPDATED:
+            id = action.payload.id;
+
             if (referencePlayerId === null) {
+                dispatch(changeOffsetsReferencePlayerId(id));
+                dispatch(changePlayerOffset(id, { offset: 0 }));
                 break;
             }
 
-            id = action.payload.id;
             const { durationSeconds: playerDuration } = action.payload;
             const {
                 durationSeconds: referencePlayerDuration,
