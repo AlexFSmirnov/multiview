@@ -72,12 +72,7 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
             if (action.type === PLAYER_PLAYED_TIME_UPDATED || action.type === PLAYER_PROGRESS_UPDATED) {
                 const masterPlayedSeconds = Object.entries(state.playersInfo).reduce((acc, curr) => {
                     const [playerId, playerInfo] = curr;
-                    const { hasEnded, playedSeconds } = playerInfo;
-
-                    // TODO: Rework this part to actually use offsets and master played time.
-                    if (hasEnded || playedSeconds < 0.0001) {
-                        return acc;
-                    }
+                    const { playedSeconds } = playerInfo;
 
                     const playerOffset = state.offsets.offsets[playerId] || 0;
                     const offsetPlayedTime = playedSeconds - playerOffset + maxOffsetUnderflow;
@@ -96,10 +91,10 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
             if (action.type === PLAYER_LOADED_TIME_UPDATED || action.type === PLAYER_PROGRESS_UPDATED) {
                 const masterLoadedSeconds = Object.entries(state.playersInfo).reduce((acc, curr) => {
                     const [playerId, playerInfo] = curr;
-                    const { hasEnded, loadedSeconds, playedSeconds, durationSeconds } = playerInfo;
+                    const { loadedSeconds, durationSeconds } = playerInfo;
 
-                    // TODO: Rework this part to actually use offsets and master played time.
-                    if (hasEnded || playedSeconds < 0.0001 || loadedSeconds >= (durationSeconds - 0.01)) {
+                    // If a player is completely loaded, it should not affect the overall loaded time.
+                    if (loadedSeconds >= (durationSeconds - 0.01)) {
                         return acc;
                     }
 

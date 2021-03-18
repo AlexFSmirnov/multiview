@@ -93,8 +93,24 @@ export const masterPlayerUpdateVolume = (volume: number): MasterPlayerVolumeUpda
 export const startPlayback = (): AppThunkAction => (dispatch, getState) => {
     const state = getState();
 
-    if (state.masterPlayerInfo.isReady) {
-        Object.keys(state.playersInfo).forEach(id => dispatch(playerStartPlaying(id)));
+    const maxOffsetUnderflow = Object.values(state.offsets.offsets).reduce((acc, offset) => Math.max(acc, offset), 0);
+    const {
+        isReady: isMasterReady,
+        isBuffering: isMasterBuffering,
+        playedSeconds: masterPlayedSeconds,
+    } = state.masterPlayerInfo;
+
+    if (isMasterReady && !isMasterBuffering) {
+        Object.entries(state.playersInfo).forEach(([playerId, playerInfo]) => {
+            const { durationSeconds, hasEnded } = playerInfo;
+            const playerOffset = state.offsets.offsets[playerId] || 0;
+
+            const playerPlayedSeconds = masterPlayedSeconds - maxOffsetUnderflow + playerOffset;
+
+            if (!hasEnded && playerPlayedSeconds >= 0 && playerPlayedSeconds <= durationSeconds) {
+                dispatch(playerStartPlaying(playerId))
+            }
+        });
     }
 };
 
