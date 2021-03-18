@@ -1,5 +1,5 @@
 import { AppThunkAction } from '../../types';
-import { playerStartPlaying, playerStopPlaying } from '../playersInfo';
+import { playerPushPendingSeek, playerStartPlaying, playerStopPlaying } from '../playersInfo';
 import {
     MASTER_PLAYER_READY,
     MASTER_PLAYER_NOT_READY,
@@ -102,4 +102,13 @@ export const stopPlayback = (): AppThunkAction => (dispatch, getState) => {
     const state = getState();
 
     Object.keys(state.playersInfo).forEach(id => dispatch(playerStopPlaying(id)));
+};
+
+export const seekTo = (seconds: number): AppThunkAction => (dispatch, getState) => {
+    const state = getState();
+
+    // TODO: account for offsets.
+    Object.keys(state.playersInfo).forEach(id => {
+        dispatch(playerPushPendingSeek(id, { seekToSeconds: seconds }));
+    });
 };

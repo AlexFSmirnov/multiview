@@ -11,6 +11,8 @@ export interface PlayerInfo {
     loadedFraction: number;
 
     volume: number;
+
+    pendingSeeks: number[];
 }
 
 export const PLAYER_INITIALIZED = 'PLAYER_INITIALIZED';
@@ -25,6 +27,8 @@ export const PLAYER_PLAYED_TIME_UPDATED = 'PLAYER_PLAYED_TIME_UPDATED';
 export const PLAYER_LOADED_TIME_UPDATED = 'PLAYER_LOADED_TIME_UPDATED';
 export const PLAYER_PROGRESS_UPDATED = 'PLAYER_PROGRESS_UPDATED';
 export const PLAYER_VOLUME_UPDATED = 'PLAYER_VOLUME_UPDATED';
+export const PLAYER_PENDING_SEEK_PUSHED = 'PLAYER_PENDING_SEEK_PUSHED';
+export const PLAYER_PENDING_SEEK_POPPED = 'PLAYER_PENDING_SEEK_POPPED';
 
 interface WithId {
     id: string;
@@ -105,8 +109,21 @@ export interface PlayerVolumeUpdatedAction {
     };
 }
 
+export interface PlayerPendingSeekPushedAction {
+    type: typeof PLAYER_PENDING_SEEK_PUSHED;
+    payload: WithId & {
+        seekToSeconds: number;
+    };
+}
+
+export interface PlayerPendingSeekPoppedAction {
+    type: typeof PLAYER_PENDING_SEEK_POPPED;
+    payload: WithId;
+}
+
 export type PlayersInfoAction = (
     PlayerInitializedAction | PlayerReadyAction | PlayerStartedPlayingAction | PlayerStoppedPlayingAction |
     PlayerStartedBufferingAction | PlayerStoppedBufferingAction | PlayerVideoEndedAction | PlayerDurationUpdatedAction |
-    PlayerPlayedTimeUpdatedAction | PlayerLoadedTimeUpdatedAction | PlayerProgressUpdatedAction | PlayerVolumeUpdatedAction
+    PlayerPlayedTimeUpdatedAction | PlayerLoadedTimeUpdatedAction | PlayerProgressUpdatedAction | PlayerVolumeUpdatedAction |
+    PlayerPendingSeekPushedAction | PlayerPendingSeekPoppedAction
 );

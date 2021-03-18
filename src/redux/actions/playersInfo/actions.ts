@@ -11,6 +11,8 @@ import {
     PlayerLoadedTimeUpdatedAction,
     PlayerProgressUpdatedAction,
     PlayerVolumeUpdatedAction,
+    PlayerPendingSeekPushedAction,
+    PlayerPendingSeekPoppedAction,
     PLAYER_INITIALIZED,
     PLAYER_READY,
     PLAYER_STARTED_PLAYING,
@@ -23,6 +25,8 @@ import {
     PLAYER_LOADED_TIME_UPDATED,
     PLAYER_PROGRESS_UPDATED,
     PLAYER_VOLUME_UPDATED,
+    PLAYER_PENDING_SEEK_PUSHED,
+    PLAYER_PENDING_SEEK_POPPED,
 } from './types';
 
 export const initializePlayer = (id: string): PlayerInitializedAction => ({
@@ -93,4 +97,14 @@ export const playerUpdateProgress = (id: string, progress: PlayedProgress & Load
 export const playerUpdateVolume = (id: string, { volume }: { volume: number }): PlayerVolumeUpdatedAction => ({
     type: PLAYER_VOLUME_UPDATED,
     payload: { id, volume },
+});
+
+export const playerPushPendingSeek = (id: string, { seekToSeconds }: { seekToSeconds: number }): PlayerPendingSeekPushedAction => ({
+    type: PLAYER_PENDING_SEEK_PUSHED,
+    payload: { id, seekToSeconds },
+});
+
+export const playerPopPendingSeek = (id: string): PlayerPendingSeekPoppedAction => ({
+    type: PLAYER_PENDING_SEEK_POPPED,
+    payload: { id },
 });

@@ -13,6 +13,8 @@ import {
     PLAYER_LOADED_TIME_UPDATED,
     PLAYER_PROGRESS_UPDATED,
     PLAYER_VOLUME_UPDATED,
+    PLAYER_PENDING_SEEK_PUSHED,
+    PLAYER_PENDING_SEEK_POPPED,
 } from '../actions/playersInfo';
 
 export type PlayersInfoState = Record<string, PlayerInfo>;
@@ -29,6 +31,7 @@ const playerInfoInitialState: PlayerInfo = {
     loadedSeconds: 0,
     loadedFraction: 0,
     volume: 1,
+    pendingSeeks: [],
 };
 
 export const playersInfoReducer = (state = playersInfoInitialState, action: PlayersInfoAction) => {
@@ -107,6 +110,24 @@ export const playersInfoReducer = (state = playersInfoInitialState, action: Play
             return { ...state, [action.payload.id]: {
                 ...state[action.payload.id],
                 volume,
+            } };
+
+        case PLAYER_PENDING_SEEK_PUSHED:
+            const { seekToSeconds } = action.payload;
+            return { ...state, [action.payload.id]: {
+                ...state[action.payload.id],
+                pendingSeeks: [
+                    ...state[action.payload.id].pendingSeeks,
+                    seekToSeconds,
+                ],
+            } };
+
+        case PLAYER_PENDING_SEEK_POPPED:
+            return { ...state, [action.payload.id]: {
+                ...state[action.payload.id],
+                pendingSeeks: [
+                    ...state[action.payload.id].pendingSeeks.slice(1),
+                ],
             } };
 
         default:

@@ -66,20 +66,16 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
         case PLAYER_PLAYED_TIME_UPDATED:
         case PLAYER_LOADED_TIME_UPDATED:
         case PLAYER_PROGRESS_UPDATED:
-            const { isBuffering, isReady } = state.playersInfo[action.payload.id];
-            if (isBuffering || !isReady) {
-                break;
-            }
-
             state = getState();
 
             maxOffsetUnderflow = Object.values(state.offsets.offsets).reduce((acc, offset) => Math.max(acc, offset), 0);
             if (action.type === PLAYER_PLAYED_TIME_UPDATED || action.type === PLAYER_PROGRESS_UPDATED) {
                 const masterPlayedSeconds = Object.entries(state.playersInfo).reduce((acc, curr) => {
                     const [playerId, playerInfo] = curr;
-                    const { isBuffering, isReady, hasEnded, playedSeconds } = playerInfo;
+                    const { hasEnded, playedSeconds } = playerInfo;
 
-                    if (isBuffering || !isReady || hasEnded || playedSeconds < 0.0001) {
+                    // TODO: Rework this part to actually use offsets and master played time.
+                    if (hasEnded || playedSeconds < 0.0001) {
                         return acc;
                     }
 
@@ -100,9 +96,10 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
             if (action.type === PLAYER_LOADED_TIME_UPDATED || action.type === PLAYER_PROGRESS_UPDATED) {
                 const masterLoadedSeconds = Object.entries(state.playersInfo).reduce((acc, curr) => {
                     const [playerId, playerInfo] = curr;
-                    const { isBuffering, isReady, hasEnded, loadedSeconds, playedSeconds, durationSeconds } = playerInfo;
+                    const { hasEnded, loadedSeconds, playedSeconds, durationSeconds } = playerInfo;
 
-                    if (isBuffering || !isReady || hasEnded || playedSeconds < 0.0001 || loadedSeconds >= (durationSeconds - 0.01)) {
+                    // TODO: Rework this part to actually use offsets and master played time.
+                    if (hasEnded || playedSeconds < 0.0001 || loadedSeconds >= (durationSeconds - 0.01)) {
                         return acc;
                     }
 
@@ -148,6 +145,4 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
             dispatch(masterPlayerNotReady());
             break;
     }
-
-    next(action);
 };
