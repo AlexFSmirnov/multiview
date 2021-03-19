@@ -1,15 +1,16 @@
 import styled from 'styled-components';
 
 export const PlaybackSliderInteractionContainer = styled.div`
-    height: 13px;
+    height: 19px;
     margin-left: 8px;
     margin-right: 8px;
 
     position: relative;
-    top: -5px;
+    top: -8px;
     left: 0;
     right: 0;
 
+    z-index: 1000;
     cursor: pointer;
 `;
 
@@ -17,7 +18,7 @@ export const PlaybackSliderContainer = styled.div<{ wide: boolean }>`
     height: 3px;
 
     position: relative;
-    top: 5px;
+    top: 8px;
     left: 0;
     right: 0;
 
@@ -25,7 +26,7 @@ export const PlaybackSliderContainer = styled.div<{ wide: boolean }>`
 
     ${props => props.wide ? `
         height: 4px;
-        top: 4.5px;
+        top: 7.5px;
     ` : null}
 `;
 
@@ -54,4 +55,34 @@ export const PlaybackSliderScrubber = styled.div.attrs<{ progress: number; color
 
     transform: scale(${props => props.visible ? 1 : 0});
     transition: transform 100ms;
+`;
+
+export const PlaybackSliderTimePreviewContainer = styled.div`
+    width: 100vw;
+    height: 32px;
+
+    position: relative;
+    top: -32px;
+    left: -8px;
+
+    overflow: hidden;
+`;
+
+export const PlaybackSliderTimePreviewWrapper = styled.div.attrs<{ progress: number; visible: boolean }>(props => ({
+    style: { left: `max(0px, min(calc(100% - 64px), calc(100% * ${props.progress} - 32px)))` },
+}))<{ progress: number; visible: boolean }>`
+    width: 64px;
+    height: 32px;
+
+    position: absolute;
+    top: -32px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    opacity: ${props => props.visible ? 1 : 0};
+    transition: opacity 100ms;
+
+    pointer-events: none;
 `;

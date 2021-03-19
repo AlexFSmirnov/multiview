@@ -3,6 +3,7 @@ import { IconButton, Typography } from '@material-ui/core';
 import { PlayArrow, Pause, Settings, Fullscreen } from '@material-ui/icons';
 import { State } from '../../redux/types';
 import { startPlayback, stopPlayback, seekTo } from '../../redux/actions/masterPlayerInfo';
+import { formatSeconds } from '../../utils/formatSeconds';
 import { PlaybackSlider } from '../PlaybackSlider';
 import { VolumeControl } from '../VolumeControl';
 import {
@@ -34,18 +35,6 @@ interface DispatchProps {
 
 type MasterPlaybackControlBarProps = OwnProps & StateProps & DispatchProps;
 
-const formatSeconds = (totalSeconds: number) => {
-    const roundedSeconds = Math.round(totalSeconds);
-
-    const hours = Math.floor(roundedSeconds / (60 * 60));
-    const minutes = Math.floor((roundedSeconds % (60 * 60)) / 60);
-    const seconds = roundedSeconds % 60;
-
-    const paddedSeconds = seconds < 10 ? `0${seconds}` : seconds;
-
-    return `${hours > 0 ? `${hours}:` : ''}${minutes}:${paddedSeconds}`
-};
-
 const MasterPlaybackControlBar: React.FC<MasterPlaybackControlBarProps> = ({
     isPlaying,
     isBuffering,
@@ -66,12 +55,13 @@ const MasterPlaybackControlBar: React.FC<MasterPlaybackControlBarProps> = ({
     };
 
     const handleSeek = (seekFraction: number) => {
-        seekTo(seekFraction * durationSeconds);
+        // seekTo(seekFraction * durationSeconds);
     };
 
     const playbackSliderProps = {
         playedFraction,
         loadedFraction,
+        durationSeconds,
         isBuffering,
         onSeek: handleSeek,
     };
