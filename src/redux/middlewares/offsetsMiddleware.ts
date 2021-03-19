@@ -7,6 +7,8 @@ import { getOffsets, getOffsetsReferencePlayerId } from '../selectors';
 import { getMasterPlayerPlayedSeconds } from '../selectors/masterPlayerInfo';
 
 export const offsetsMiddleware: Middleware<{}, State> = store => next => (action: Action) => {
+    next(action);
+
     const { dispatch, getState } = store;
     const state = getState();
 
@@ -33,7 +35,6 @@ export const offsetsMiddleware: Middleware<{}, State> = store => next => (action
                 break;
             }
 
-            // const offset = playedSeconds - getPlayerPlayedSeconds(referencePlayerId)(state);
             const offset = playedSeconds - getMasterPlayerPlayedSeconds(state);
 
             // All offsets should be negative, i.e. the reference player should play first.
@@ -56,6 +57,4 @@ export const offsetsMiddleware: Middleware<{}, State> = store => next => (action
             dispatch(changePlayerOffset(id, { offset }));
             break;
     }
-
-    next(action);
 };

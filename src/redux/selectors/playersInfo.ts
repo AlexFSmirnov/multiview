@@ -15,7 +15,7 @@ export const getPlayerInfo = memoize(getPlayerInfoBase);
 
 const getPlayerDurationSecondsBase = (id: string) => createSelector(
     getPlayerInfo(id),
-    get('durationSeconds'),
+    getOr(0, 'durationSeconds'),
 );
 export const getPlayerDurationSeconds = memoize(getPlayerDurationSecondsBase);
 

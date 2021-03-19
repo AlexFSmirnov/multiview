@@ -5,7 +5,7 @@ import { MasterPlayerInfoState } from '../reducers/masterPlayerInfo';
 
 export const getMasterPlayerInfo = (state: State) => state.masterPlayerInfo;
 
-export const getMasterPlayerDuration = createSelector(
+export const getMasterPlayerDurationSeconds = createSelector(
     getMasterPlayerInfo,
     getOr(0, 'durationSeconds'),
 );

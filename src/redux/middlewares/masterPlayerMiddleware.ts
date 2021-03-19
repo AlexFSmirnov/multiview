@@ -24,18 +24,20 @@ import {
     masterPlayerUpdatePlayedTime,
     masterPlayerUpdateLoadedTime,
 } from '../actions/masterPlayerInfo';
+import { getOffsets, getPlayerOffset } from '../selectors';
+import { getPlayerDurationSeconds, getPlayersInfoState } from '../selectors/playersInfo';
+import { getMasterPlayerDurationSeconds } from '../selectors/masterPlayerInfo';
 
 const everyOtherPlayer = (condition: (playerInfo: PlayerInfo) => boolean, state: State, currentId: string) => (
     Object.entries(state.playersInfo).every(([id, playerInfo]) => id === currentId || condition(playerInfo))
 );
 
 export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (action: Action) => {
-    const { dispatch, getState } = store;
-    let state = getState();
-
-    let maxOffsetUnderflow = 0;
-
     next(action);
+
+    const { dispatch, getState } = store;
+    const state = getState();
+
     switch (action.type) {
         case PLAYER_READY:
             if (everyOtherPlayer(player => player.isReady, state, action.payload.id)) {
@@ -66,21 +68,25 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
         case PLAYER_PLAYED_TIME_UPDATED:
         case PLAYER_LOADED_TIME_UPDATED:
         case PLAYER_PROGRESS_UPDATED:
-            state = getState();
+            const masterDurationSeconds = getMasterPlayerDurationSeconds(state);
 
-            maxOffsetUnderflow = Object.values(state.offsets.offsets).reduce((acc, offset) => Math.max(acc, offset), 0);
             if (action.type === PLAYER_PLAYED_TIME_UPDATED || action.type === PLAYER_PROGRESS_UPDATED) {
-                const masterPlayedSeconds = Object.entries(state.playersInfo).reduce((acc, curr) => {
-                    const [playerId, playerInfo] = curr;
-                    const { playedSeconds } = playerInfo;
+                const masterPlayedSeconds = Object.entries(getPlayersInfoState(state)).reduce(
+                    (acc, curr) => {
+                        const [playerId, playerInfo] = curr;
+                        const { playedSeconds, hasEnded } = playerInfo;
+                        const offset = getPlayerOffset(playerId)(state);
 
-                    const playerOffset = state.offsets.offsets[playerId] || 0;
-                    const offsetPlayedTime = playedSeconds - playerOffset + maxOffsetUnderflow;
+                        if (hasEnded) {
+                            return acc;
+                        }
 
-                    return Math.min(acc, offsetPlayedTime);
-                }, state.masterPlayerInfo.durationSeconds);
+                        return Math.min(acc, playedSeconds - offset);
+                    },
+                    masterDurationSeconds,
+                );
 
-                const masterPlayedFraction = masterPlayedSeconds / state.masterPlayerInfo.durationSeconds;
+                const masterPlayedFraction = masterPlayedSeconds / masterDurationSeconds;
 
                 dispatch(masterPlayerUpdatePlayedTime({
                     playedSeconds: masterPlayedSeconds,
@@ -89,22 +95,23 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
             }
 
             if (action.type === PLAYER_LOADED_TIME_UPDATED || action.type === PLAYER_PROGRESS_UPDATED) {
-                const masterLoadedSeconds = Object.entries(state.playersInfo).reduce((acc, curr) => {
-                    const [playerId, playerInfo] = curr;
-                    const { loadedSeconds, durationSeconds } = playerInfo;
+                const masterLoadedSeconds = Object.entries(getPlayersInfoState(state)).reduce(
+                    (acc, curr) => {
+                        const [playerId, playerInfo] = curr;
+                        const { loadedSeconds, durationSeconds, hasEnded } = playerInfo;
+                        const offset = getPlayerOffset(playerId)(state);
 
-                    // If a player is completely loaded, it should not affect the overall loaded time.
-                    if (loadedSeconds >= (durationSeconds - 0.01)) {
-                        return acc;
-                    }
+                        // If a player is completely loaded, it should not affect the overall loaded time.
+                        if (hasEnded || loadedSeconds >= (durationSeconds - 0.01)) {
+                            return acc;
+                        }
 
-                    const playerOffset = state.offsets.offsets[playerId] || 0;
-                    const offsetLoadedTime = loadedSeconds - playerOffset + maxOffsetUnderflow;
+                        return Math.min(acc, loadedSeconds - offset);
+                    },
+                    masterDurationSeconds,
+                );
 
-                    return Math.min(acc, offsetLoadedTime);
-                }, state.masterPlayerInfo.durationSeconds);
-
-                const masterLoadedFraction = masterLoadedSeconds / state.masterPlayerInfo.durationSeconds;
+                const masterLoadedFraction = masterLoadedSeconds / masterDurationSeconds;
 
                 dispatch(masterPlayerUpdateLoadedTime({
                     loadedSeconds: masterLoadedSeconds,
@@ -115,24 +122,17 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
             break;
 
         case PLAYER_OFFSET_CHANGED:
-            state = getState();
+            const masterPlayerDuration = Object.entries(getOffsets(state)).reduce(
+                (acc, curr) => {
+                    const [playerId, offset] = curr;
+                    const playerDuration = getPlayerDurationSeconds(playerId)(state);
 
-            const maxDurationPlayerId = state.offsets.referencePlayerId;
-            if (!maxDurationPlayerId) {
-                break;
-            }
+                    return Math.max(acc, playerDuration - offset);
+                },
+                0,
+            );
 
-            const maxDuration = state.playersInfo[maxDurationPlayerId].durationSeconds;
-
-            maxOffsetUnderflow = Object.values(state.offsets.offsets).reduce((acc, offset) => Math.max(acc, offset), 0);
-            const maxOffsetOverflow = Object.entries(state.offsets.offsets).reduce((acc, curr) => {
-                const [playerId, offset] = curr;
-                const playerDuration = state.playersInfo[playerId].durationSeconds;
-
-                return Math.max(acc, playerDuration - offset - maxDuration);
-            }, 0);
-
-            dispatch(masterPlayerUpdateDuration(maxOffsetUnderflow + maxDuration + maxOffsetOverflow));
+            dispatch(masterPlayerUpdateDuration(masterPlayerDuration));
             break;
 
         case VIDEO_ADDED:
