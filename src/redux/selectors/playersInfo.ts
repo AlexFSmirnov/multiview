@@ -7,29 +7,41 @@ import { PlayerInfo } from '../actions/playersInfo';
 
 export const getPlayersInfoState = (state: State) => state.playersInfo;
 
-const getPlayerInfoBase = (id: number) => createSelector(
+const getPlayerInfoBase = (id: string) => createSelector(
     getPlayersInfoState,
     getOr(playerInfoInitialState, id),
 );
 export const getPlayerInfo = memoize(getPlayerInfoBase);
 
-const getPlayerDurationSecondsBase = (id: number) => createSelector(
+const getPlayerDurationSecondsBase = (id: string) => createSelector(
     getPlayerInfo(id),
     get('durationSeconds'),
 );
 export const getPlayerDurationSeconds = memoize(getPlayerDurationSecondsBase);
 
-const getPlayerPlayedTimeBase = (id: number) => createSelector(
+const getPlayerPlayedTimeBase = (id: string) => createSelector(
     getPlayerInfo(id),
     ({ playedSeconds, playedFraction }: PlayerInfo) => ({ playedSeconds, playedFraction }),
 );
 export const getPlayerPlayedTime = memoize(getPlayerPlayedTimeBase);
 
-const getPlayerLoadedTimeBase = (id: number) => createSelector(
+const getPlayerPlayedSecondsBase = (id: string) => createSelector(
+    getPlayerPlayedTime(id),
+    getOr(0, 'playedSeconds'),
+);
+export const getPlayerPlayedSeconds = memoize(getPlayerPlayedSecondsBase);
+
+const getPlayerLoadedTimeBase = (id: string) => createSelector(
     getPlayerInfo(id),
     ({ loadedSeconds, loadedFraction }: PlayerInfo) => ({ loadedSeconds, loadedFraction }),
 );
 export const getPlayerLoadedTime = memoize(getPlayerLoadedTimeBase);
+
+const hasPlayerEndedBase = (id: string) => createSelector<State, PlayerInfo, boolean>(
+    getPlayerInfo(id),
+    get('hasEnded'),
+);
+export const hasPlayerEnded = memoize(hasPlayerEndedBase);
 
 export const getMaxDurationPlayerId = createSelector<State, PlayersInfoState, string | null>(
     getPlayersInfoState,
