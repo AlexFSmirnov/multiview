@@ -20,7 +20,7 @@ import {
 export type PlayersInfoState = Record<string, PlayerInfo>;
 export const playersInfoInitialState: PlayersInfoState = {};
 
-const playerInfoInitialState: PlayerInfo = {
+export const playerInfoInitialState: PlayerInfo = {
     isReady: false,
     isPlaying: false,
     isBuffering: false,

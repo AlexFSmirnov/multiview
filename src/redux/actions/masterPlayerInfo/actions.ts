@@ -1,3 +1,4 @@
+import { getPlayerOffset } from '../../selectors';
 import { AppThunkAction } from '../../types';
 import { playerPushPendingSeek, playerStartPlaying, playerStopPlaying } from '../playersInfo';
 import {
