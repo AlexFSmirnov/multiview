@@ -122,6 +122,7 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
             break;
 
         case PLAYER_OFFSET_CHANGED:
+            const prevMasterPlayerDuration = getMasterPlayerDurationSeconds(state);
             const masterPlayerDuration = Object.entries(getOffsets(state)).reduce(
                 (acc, curr) => {
                     const [playerId, offset] = curr;
@@ -132,7 +133,11 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
                 0,
             );
 
-            dispatch(masterPlayerUpdateDuration(masterPlayerDuration));
+            // Account for slight delays in onProgress calls.
+            if (Math.abs(masterPlayerDuration - prevMasterPlayerDuration) >= 1) {
+                dispatch(masterPlayerUpdateDuration(masterPlayerDuration));
+            }
+
             break;
 
         case VIDEO_ADDED:
