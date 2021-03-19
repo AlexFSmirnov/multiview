@@ -68,9 +68,28 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
         case PLAYER_PLAYED_TIME_UPDATED:
         case PLAYER_LOADED_TIME_UPDATED:
         case PLAYER_PROGRESS_UPDATED:
-            const masterDurationSeconds = getMasterPlayerDurationSeconds(state);
+        case PLAYER_OFFSET_CHANGED:
+            let masterDurationSeconds = getMasterPlayerDurationSeconds(state);
 
-            if (action.type === PLAYER_PLAYED_TIME_UPDATED || action.type === PLAYER_PROGRESS_UPDATED) {
+            if (action.type === PLAYER_OFFSET_CHANGED) {
+                const newMasterDurationSeconds = Object.entries(getOffsets(state)).reduce(
+                    (acc, curr) => {
+                        const [playerId, offset] = curr;
+                        const playerDuration = getPlayerDurationSeconds(playerId)(state);
+
+                        return Math.max(acc, playerDuration - offset);
+                    },
+                    0,
+                );
+
+                // Account for slight delays in onProgress calls.
+                if (Math.abs(newMasterDurationSeconds - masterDurationSeconds) >= 1) {
+                    masterDurationSeconds = newMasterDurationSeconds;
+                    dispatch(masterPlayerUpdateDuration(newMasterDurationSeconds));
+                }
+            }
+
+            if (action.type === PLAYER_PLAYED_TIME_UPDATED || action.type === PLAYER_PROGRESS_UPDATED || action.type === PLAYER_OFFSET_CHANGED) {
                 const masterPlayedSeconds = Object.entries(getPlayersInfoState(state)).reduce(
                     (acc, curr) => {
                         const [playerId, playerInfo] = curr;
@@ -94,7 +113,7 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
                 }));
             }
 
-            if (action.type === PLAYER_LOADED_TIME_UPDATED || action.type === PLAYER_PROGRESS_UPDATED) {
+            if (action.type === PLAYER_LOADED_TIME_UPDATED || action.type === PLAYER_PROGRESS_UPDATED || action.type === PLAYER_OFFSET_CHANGED) {
                 const masterLoadedSeconds = Object.entries(getPlayersInfoState(state)).reduce(
                     (acc, curr) => {
                         const [playerId, playerInfo] = curr;
@@ -117,25 +136,6 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
                     loadedSeconds: masterLoadedSeconds,
                     loadedFraction: masterLoadedFraction,
                 }));
-            }
-
-            break;
-
-        case PLAYER_OFFSET_CHANGED:
-            const prevMasterPlayerDuration = getMasterPlayerDurationSeconds(state);
-            const masterPlayerDuration = Object.entries(getOffsets(state)).reduce(
-                (acc, curr) => {
-                    const [playerId, offset] = curr;
-                    const playerDuration = getPlayerDurationSeconds(playerId)(state);
-
-                    return Math.max(acc, playerDuration - offset);
-                },
-                0,
-            );
-
-            // Account for slight delays in onProgress calls.
-            if (Math.abs(masterPlayerDuration - prevMasterPlayerDuration) >= 1) {
-                dispatch(masterPlayerUpdateDuration(masterPlayerDuration));
             }
 
             break;

@@ -1,4 +1,6 @@
 import { getPlayerOffset } from '../../selectors';
+import { getMasterPlayerInfo } from '../../selectors/masterPlayerInfo';
+import { getPlayersInfoState } from '../../selectors/playersInfo';
 import { AppThunkAction } from '../../types';
 import { playerPushPendingSeek, playerStartPlaying, playerStopPlaying } from '../playersInfo';
 import {
@@ -94,22 +96,19 @@ export const masterPlayerUpdateVolume = (volume: number): MasterPlayerVolumeUpda
 export const startPlayback = (): AppThunkAction => (dispatch, getState) => {
     const state = getState();
 
-    const maxOffsetUnderflow = Object.values(state.offsets.offsets).reduce((acc, offset) => Math.max(acc, offset), 0);
     const {
         isReady: isMasterReady,
         isBuffering: isMasterBuffering,
         playedSeconds: masterPlayedSeconds,
-    } = state.masterPlayerInfo;
+    } = getMasterPlayerInfo(state);
 
     if (isMasterReady && !isMasterBuffering) {
-        Object.entries(state.playersInfo).forEach(([playerId, playerInfo]) => {
-            const { durationSeconds, hasEnded } = playerInfo;
-            const playerOffset = state.offsets.offsets[playerId] || 0;
+        Object.entries(getPlayersInfoState(state)).forEach(([playerId, playerInfo]) => {
+            const { durationSeconds } = playerInfo;
+            const playerOffset = getPlayerOffset(playerId)(state);
 
-            const playerPlayedSeconds = masterPlayedSeconds - maxOffsetUnderflow + playerOffset;
-
-            if (!hasEnded && playerPlayedSeconds >= 0 && playerPlayedSeconds <= durationSeconds) {
-                dispatch(playerStartPlaying(playerId))
+            if (-playerOffset <= masterPlayedSeconds && masterPlayedSeconds < durationSeconds - playerOffset) {
+                dispatch(playerStartPlaying(playerId));
             }
         });
     }
