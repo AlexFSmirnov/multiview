@@ -55,7 +55,7 @@ const MasterPlaybackControlBar: React.FC<MasterPlaybackControlBarProps> = ({
     };
 
     const handleSeek = (seekFraction: number) => {
-        // seekTo(seekFraction * durationSeconds);
+        seekTo(seekFraction * durationSeconds);
     };
 
     const playbackSliderProps = {

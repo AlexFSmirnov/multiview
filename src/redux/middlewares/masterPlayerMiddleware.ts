@@ -25,11 +25,11 @@ import {
     masterPlayerUpdateLoadedTime,
 } from '../actions/masterPlayerInfo';
 import { getOffsets, getPlayerOffset } from '../selectors';
-import { getPlayerDurationSeconds, getPlayersInfoState } from '../selectors/playersInfo';
+import { getPlayerDurationSeconds, getPlayerInfo, getPlayersInfoState } from '../selectors/playersInfo';
 import { getMasterPlayerDurationSeconds } from '../selectors/masterPlayerInfo';
 
 const everyOtherPlayer = (condition: (playerInfo: PlayerInfo) => boolean, state: State, currentId: string) => (
-    Object.entries(state.playersInfo).every(([id, playerInfo]) => id === currentId || condition(playerInfo))
+    Object.entries(getPlayersInfoState(state)).every(([id, playerInfo]) => id === currentId || condition(playerInfo))
 );
 
 export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (action: Action) => {
@@ -56,11 +56,13 @@ export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (a
             break;
 
         case PLAYER_STARTED_BUFFERING:
-            dispatch(masterPlayerStartBuffering());
+            if (!getPlayerInfo(action.payload.id)(state).hasEnded) {
+                dispatch(masterPlayerStartBuffering());
+            }
             break;
 
         case PLAYER_STOPPED_BUFFERING:
-            if (everyOtherPlayer(player => !player.isBuffering, state, action.payload.id)) {
+            if (everyOtherPlayer(player => (!player.isBuffering || player.hasEnded), state, action.payload.id)) {
                 dispatch(masterPlayerStopBuffering());
             }
             break;

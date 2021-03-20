@@ -6,6 +6,7 @@ import {
     PlayerStartedBufferingAction,
     PlayerStoppedBufferingAction,
     PlayerVideoEndedAction,
+    PlayerVideoRestartedAction,
     PlayerDurationUpdatedAction,
     PlayerPlayedTimeUpdatedAction,
     PlayerLoadedTimeUpdatedAction,
@@ -20,6 +21,7 @@ import {
     PLAYER_STARTED_BUFFERING,
     PLAYER_STOPPED_BUFFERING,
     PLAYER_VIDEO_ENDED,
+    PLAYER_VIDEO_RESTARTED,
     PLAYER_DURATION_UPDATED,
     PLAYER_PLAYED_TIME_UPDATED,
     PLAYER_LOADED_TIME_UPDATED,
@@ -61,6 +63,11 @@ export const playerStopBuffering = (id: string): PlayerStoppedBufferingAction =>
 
 export const playerEndVideo = (id: string): PlayerVideoEndedAction => ({
     type: PLAYER_VIDEO_ENDED,
+    payload: { id },
+});
+
+export const playerRestartVideo = (id: string): PlayerVideoRestartedAction => ({
+    type: PLAYER_VIDEO_RESTARTED,
     payload: { id },
 });
 

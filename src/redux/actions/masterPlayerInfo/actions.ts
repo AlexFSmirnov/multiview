@@ -1,8 +1,8 @@
 import { getPlayerOffset } from '../../selectors';
 import { getMasterPlayerInfo } from '../../selectors/masterPlayerInfo';
-import { getPlayersInfoState } from '../../selectors/playersInfo';
+import { getPlayersInfoState, shouldPlayerCurrentlyPlay } from '../../selectors/playersInfo';
 import { AppThunkAction } from '../../types';
-import { playerPushPendingSeek, playerStartPlaying, playerStopPlaying } from '../playersInfo';
+import { playerEndVideo, playerPushPendingSeek, playerRestartVideo, playerStartPlaying, playerStopPlaying } from '../playersInfo';
 import {
     MASTER_PLAYER_READY,
     MASTER_PLAYER_NOT_READY,
@@ -99,16 +99,12 @@ export const startPlayback = (): AppThunkAction => (dispatch, getState) => {
     const {
         isReady: isMasterReady,
         isBuffering: isMasterBuffering,
-        playedSeconds: masterPlayedSeconds,
     } = getMasterPlayerInfo(state);
 
     if (isMasterReady && !isMasterBuffering) {
-        Object.entries(getPlayersInfoState(state)).forEach(([playerId, playerInfo]) => {
-            const { durationSeconds } = playerInfo;
-            const playerOffset = getPlayerOffset(playerId)(state);
-
-            if (-playerOffset <= masterPlayedSeconds && masterPlayedSeconds < durationSeconds - playerOffset) {
-                dispatch(playerStartPlaying(playerId));
+        Object.keys(getPlayersInfoState(state)).forEach(id => {
+            if (shouldPlayerCurrentlyPlay(id)(state)) {
+                dispatch(playerStartPlaying(id));
             }
         });
     }
@@ -123,8 +119,31 @@ export const stopPlayback = (): AppThunkAction => (dispatch, getState) => {
 export const seekTo = (seconds: number): AppThunkAction => (dispatch, getState) => {
     const state = getState();
 
-    // TODO: account for offsets.
-    Object.keys(state.playersInfo).forEach(id => {
-        dispatch(playerPushPendingSeek(id, { seekToSeconds: seconds }));
+    Object.entries(getPlayersInfoState(state)).forEach(([playerId, playerInfo]) => {
+        const { playedSeconds, durationSeconds } = playerInfo;
+        const playerOffset = getPlayerOffset(playerId)(state);
+
+        if (-playerOffset > seconds) {
+            if (playedSeconds > 0) {
+                dispatch(playerPushPendingSeek(playerId, { seekToSeconds: 0 }));
+            }
+
+            dispatch(playerStopPlaying(playerId));
+        } else if (seconds >= durationSeconds - playerOffset) {
+            if (playedSeconds < durationSeconds) {
+                dispatch(playerPushPendingSeek(playerId, { seekToSeconds: durationSeconds }));
+            }
+
+            dispatch(playerStopPlaying(playerId));
+            dispatch(playerEndVideo(playerId));
+        } else {
+            const playerPlayedTime = seconds + playerOffset;
+            dispatch(playerRestartVideo(playerId));
+            dispatch(playerPushPendingSeek(playerId, { seekToSeconds: playerPlayedTime }));
+
+            if (getMasterPlayerInfo(state).isPlaying) {
+                dispatch(playerStartPlaying(playerId));
+            }
+        }
     });
 };

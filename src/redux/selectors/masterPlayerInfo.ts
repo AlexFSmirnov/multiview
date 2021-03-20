@@ -5,6 +5,11 @@ import { MasterPlayerInfoState } from '../reducers/masterPlayerInfo';
 
 export const getMasterPlayerInfo = (state: State) => state.masterPlayerInfo;
 
+export const getIsMasterPlayerBuffering = createSelector(
+    getMasterPlayerInfo,
+    getOr(false, 'isBuffering'),
+);
+
 export const getMasterPlayerDurationSeconds = createSelector(
     getMasterPlayerInfo,
     getOr(0, 'durationSeconds'),

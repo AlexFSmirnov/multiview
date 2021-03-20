@@ -8,6 +8,7 @@ import {
     PLAYER_STARTED_BUFFERING,
     PLAYER_STOPPED_BUFFERING,
     PLAYER_VIDEO_ENDED,
+    PLAYER_VIDEO_RESTARTED,
     PLAYER_DURATION_UPDATED,
     PLAYER_PLAYED_TIME_UPDATED,
     PLAYER_LOADED_TIME_UPDATED,
@@ -76,6 +77,13 @@ export const playersInfoReducer = (state = playersInfoInitialState, action: Play
             return { ...state, [action.payload.id]: {
                 ...state[action.payload.id],
                 hasEnded: true,
+                isBuffering: false,
+            } };
+
+        case PLAYER_VIDEO_RESTARTED:
+            return { ...state, [action.payload.id]: {
+                ...state[action.payload.id],
+                hasEnded: false,
             } };
 
         case PLAYER_DURATION_UPDATED:

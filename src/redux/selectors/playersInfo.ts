@@ -4,6 +4,8 @@ import { compose, entries, get, getOr, reduce } from 'lodash/fp';
 import { State } from '../types';
 import { playerInfoInitialState, PlayersInfoState } from '../reducers/playersInfo';
 import { PlayerInfo } from '../actions/playersInfo';
+import { getPlayerOffset } from './offsets';
+import { getMasterPlayerPlayedSeconds } from './masterPlayerInfo';
 
 export const getPlayersInfoState = (state: State) => state.playersInfo;
 
@@ -70,4 +72,20 @@ export const getMaxDuration = createSelector(
     getPlayersInfoState,
     getMaxDurationPlayerId,
     (playersInfo: PlayersInfoState, maxDurationPlayerId: string | null) => maxDurationPlayerId ? get(maxDurationPlayerId, playersInfo).durationSeconds : 0,
+);
+
+const shouldPlayerCurrentlyPlayBase = (id: string) => createSelector(
+    getPlayerDurationSeconds(id),
+    getPlayerOffset(id),
+    getMasterPlayerPlayedSeconds,
+    (playerDuration: number, playerOffset: number, masterPlayedSeconds: number) => (
+        -playerOffset <= masterPlayedSeconds && masterPlayedSeconds <= playerDuration - playerOffset
+    ),
+);
+export const shouldPlayerCurrentlyPlay = memoize(shouldPlayerCurrentlyPlayBase);
+
+export const areAllCorrectPlayersPlaying = (state: State) => (
+    Object.entries(getPlayersInfoState(state)).every(([playerId, playerInfo]) => (
+        !shouldPlayerCurrentlyPlay(playerId)(state) || (playerInfo.isPlaying && shouldPlayerCurrentlyPlay(playerId)(state))
+    ))
 );

@@ -2,9 +2,9 @@ import { Middleware } from 'redux';
 import { Action, State } from '../types';
 import { changeOffsetsReferencePlayerId, changePlayerOffset } from '../actions/offsets';
 import { PLAYER_PLAYED_TIME_UPDATED, PLAYER_PROGRESS_UPDATED } from '../actions/playersInfo';
-import { getPlayersInfoState } from '../selectors/playersInfo';
+import { areAllCorrectPlayersPlaying, getPlayersInfoState, shouldPlayerCurrentlyPlay } from '../selectors/playersInfo';
 import { getOffsets, getOffsetsReferencePlayerId } from '../selectors';
-import { getMasterPlayerPlayedSeconds } from '../selectors/masterPlayerInfo';
+import { getIsMasterPlayerBuffering, getMasterPlayerPlayedSeconds } from '../selectors/masterPlayerInfo';
 
 export const offsetsMiddleware: Middleware<{}, State> = store => next => (action: Action) => {
     next(action);
@@ -24,18 +24,12 @@ export const offsetsMiddleware: Middleware<{}, State> = store => next => (action
                 break;
             }
 
-            if (id === referencePlayerId) {
-                Object.entries(getPlayersInfoState(state)).forEach(([playerId, playerInfo]) => {
-                    if (playerId !== referencePlayerId && playerInfo.playedSeconds >= 0.0001 && !playerInfo.hasEnded) {
-                        dispatch(changePlayerOffset(playerId, {
-                            offset: playerInfo.playedSeconds - playedSeconds,
-                        }));
-                    }
-                });
+            if (getIsMasterPlayerBuffering(state) || areAllCorrectPlayersPlaying(state)) {
                 break;
             }
 
-            const offset = playedSeconds - getMasterPlayerPlayedSeconds(state);
+            const masterPlayedSeconds = getMasterPlayerPlayedSeconds(state);
+            const offset = playedSeconds - masterPlayedSeconds;
 
             // All offsets should be negative, i.e. the reference player should play first.
             // Checking for > 1.5 instead of 0 to account for the order of onProgress calls.
@@ -54,7 +48,15 @@ export const offsetsMiddleware: Middleware<{}, State> = store => next => (action
                 break;
             }
 
-            dispatch(changePlayerOffset(id, { offset }));
+            Object.entries(getPlayersInfoState(state)).forEach(([playerId, playerInfo]) => {
+                if (playerId !== referencePlayerId && shouldPlayerCurrentlyPlay(playerId)(state)) {
+                    const playerPlayedSeconds = playerId === id ? playedSeconds : playerInfo.playedSeconds;
+                    dispatch(changePlayerOffset(playerId, {
+                        offset: playerPlayedSeconds - masterPlayedSeconds,
+                    }));
+                }
+            });
+
             break;
     }
 };

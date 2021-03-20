@@ -44,7 +44,7 @@ const masterPlayerInfoInitialState: MasterPlayerInfoState = {
 export const masterPlayerInfoReducer = (state = masterPlayerInfoInitialState, action: MasterPlayerInfoAction) => {
     switch (action.type) {
         case MASTER_PLAYER_READY:
-            return { ...state, isReady: true };
+            return { ...state, isReady: true, isBuffering: false };
 
         case MASTER_PLAYER_NOT_READY:
             return { ...state, isReady: false };

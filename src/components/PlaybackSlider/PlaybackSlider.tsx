@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Typography, useTheme } from '@material-ui/core';
 import { throttle } from 'lodash/fp';
 import { formatSeconds } from '../../utils/formatSeconds';
-import { PlaybackSliderBar, PlaybackSliderContainer, PlaybackSliderInteractionContainer, PlaybackSliderScrubber, PlaybackSliderTimePreviewContainer, PlaybackSliderTimePreviewWrapper } from './style'
+import { PlaybackSliderBar, PlaybackSliderContainer, PlaybackSliderInteractionContainer, PlaybackSliderScrubber, PlaybackSliderTimePreviewContainer } from './style'
 
 export interface PlaybackSliderProps {
     playedFraction: number;
@@ -102,11 +102,11 @@ const PlaybackSlider: React.FC<PlaybackSliderProps> = ({ playedFraction, loadedF
 
                 <PlaybackSliderScrubber progress={internalPlayedFraction} color={theme.palette.primary.light} visible={isInteractable} />
 
-                <PlaybackSliderTimePreviewWrapper progress={mousePosFraction} visible={isInteractable}>
+                <PlaybackSliderTimePreviewContainer progress={mousePosFraction} visible={isInteractable}>
                     <Typography variant="caption">
                         {formatSeconds(Math.round(mousePosFraction * durationSeconds))}
                     </Typography>
-                </PlaybackSliderTimePreviewWrapper>
+                </PlaybackSliderTimePreviewContainer>
             </PlaybackSliderContainer>
         </PlaybackSliderInteractionContainer>
     );

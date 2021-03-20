@@ -22,6 +22,7 @@ export const PLAYER_STOPPED_PLAYING = 'PLAYER_STOPPED_PLAYING';
 export const PLAYER_STARTED_BUFFERING = 'PLAYER_STARTED_BUFFERING';
 export const PLAYER_STOPPED_BUFFERING = 'PLAYER_STOPPED_BUFFERING';
 export const PLAYER_VIDEO_ENDED = 'PLAYER_VIDEO_ENDED';
+export const PLAYER_VIDEO_RESTARTED = 'PLAYER_VIDEO_RESTARTED';
 export const PLAYER_DURATION_UPDATED = 'PLAYER_DURATION_UPDATED';
 export const PLAYER_PLAYED_TIME_UPDATED = 'PLAYER_PLAYED_TIME_UPDATED';
 export const PLAYER_LOADED_TIME_UPDATED = 'PLAYER_LOADED_TIME_UPDATED';
@@ -66,6 +67,11 @@ export interface PlayerStoppedBufferingAction {
 
 export interface PlayerVideoEndedAction {
     type: typeof PLAYER_VIDEO_ENDED;
+    payload: WithId;
+}
+
+export interface PlayerVideoRestartedAction {
+    type: typeof PLAYER_VIDEO_RESTARTED;
     payload: WithId;
 }
 
@@ -123,7 +129,7 @@ export interface PlayerPendingSeekPoppedAction {
 
 export type PlayersInfoAction = (
     PlayerInitializedAction | PlayerReadyAction | PlayerStartedPlayingAction | PlayerStoppedPlayingAction |
-    PlayerStartedBufferingAction | PlayerStoppedBufferingAction | PlayerVideoEndedAction | PlayerDurationUpdatedAction |
-    PlayerPlayedTimeUpdatedAction | PlayerLoadedTimeUpdatedAction | PlayerProgressUpdatedAction | PlayerVolumeUpdatedAction |
-    PlayerPendingSeekPushedAction | PlayerPendingSeekPoppedAction
+    PlayerStartedBufferingAction | PlayerStoppedBufferingAction | PlayerVideoEndedAction | PlayerVideoRestartedAction |
+    PlayerDurationUpdatedAction | PlayerPlayedTimeUpdatedAction | PlayerLoadedTimeUpdatedAction | PlayerProgressUpdatedAction |
+    PlayerVolumeUpdatedAction | PlayerPendingSeekPushedAction | PlayerPendingSeekPoppedAction
 );

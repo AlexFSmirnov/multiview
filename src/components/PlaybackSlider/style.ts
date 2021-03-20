@@ -57,18 +57,7 @@ export const PlaybackSliderScrubber = styled.div.attrs<{ progress: number; color
     transition: transform 100ms;
 `;
 
-export const PlaybackSliderTimePreviewContainer = styled.div`
-    width: 100vw;
-    height: 32px;
-
-    position: relative;
-    top: -32px;
-    left: -8px;
-
-    overflow: hidden;
-`;
-
-export const PlaybackSliderTimePreviewWrapper = styled.div.attrs<{ progress: number; visible: boolean }>(props => ({
+export const PlaybackSliderTimePreviewContainer = styled.div.attrs<{ progress: number; visible: boolean }>(props => ({
     style: { left: `max(0px, min(calc(100% - 64px), calc(100% * ${props.progress} - 32px)))` },
 }))<{ progress: number; visible: boolean }>`
     width: 64px;
