@@ -18,7 +18,7 @@ import { getIsPlayerPlaying, getIsPlayerBuffering, getPlayerVolume, getPlayerPen
 import { State } from '../../redux/types';
 import { ReactPlayerWrapper, VideoPlayerContainer } from './style';
 import { PlayerControlOverlay } from '../PlayerControlOverlay';
-import { getIsMasterPlayerBuffering } from '../../redux/selectors/masterPlayerInfo';
+import { getIsMasterPlayerBuffering, getMasterPlayerVolume } from '../../redux/selectors/masterPlayerInfo';
 
 interface OwnProps {
     id: string;
@@ -32,6 +32,7 @@ interface StateProps {
     isBuffering: boolean;
     isMasterBuffering: boolean;
     volume: number;
+    masterVolume: number;
     pendingSeeks: number[];
 }
 
@@ -59,6 +60,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     isBuffering,
     isMasterBuffering,
     volume,
+    masterVolume,
     pendingSeeks,
     initializePlayer,
     playerReady,
@@ -125,7 +127,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         controls: false,
         width,
         height,
-        volume,
+        volume: volume * masterVolume,
         playing: isPlaying && !isMasterBuffering,
         onReady: handlePlayerReady,
         onPlay: handlePlayerPlay,
@@ -159,6 +161,7 @@ export default connect<StateProps, DispatchProps, OwnProps, State>(
         isPlaying: getIsPlayerPlaying(id)(state),
         isBuffering: getIsPlayerBuffering(id)(state),
         volume: getPlayerVolume(id)(state),
+        masterVolume: getMasterPlayerVolume(state),
         isMasterBuffering: getIsMasterPlayerBuffering(state),
         pendingSeeks: getPlayerPendingSeeks(id)(state),
     }),
