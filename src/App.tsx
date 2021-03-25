@@ -22,7 +22,7 @@ interface StateProps {
 }
 
 const App: React.FC<StateProps> = ({ videos }) => {
-    const [isAddVideosDialogOpen, setIsAddVideosDialogOpen] = useState(false);
+    const [isAddVideosDialogOpen, setIsAddVideosDialogOpen] = useState(true);
 
     const openAddVideosDialog = () => setIsAddVideosDialogOpen(true);
     const closeAddVideosDialog = () => setIsAddVideosDialogOpen(false);

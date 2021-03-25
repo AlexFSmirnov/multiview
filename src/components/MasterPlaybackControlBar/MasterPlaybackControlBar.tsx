@@ -33,6 +33,7 @@ const MasterPlaybackControlBar: React.FC<MasterPlaybackControlBarProps> = ({
         ...other,
         onPlay: startPlayback,
         onPause: stopPlayback,
+        // TODO: Connect master volume to state.
         onMuteUnmute: () => {},
         onVolumeChange: () => {},
         onSeek: seekTo,

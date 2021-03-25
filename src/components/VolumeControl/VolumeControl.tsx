@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { throttle } from 'lodash/fp';
 import { IconButton, Slider, withStyles } from '@material-ui/core';
 import { VolumeOff, VolumeDown, VolumeUp } from '@material-ui/icons';
 import { VolumeControlContainer, VolumeControlIconContainer, VolumeControlSliderContainer } from './style';
@@ -31,15 +32,28 @@ interface VolumeControlProps {
     onMuteUnmute?: (isMuted: boolean) => void;
 }
 
+const throttledOnVolumeChange = throttle(100, (volume: number, onVolumeChange?: (volume: number) => void) => {
+    if (onVolumeChange) {
+        onVolumeChange(volume);
+    }
+});
+
 const VolumeControl: React.FC<VolumeControlProps> = ({ volume, isMuted, onVolumeChange, onMuteUnmute }) => {
     const [isMouseOver, setIsMouseOver] = useState(false);
     const [isAdjustingVolume, setIsAdjustingVolume] = useState(false);
+    const [internalVolume, setInternalVolume] = useState(volume);
+
+    useEffect(() => {
+        if (!isAdjustingVolume) {
+            setInternalVolume(volume);
+        }
+    }, [volume, isAdjustingVolume, setInternalVolume]);
 
     const handleVolumeChange = (_: React.ChangeEvent<{}>, v: number | number[]) => {
-        const parsedVolume = Array.isArray(v) ? v[0] : v;
-        if (onVolumeChange) {
-            onVolumeChange(parsedVolume || 0);
-        }
+        const parsedVolume = (Array.isArray(v) ? v[0] : v) || 0;
+
+        throttledOnVolumeChange(parsedVolume, onVolumeChange);
+        setInternalVolume(parsedVolume);
     };
 
     const handleIconClick = () => {
@@ -60,6 +74,7 @@ const VolumeControl: React.FC<VolumeControlProps> = ({ volume, isMuted, onVolume
     };
 
     const volumeSliderProps = {
+        value: internalVolume,
         min: 0,
         max: 1,
         step: 0.01,

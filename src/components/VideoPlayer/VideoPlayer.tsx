@@ -12,10 +12,13 @@ import {
     playerEndVideo,
     playerUpdateDuration,
     playerUpdateProgress,
-    playerUpdateVolume,
     playerPopPendingSeek,
 } from '../../redux/actions/playersInfo';
+import { getIsPlayerPlaying, getIsPlayerBuffering, getPlayerVolume, getPlayerPendingSeeks } from '../../redux/selectors/playersInfo';
 import { State } from '../../redux/types';
+import { ReactPlayerWrapper, VideoPlayerContainer } from './style';
+import { PlayerControlOverlay } from '../PlayerControlOverlay';
+import { getIsMasterPlayerBuffering } from '../../redux/selectors/masterPlayerInfo';
 
 interface OwnProps {
     id: string;
@@ -28,6 +31,7 @@ interface StateProps {
     isPlaying: boolean;
     isBuffering: boolean;
     isMasterBuffering: boolean;
+    volume: number;
     pendingSeeks: number[];
 }
 
@@ -41,7 +45,6 @@ interface DispatchProps {
     playerEndVideo: typeof playerEndVideo;
     playerUpdateDuration: typeof playerUpdateDuration;
     playerUpdateProgress: typeof playerUpdateProgress;
-    playerUpdateVolume: typeof playerUpdateVolume;
     playerPopPendingSeek: typeof playerPopPendingSeek;
 }
 
@@ -55,6 +58,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     isPlaying,
     isBuffering,
     isMasterBuffering,
+    volume,
     pendingSeeks,
     initializePlayer,
     playerReady,
@@ -65,7 +69,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     playerEndVideo,
     playerUpdateDuration,
     playerUpdateProgress,
-    playerUpdateVolume,
     playerPopPendingSeek,
 }) => {
     const playerRef = useRef<ReactPlayer | null>(null);
@@ -119,9 +122,10 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const playerProps = {
         url: video.url,
         ref: playerRef,
-        controls: true,
+        controls: false,
         width,
         height,
+        volume,
         playing: isPlaying && !isMasterBuffering,
         onReady: handlePlayerReady,
         onPlay: handlePlayerPlay,
@@ -141,16 +145,22 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     };
 
     return (
-        <ReactPlayer {...playerProps}/>
+        <VideoPlayerContainer width={width} height={height}>
+            <ReactPlayerWrapper>
+                <ReactPlayer {...playerProps}/>
+            </ReactPlayerWrapper>
+            <PlayerControlOverlay id={id} />
+        </VideoPlayerContainer>
     );
 };
 
 export default connect<StateProps, DispatchProps, OwnProps, State>(
-    (state, ownProps) => ({
-        isPlaying: state.playersInfo[ownProps.id] ? state.playersInfo[ownProps.id].isPlaying : false,
-        isBuffering: state.playersInfo[ownProps.id] ? state.playersInfo[ownProps.id].isBuffering : false,
-        isMasterBuffering: state.masterPlayerInfo.isBuffering,
-        pendingSeeks: state.playersInfo[ownProps.id] ? state.playersInfo[ownProps.id].pendingSeeks : [],
+    (state, { id }) => ({
+        isPlaying: getIsPlayerPlaying(id)(state),
+        isBuffering: getIsPlayerBuffering(id)(state),
+        volume: getPlayerVolume(id)(state),
+        isMasterBuffering: getIsMasterPlayerBuffering(state),
+        pendingSeeks: getPlayerPendingSeeks(id)(state),
     }),
     {
         initializePlayer,
@@ -162,7 +172,6 @@ export default connect<StateProps, DispatchProps, OwnProps, State>(
         playerEndVideo,
         playerUpdateDuration,
         playerUpdateProgress,
-        playerUpdateVolume,
         playerPopPendingSeek,
     },
 )(VideoPlayer);

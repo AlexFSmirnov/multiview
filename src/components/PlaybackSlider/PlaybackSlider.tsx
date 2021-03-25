@@ -9,11 +9,16 @@ export interface PlaybackSliderProps {
     loadedFraction: number;
     durationSeconds: number;
     isBuffering: boolean;
-    onSeekCallbackThrottle?: number;
     onSeek?: (playedFraction: number) => void;
 }
 
-const PlaybackSlider: React.FC<PlaybackSliderProps> = ({ playedFraction, loadedFraction, durationSeconds, isBuffering, onSeekCallbackThrottle = 200, onSeek }) => {
+const throttledHandleSeek = throttle(1000, (playedFraction: number, onSeek?: (playedFraction: number) => void) => {
+    if (onSeek) {
+        onSeek(playedFraction);
+    }
+});
+
+const PlaybackSlider: React.FC<PlaybackSliderProps> = ({ playedFraction, loadedFraction, durationSeconds, isBuffering, onSeek }) => {
     const theme = useTheme();
     const [isHovered, setIsHovered] = useState(false);
     const [isScrubberGrabbed, setIsScrubberGrabbed] = useState(false);
@@ -30,12 +35,6 @@ const PlaybackSlider: React.FC<PlaybackSliderProps> = ({ playedFraction, loadedF
 
     const handleMouseEnter = () => setIsHovered(true);
     const handleMouseLeave = () => setIsHovered(false);
-
-    const debouncedHandleSeek = throttle(onSeekCallbackThrottle, (playedFraction: number) => {
-        if (onSeek) {
-            onSeek(playedFraction);
-        }
-    });
 
     const getMousePosFraction = (mouseX: number) => {
         const { current: sliderContainer } = sliderContainerRef;
@@ -55,7 +54,7 @@ const PlaybackSlider: React.FC<PlaybackSliderProps> = ({ playedFraction, loadedF
         const newMousePosFraction = getMousePosFraction(mouseX);
         setMousePosFraction(newMousePosFraction);
         setInternalPlayedFraction(newMousePosFraction);
-        debouncedHandleSeek(newMousePosFraction);
+        throttledHandleSeek(newMousePosFraction, onSeek);
     };
 
     const handleWindowMouseMove = (event: MouseEvent) => {

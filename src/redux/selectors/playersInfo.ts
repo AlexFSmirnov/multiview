@@ -15,11 +15,29 @@ const getPlayerInfoBase = (id: string) => createSelector(
 );
 export const getPlayerInfo = memoize(getPlayerInfoBase);
 
+const getIsPlayerPlayingBase = (id: string) => createSelector(
+    getPlayerInfo(id),
+    getOr(false, 'isPlaying'),
+);
+export const getIsPlayerPlaying = memoize(getIsPlayerPlayingBase);
+
+const getIsPlayerBufferingBase = (id: string) => createSelector(
+    getPlayerInfo(id),
+    getOr(false, 'isBuffering'),
+);
+export const getIsPlayerBuffering = memoize(getIsPlayerBufferingBase);
+
 const getPlayerDurationSecondsBase = (id: string) => createSelector(
     getPlayerInfo(id),
     getOr(0, 'durationSeconds'),
 );
 export const getPlayerDurationSeconds = memoize(getPlayerDurationSecondsBase);
+
+const getPlayerVolumeBase = (id: string) => createSelector(
+    getPlayerInfo(id),
+    getOr(1, 'volume'),
+);
+export const getPlayerVolume = memoize(getPlayerVolumeBase);
 
 const getPlayerPlayedTimeBase = (id: string) => createSelector(
     getPlayerInfo(id),
@@ -33,17 +51,41 @@ const getPlayerPlayedSecondsBase = (id: string) => createSelector(
 );
 export const getPlayerPlayedSeconds = memoize(getPlayerPlayedSecondsBase);
 
+const getPlayerPlayedFractionBase = (id: string) => createSelector(
+    getPlayerPlayedTime(id),
+    getOr(0, 'playedFraction'),
+);
+export const getPlayerPlayedFraction = memoize(getPlayerPlayedFractionBase);
+
 const getPlayerLoadedTimeBase = (id: string) => createSelector(
     getPlayerInfo(id),
     ({ loadedSeconds, loadedFraction }: PlayerInfo) => ({ loadedSeconds, loadedFraction }),
 );
 export const getPlayerLoadedTime = memoize(getPlayerLoadedTimeBase);
 
-const hasPlayerEndedBase = (id: string) => createSelector<State, PlayerInfo, boolean>(
+const getPlayerLoadedSecondsBase = (id: string) => createSelector(
+    getPlayerLoadedTime(id),
+    getOr(0, 'loadedSeconds'),
+);
+export const getPlayerLoadedSeconds = memoize(getPlayerLoadedSecondsBase);
+
+const getPlayerLoadedFractionBase = (id: string) => createSelector(
+    getPlayerLoadedTime(id),
+    getOr(0, 'loadedFraction'),
+);
+export const getPlayerLoadedFraction = memoize(getPlayerLoadedFractionBase);
+
+const hasPlayerEndedBase = (id: string) => createSelector(
     getPlayerInfo(id),
-    get('hasEnded'),
+    getOr(false, 'hasEnded'),
 );
 export const hasPlayerEnded = memoize(hasPlayerEndedBase);
+
+const getPlayerPendingSeeksBase = (id: string) => createSelector(
+    getPlayerInfo(id),
+    getOr([], 'pendingSeeks'),
+);
+export const getPlayerPendingSeeks = memoize(getPlayerPendingSeeksBase);
 
 export const getMaxDurationPlayerId = createSelector<State, PlayersInfoState, string | null>(
     getPlayersInfoState,
