@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { omit } from 'lodash/fp';
@@ -49,6 +49,25 @@ const AddVideosDialog: React.FC<AddVideosDialogProps> = ({ open, onClose, addVid
             setFileNames({ ...fileNames, ...acceptedNames });
         },
     });
+
+    useEffect(() => {
+        const handleKeyPress = (e: KeyboardEvent) => {
+            if (e.key === 'Enter') {
+                handleConfirm();
+            }
+        };
+
+        if (open) {
+            window.addEventListener('keypress', handleKeyPress);
+        } else {
+            window.removeEventListener('keypress', handleKeyPress);
+        }
+
+        return () => {
+            window.removeEventListener('keypress', handleKeyPress);
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [open]);
 
     const handleUrlInputChange = (id: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
         // Adds a new TextField if all others are non-empty.
