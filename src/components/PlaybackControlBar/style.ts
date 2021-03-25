@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 
-export const MasterPlaybackControlBarContainer = styled.div`
+export const PlaybackControlBarContainer = styled.div`
     width: 100%;
     height: 46px;
 `;
 
-export const MasterPlaybackControlBarOuterWrapper = styled.div`
+export const PlaybackControlBarOuterWrapper = styled.div`
     width: 100%;
     position: absolute;
     left: 0;
@@ -16,7 +16,7 @@ export const MasterPlaybackControlBarOuterWrapper = styled.div`
     align-items: center;
 `;
 
-export const MasterPlaybackControlBarInnerWrapper = styled.div`
+export const PlaybackControlBarInnerWrapper = styled.div`
     height: 30px;
 
     display: flex;
@@ -24,7 +24,7 @@ export const MasterPlaybackControlBarInnerWrapper = styled.div`
     flex: 1;
 `;
 
-export const MasterPlaybackControlBarProgressTextWrapper = styled.div`
+export const PlaybackControlBarProgressTextWrapper = styled.div`
     height: 100%;
     padding-left: 12px;
 
@@ -33,6 +33,6 @@ export const MasterPlaybackControlBarProgressTextWrapper = styled.div`
     align-items: center;
 `;
 
-export const MasterPlaybackControlBarButtonsSpacer = styled.div`
+export const PlaybackControlBarButtonsSpacer = styled.div`
     flex: 1;
 `;
