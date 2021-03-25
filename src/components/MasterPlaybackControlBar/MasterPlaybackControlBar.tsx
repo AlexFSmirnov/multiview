@@ -1,8 +1,10 @@
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { State } from '../../redux/types';
 import { startPlayback, stopPlayback, seekTo } from '../../redux/actions/masterPlayerInfo';
 import { PlaybackControlBar } from '../PlaybackControlBar';
 import MasterPlaybackControlBarActions from './MasterPlaybackControlBarActions';
+import { getIsMasterPlayerBuffering, getIsMasterPlayerPlaying, getMasterPlayerDurationSeconds, getMasterPlayerLoadedFraction, getMasterPlayerPlayedFraction, getMasterPlayerVolume } from '../../redux/selectors/masterPlayerInfo';
 
 interface StateProps {
     isPlaying: boolean;
@@ -42,13 +44,13 @@ const MasterPlaybackControlBar: React.FC<MasterPlaybackControlBarProps> = ({
 };
 
 export default connect<StateProps, DispatchProps, {}, State>(
-    state => ({
-        isPlaying: state.masterPlayerInfo.isPlaying,
-        isBuffering: state.masterPlayerInfo.isBuffering,
-        volume: state.masterPlayerInfo.volume,
-        durationSeconds: state.masterPlayerInfo.durationSeconds,
-        playedFraction: state.masterPlayerInfo.playedFraction,
-        loadedFraction: state.masterPlayerInfo.loadedFraction,
+    createStructuredSelector({
+        isPlaying: getIsMasterPlayerPlaying,
+        isBuffering: getIsMasterPlayerBuffering,
+        volume: getMasterPlayerVolume,
+        durationSeconds: getMasterPlayerDurationSeconds,
+        playedFraction: getMasterPlayerPlayedFraction,
+        loadedFraction: getMasterPlayerLoadedFraction,
     }),
     {
         startPlayback,
