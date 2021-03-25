@@ -14,11 +14,11 @@ import {
     playerUpdateProgress,
     playerPopPendingSeek,
 } from '../../redux/actions/playersInfo';
-import { getIsPlayerPlaying, getIsPlayerBuffering, getPlayerVolume, getPlayerPendingSeeks } from '../../redux/selectors/playersInfo';
+import { getIsPlayerPlaying, getIsPlayerBuffering, getPlayerVolume, getPlayerPendingSeeks, getIsPlayerMuted } from '../../redux/selectors/playersInfo';
 import { State } from '../../redux/types';
 import { ReactPlayerWrapper, VideoPlayerContainer } from './style';
 import { PlayerControlOverlay } from '../PlayerControlOverlay';
-import { getIsMasterPlayerBuffering, getMasterPlayerVolume } from '../../redux/selectors/masterPlayerInfo';
+import { getIsMasterPlayerBuffering, getIsMasterPlayerMuted, getMasterPlayerVolume } from '../../redux/selectors/masterPlayerInfo';
 
 interface OwnProps {
     id: string;
@@ -33,6 +33,8 @@ interface StateProps {
     isMasterBuffering: boolean;
     volume: number;
     masterVolume: number;
+    isPlayerMuted: boolean;
+    isMasterMuted: boolean;
     pendingSeeks: number[];
 }
 
@@ -61,6 +63,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     isMasterBuffering,
     volume,
     masterVolume,
+    isPlayerMuted,
+    isMasterMuted,
     pendingSeeks,
     initializePlayer,
     playerReady,
@@ -121,13 +125,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         }
     };
 
+    const isMuted = isPlayerMuted || isMasterMuted;
+
     const playerProps = {
         url: video.url,
         ref: playerRef,
         controls: false,
         width,
         height,
-        volume: volume * masterVolume,
+        volume: isMuted ? 0 : (volume * masterVolume),
         playing: isPlaying && !isMasterBuffering,
         onReady: handlePlayerReady,
         onPlay: handlePlayerPlay,
@@ -160,9 +166,11 @@ export default connect<StateProps, DispatchProps, OwnProps, State>(
     (state, { id }) => ({
         isPlaying: getIsPlayerPlaying(id)(state),
         isBuffering: getIsPlayerBuffering(id)(state),
+        isMasterBuffering: getIsMasterPlayerBuffering(state),
         volume: getPlayerVolume(id)(state),
         masterVolume: getMasterPlayerVolume(state),
-        isMasterBuffering: getIsMasterPlayerBuffering(state),
+        isPlayerMuted: getIsPlayerMuted(id)(state),
+        isMasterMuted: getIsMasterPlayerMuted(state),
         pendingSeeks: getPlayerPendingSeeks(id)(state),
     }),
     {

@@ -4,18 +4,6 @@ import { getPlayersInfoState, shouldPlayerCurrentlyPlay } from '../../selectors/
 import { AppThunkAction } from '../../types';
 import { playerEndVideo, playerPushPendingSeek, playerRestartVideo, playerStartPlaying, playerStopPlaying } from '../playersInfo';
 import {
-    MASTER_PLAYER_READY,
-    MASTER_PLAYER_NOT_READY,
-    MASTER_PLAYER_STARTED_PLAYING,
-    MASTER_PLAYER_STOPPED_PLAYING,
-    MASTER_PLAYER_STARTED_BUFFERING,
-    MASTER_PLAYER_STOPPED_BUFFERING,
-    MASTER_PLAYER_ENDED,
-    MASTER_PLAYER_DURATION_UPDATED,
-    MASTER_PLAYER_PLAYED_TIME_UPDATED,
-    MASTER_PLAYER_LOADED_TIME_UPDATED,
-    MASTER_PLAYER_PROGRESS_UPDATED,
-    MASTER_PLAYER_VOLUME_UPDATED,
     MasterPlayerReadyAction,
     MasterPlayerNotReadyAction,
     MasterPlayerStartedPlayingAction,
@@ -28,6 +16,22 @@ import {
     MasterPlayerLoadedTimeUpdatedAction,
     MasterPlayerProgressUpdatedAction,
     MasterPlayerVolumeUpdatedAction,
+    MasterPlayerMutedAction,
+    MasterPlayerUnmutedAction,
+    MASTER_PLAYER_READY,
+    MASTER_PLAYER_NOT_READY,
+    MASTER_PLAYER_STARTED_PLAYING,
+    MASTER_PLAYER_STOPPED_PLAYING,
+    MASTER_PLAYER_STARTED_BUFFERING,
+    MASTER_PLAYER_STOPPED_BUFFERING,
+    MASTER_PLAYER_ENDED,
+    MASTER_PLAYER_DURATION_UPDATED,
+    MASTER_PLAYER_PLAYED_TIME_UPDATED,
+    MASTER_PLAYER_LOADED_TIME_UPDATED,
+    MASTER_PLAYER_PROGRESS_UPDATED,
+    MASTER_PLAYER_VOLUME_UPDATED,
+    MASTER_PLAYER_MUTED,
+    MASTER_PLAYER_UNMUTED,
 } from './types';
 
 export const masterPlayerReady = (): MasterPlayerReadyAction => ({
@@ -91,6 +95,14 @@ export const masterPlayerUpdateProgress = (progress: PlayedProgress & LoadedProg
 export const masterPlayerUpdateVolume = (volume: number): MasterPlayerVolumeUpdatedAction => ({
     type: MASTER_PLAYER_VOLUME_UPDATED,
     payload: { volume },
+});
+
+export const masterPlayerMute = (): MasterPlayerMutedAction => ({
+    type: MASTER_PLAYER_MUTED,
+});
+
+export const masterPlayerUnmute = (): MasterPlayerUnmutedAction => ({
+    type: MASTER_PLAYER_UNMUTED,
 });
 
 export const startPlayback = (): AppThunkAction => (dispatch, getState) => {

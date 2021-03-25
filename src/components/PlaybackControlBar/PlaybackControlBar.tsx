@@ -14,6 +14,7 @@ import {
 interface PlaybackControlBarProps {
     isPlaying: boolean;
     isBuffering: boolean;
+    isMuted: boolean;
     volume: number;
     durationSeconds: number;
     playedFraction: number;
@@ -31,6 +32,7 @@ interface PlaybackControlBarProps {
 const PlaybackControlBar: React.FC<PlaybackControlBarProps> = ({
     isPlaying,
     isBuffering,
+    isMuted,
     volume,
     durationSeconds,
     playedFraction,
@@ -63,7 +65,7 @@ const PlaybackControlBar: React.FC<PlaybackControlBarProps> = ({
     };
 
     const volumeControlProps = {
-        volume,
+        volume: isMuted ? 0 : volume,
         onMuteUnmute,
         onVolumeChange,
     };

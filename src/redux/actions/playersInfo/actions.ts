@@ -12,6 +12,8 @@ import {
     PlayerLoadedTimeUpdatedAction,
     PlayerProgressUpdatedAction,
     PlayerVolumeUpdatedAction,
+    PlayerMutedAction,
+    PlayerUnmutedAction,
     PlayerPendingSeekPushedAction,
     PlayerPendingSeekPoppedAction,
     PLAYER_INITIALIZED,
@@ -27,6 +29,8 @@ import {
     PLAYER_LOADED_TIME_UPDATED,
     PLAYER_PROGRESS_UPDATED,
     PLAYER_VOLUME_UPDATED,
+    PLAYER_MUTED,
+    PLAYER_UNMUTED,
     PLAYER_PENDING_SEEK_PUSHED,
     PLAYER_PENDING_SEEK_POPPED,
 } from './types';
@@ -104,6 +108,16 @@ export const playerUpdateProgress = (id: string, progress: PlayedProgress & Load
 export const playerUpdateVolume = (id: string, { volume }: { volume: number }): PlayerVolumeUpdatedAction => ({
     type: PLAYER_VOLUME_UPDATED,
     payload: { id, volume },
+});
+
+export const playerMute = (id: string): PlayerMutedAction => ({
+    type: PLAYER_MUTED,
+    payload: { id },
+});
+
+export const playerUnmute = (id: string): PlayerUnmutedAction => ({
+    type: PLAYER_UNMUTED,
+    payload: { id },
 });
 
 export const playerPushPendingSeek = (id: string, { seekToSeconds }: { seekToSeconds: number }): PlayerPendingSeekPushedAction => ({

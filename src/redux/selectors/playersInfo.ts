@@ -33,12 +33,6 @@ const getPlayerDurationSecondsBase = (id: string) => createSelector(
 );
 export const getPlayerDurationSeconds = memoize(getPlayerDurationSecondsBase);
 
-const getPlayerVolumeBase = (id: string) => createSelector(
-    getPlayerInfo(id),
-    getOr(1, 'volume'),
-);
-export const getPlayerVolume = memoize(getPlayerVolumeBase);
-
 const getPlayerPlayedTimeBase = (id: string) => createSelector(
     getPlayerInfo(id),
     ({ playedSeconds, playedFraction }: PlayerInfo) => ({ playedSeconds, playedFraction }),
@@ -80,6 +74,18 @@ const hasPlayerEndedBase = (id: string) => createSelector(
     getOr(false, 'hasEnded'),
 );
 export const hasPlayerEnded = memoize(hasPlayerEndedBase);
+
+const getPlayerVolumeBase = (id: string) => createSelector(
+    getPlayerInfo(id),
+    getOr(1, 'volume'),
+);
+export const getPlayerVolume = memoize(getPlayerVolumeBase);
+
+const getIsPlayerMutedBase = (id: string) => createSelector(
+    getPlayerInfo(id),
+    getOr(false, 'isMuted'),
+);
+export const getIsPlayerMuted = memoize(getIsPlayerMutedBase);
 
 const getPlayerPendingSeeksBase = (id: string) => createSelector(
     getPlayerInfo(id),

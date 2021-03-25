@@ -54,3 +54,8 @@ export const getMasterPlayerVolume = createSelector(
     getMasterPlayerInfo,
     getOr(1, 'volume'),
 );
+
+export const getIsMasterPlayerMuted = createSelector(
+    getMasterPlayerInfo,
+    getOr(false, 'isMuted'),
+);

@@ -10,6 +10,8 @@ export const MASTER_PLAYER_PLAYED_TIME_UPDATED = 'MASTER_PLAYER_PLAYED_TIME_UPDA
 export const MASTER_PLAYER_LOADED_TIME_UPDATED = 'MASTER_PLAYER_LOADED_TIME_UPDATED';
 export const MASTER_PLAYER_PROGRESS_UPDATED = 'MASTER_PLAYER_PROGRESS_UPDATED';
 export const MASTER_PLAYER_VOLUME_UPDATED = 'MASTER_PLAYER_VOLUME_UPDATED';
+export const MASTER_PLAYER_MUTED = 'MASTER_PLAYER_MUTED';
+export const MASTER_PLAYER_UNMUTED = 'MASTER_PLAYER_UNMUTED';
 
 export interface MasterPlayerReadyAction {
     type: typeof MASTER_PLAYER_READY;
@@ -79,8 +81,17 @@ export interface MasterPlayerVolumeUpdatedAction {
     };
 }
 
+export interface MasterPlayerMutedAction {
+    type: typeof MASTER_PLAYER_MUTED;
+}
+
+export interface MasterPlayerUnmutedAction {
+    type: typeof MASTER_PLAYER_UNMUTED;
+}
+
 export type MasterPlayerInfoAction = (
     MasterPlayerReadyAction | MasterPlayerNotReadyAction | MasterPlayerStartedPlayingAction | MasterPlayerStoppedPlayingAction |
     MasterPlayerStartedBufferingAction | MasterPlayerStoppedBufferingAction | MasterPlayerEndedAction | MasterPlayerDurationUpdatedAction |
-    MasterPlayerPlayedTimeUpdatedAction | MasterPlayerLoadedTimeUpdatedAction | MasterPlayerProgressUpdatedAction | MasterPlayerVolumeUpdatedAction
+    MasterPlayerPlayedTimeUpdatedAction | MasterPlayerLoadedTimeUpdatedAction | MasterPlayerProgressUpdatedAction |
+    MasterPlayerVolumeUpdatedAction | MasterPlayerMutedAction | MasterPlayerUnmutedAction
 );

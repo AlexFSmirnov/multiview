@@ -12,6 +12,8 @@ import {
     MASTER_PLAYER_LOADED_TIME_UPDATED,
     MASTER_PLAYER_PROGRESS_UPDATED,
     MASTER_PLAYER_VOLUME_UPDATED,
+    MASTER_PLAYER_MUTED,
+    MASTER_PLAYER_UNMUTED,
 } from '../actions/masterPlayerInfo';
 
 export interface MasterPlayerInfoState {
@@ -27,6 +29,7 @@ export interface MasterPlayerInfoState {
     loadedFraction: number;
 
     volume: number;
+    isMuted: boolean;
 }
 const masterPlayerInfoInitialState: MasterPlayerInfoState = {
     isReady: false,
@@ -39,6 +42,7 @@ const masterPlayerInfoInitialState: MasterPlayerInfoState = {
     loadedSeconds: 0,
     loadedFraction: 0,
     volume: 1,
+    isMuted: false,
 };
 
 export const masterPlayerInfoReducer = (state = masterPlayerInfoInitialState, action: MasterPlayerInfoAction) => {
@@ -64,11 +68,19 @@ export const masterPlayerInfoReducer = (state = masterPlayerInfoInitialState, ac
         case MASTER_PLAYER_ENDED:
             return { ...state, hasEnded: true };
 
+        case MASTER_PLAYER_VOLUME_UPDATED:
+            return { ...state, isMuted: false, ...action.payload };
+
+        case MASTER_PLAYER_MUTED:
+            return { ...state, isMuted: true };
+
+        case MASTER_PLAYER_UNMUTED:
+            return { ...state, isMuted: false };
+
         case MASTER_PLAYER_DURATION_UPDATED:
         case MASTER_PLAYER_PLAYED_TIME_UPDATED:
         case MASTER_PLAYER_LOADED_TIME_UPDATED:
         case MASTER_PLAYER_PROGRESS_UPDATED:
-        case MASTER_PLAYER_VOLUME_UPDATED:
             return { ...state, ...action.payload };
 
         default:

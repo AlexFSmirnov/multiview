@@ -13,10 +13,12 @@ export const VolumeControlContainer = styled.div<{ isSliderVisible: boolean }>`
 `;
 
 export const VolumeControlIconContainer = styled.div`
-    margin-right: 6px;
+    margin-right: 12px;
+    z-index: 1;
 `;
 
 export const VolumeControlSliderContainer = styled.div`
     width: 62px;
     height: 28px;
+    z-index: 0;
 `;

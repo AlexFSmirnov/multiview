@@ -14,6 +14,8 @@ import {
     PLAYER_LOADED_TIME_UPDATED,
     PLAYER_PROGRESS_UPDATED,
     PLAYER_VOLUME_UPDATED,
+    PLAYER_MUTED,
+    PLAYER_UNMUTED,
     PLAYER_PENDING_SEEK_PUSHED,
     PLAYER_PENDING_SEEK_POPPED,
 } from '../actions/playersInfo';
@@ -32,6 +34,7 @@ export const playerInfoInitialState: PlayerInfo = {
     loadedSeconds: 0,
     loadedFraction: 0,
     volume: 1,
+    isMuted: false,
     pendingSeeks: [],
 };
 
@@ -121,6 +124,19 @@ export const playersInfoReducer = (state = playersInfoInitialState, action: Play
             return { ...state, [action.payload.id]: {
                 ...state[action.payload.id],
                 volume,
+                isMuted: false,
+            } };
+
+        case PLAYER_MUTED:
+            return { ...state, [action.payload.id]: {
+                ...state[action.payload.id],
+                isMuted: true,
+            } };
+
+        case PLAYER_UNMUTED:
+            return { ...state, [action.payload.id]: {
+                ...state[action.payload.id],
+                isMuted: false,
             } };
 
         case PLAYER_PENDING_SEEK_PUSHED:

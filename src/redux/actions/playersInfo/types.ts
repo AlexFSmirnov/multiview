@@ -11,6 +11,7 @@ export interface PlayerInfo {
     loadedFraction: number;
 
     volume: number;
+    isMuted: boolean;
 
     pendingSeeks: number[];
 }
@@ -28,6 +29,8 @@ export const PLAYER_PLAYED_TIME_UPDATED = 'PLAYER_PLAYED_TIME_UPDATED';
 export const PLAYER_LOADED_TIME_UPDATED = 'PLAYER_LOADED_TIME_UPDATED';
 export const PLAYER_PROGRESS_UPDATED = 'PLAYER_PROGRESS_UPDATED';
 export const PLAYER_VOLUME_UPDATED = 'PLAYER_VOLUME_UPDATED';
+export const PLAYER_MUTED = 'PLAYER_MUTED';
+export const PLAYER_UNMUTED = 'PLAYER_UNMUTED';
 export const PLAYER_PENDING_SEEK_PUSHED = 'PLAYER_PENDING_SEEK_PUSHED';
 export const PLAYER_PENDING_SEEK_POPPED = 'PLAYER_PENDING_SEEK_POPPED';
 
@@ -115,6 +118,16 @@ export interface PlayerVolumeUpdatedAction {
     };
 }
 
+export interface PlayerMutedAction {
+    type: typeof PLAYER_MUTED;
+    payload: WithId;
+}
+
+export interface PlayerUnmutedAction {
+    type: typeof PLAYER_UNMUTED;
+    payload: WithId;
+}
+
 export interface PlayerPendingSeekPushedAction {
     type: typeof PLAYER_PENDING_SEEK_PUSHED;
     payload: WithId & {
@@ -131,5 +144,5 @@ export type PlayersInfoAction = (
     PlayerInitializedAction | PlayerReadyAction | PlayerStartedPlayingAction | PlayerStoppedPlayingAction |
     PlayerStartedBufferingAction | PlayerStoppedBufferingAction | PlayerVideoEndedAction | PlayerVideoRestartedAction |
     PlayerDurationUpdatedAction | PlayerPlayedTimeUpdatedAction | PlayerLoadedTimeUpdatedAction | PlayerProgressUpdatedAction |
-    PlayerVolumeUpdatedAction | PlayerPendingSeekPushedAction | PlayerPendingSeekPoppedAction
+    PlayerVolumeUpdatedAction | PlayerPendingSeekPushedAction | PlayerPendingSeekPoppedAction | PlayerMutedAction | PlayerUnmutedAction
 );
