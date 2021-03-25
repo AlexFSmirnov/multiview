@@ -49,6 +49,14 @@ const VolumeControl: React.FC<VolumeControlProps> = ({ volume, isMuted, onVolume
         }
     }, [volume, isAdjustingVolume, setInternalVolume]);
 
+    useEffect(() => {
+        window.addEventListener('mouseup', () => setIsAdjustingVolume(false));
+
+        return () => {
+            window.removeEventListener('mouseup', () => setIsAdjustingVolume(false));
+        };
+    }, [setIsAdjustingVolume]);
+
     const handleVolumeChange = (_: React.ChangeEvent<{}>, v: number | number[]) => {
         const parsedVolume = (Array.isArray(v) ? v[0] : v) || 0;
 
