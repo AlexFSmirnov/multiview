@@ -39,12 +39,12 @@ const PlaybackSlider: React.FC<PlaybackSliderProps> = ({ playedFraction, loadedF
     const getMousePosFraction = (mouseX: number) => {
         const { current: sliderContainer } = sliderContainerRef;
         if (sliderContainer) {
-            const sliderContainerWidth = sliderContainer.clientWidth;
-            const windowWidth = window.innerWidth;
-            const padding = (windowWidth - sliderContainerWidth) / 2;
-            const paddedMouseX = mouseX - padding;
+            const { width: sliderContainerWidth, x: sliderContainerX } = sliderContainer.getBoundingClientRect();
 
-            return paddedMouseX / sliderContainerWidth;
+            const relativeMouseX = mouseX - sliderContainerX;
+            const clampedMouseX = Math.max(0, Math.min(sliderContainerWidth, relativeMouseX));
+
+            return clampedMouseX / sliderContainerWidth;
         }
 
         return 0;
