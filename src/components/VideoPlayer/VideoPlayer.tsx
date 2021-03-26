@@ -81,7 +81,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         initializePlayer(id);
     }, [id, initializePlayer]);
 
-    // TODO: Fire onProgress events manually 
     useEffect(() => {
         const { current: player } = playerRef;
 

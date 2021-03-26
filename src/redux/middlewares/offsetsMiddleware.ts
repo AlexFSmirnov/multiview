@@ -19,6 +19,8 @@ export const offsetsMiddleware: Middleware<{}, State, AppThunkDispatch> = store 
             const { id } = action.payload;
             const referencePlayerId = getOffsetsReferencePlayerId(state);
 
+            // TODO: There's still a bug when you master seek to when after a video ends.
+
             if (referencePlayerId === null) {
                 dispatch(changeOffsetsReferencePlayerId(id));
                 dispatch(changePlayerOffset(id, { offset: 0 }));
