@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import { omit } from 'lodash/fp';
@@ -50,13 +50,28 @@ const AddVideosDialog: React.FC<AddVideosDialogProps> = ({ open, onClose, addVid
         },
     });
 
-    useEffect(() => {
-        const handleKeyPress = (e: KeyboardEvent) => {
-            if (e.key === 'Enter') {
-                handleConfirm();
-            }
-        };
+    const handleConfirm = useCallback(() => {
+        const filterEmpty = (videos: Record<string, Video>) => Object.fromEntries(Object.entries(videos).filter(([_, value]) => value.url !== ''));
 
+        addVideos({
+            ...filterEmpty(urls),
+            ...filterEmpty(files),
+        });
+
+        onClose();
+
+        setUrls({ [uuidv4()]: { url: '' } });
+        setFiles({});
+        setFileNames({});
+    }, [addVideos, onClose, urls, files]);
+
+    const handleKeyPress = useCallback((e: KeyboardEvent) => {
+        if (e.key === 'Enter') {
+            handleConfirm();
+        }
+    }, [handleConfirm]);
+
+    useEffect(() => {
         if (open) {
             window.addEventListener('keypress', handleKeyPress);
         } else {
@@ -66,8 +81,7 @@ const AddVideosDialog: React.FC<AddVideosDialogProps> = ({ open, onClose, addVid
         return () => {
             window.removeEventListener('keypress', handleKeyPress);
         };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [open]);
+    }, [open, handleKeyPress]);
 
     const handleUrlInputChange = (id: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
         // Adds a new TextField if all others are non-empty.
@@ -87,21 +101,6 @@ const AddVideosDialog: React.FC<AddVideosDialogProps> = ({ open, onClose, addVid
     const handleFileDelete = (id: string) => () => {
         setFiles(omit(id, files));
         setFileNames(omit(id, fileNames));
-    };
-
-    const handleConfirm = () => {
-        const filterEmpty = (videos: Record<string, Video>) => Object.fromEntries(Object.entries(videos).filter(([_, value]) => value.url !== ''));
-
-        addVideos({
-            ...filterEmpty(urls),
-            ...filterEmpty(files),
-        });
-
-        onClose();
-
-        setUrls({ [uuidv4()]: { url: '' } });
-        setFiles({});
-        setFileNames({});
     };
 
     const isConfirmActive = Object.keys(files).length > 0 || Object.keys(urls).some(id => urls[id].url !== '');
