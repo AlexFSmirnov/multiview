@@ -93,6 +93,9 @@ export interface MasterPlayerUnmutedAction {
 
 export interface MasterPlayerPendingSeekSetAction {
     type: typeof MASTER_PLAYER_PENDING_SEEK_SET;
+    payload: {
+        seekToSeconds: number;
+    };
 }
 
 export interface MasterPlayerPendingSeekRemovedAction {

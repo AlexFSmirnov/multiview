@@ -4,7 +4,7 @@ import { changeOffsetsReferencePlayerId, changePlayerOffset, normalizeOffsets } 
 import { playerStartPlaying, PLAYER_PLAYED_TIME_UPDATED, PLAYER_PROGRESS_UPDATED } from '../actions/playersInfo';
 import { areAllCorrectPlayersPlaying, getPlayersInfoState, shouldPlayerCurrentlyPlay } from '../selectors/playersInfo';
 import { getOffsetsReferencePlayerId } from '../selectors';
-import { getHasMasterPlayerPendingSeek, getMasterPlayerPlayedSeconds } from '../selectors/masterPlayerInfo';
+import { getMasterPendingSeek, getMasterPlayerPlayedSeconds } from '../selectors/masterPlayerInfo';
 
 export const offsetsMiddleware: Middleware<{}, State, AppThunkDispatch> = store => next => (action: Action) => {
     const { dispatch, getState } = store;
@@ -19,15 +19,13 @@ export const offsetsMiddleware: Middleware<{}, State, AppThunkDispatch> = store 
             const { id } = action.payload;
             const referencePlayerId = getOffsetsReferencePlayerId(state);
 
-            // TODO: There's still a bug when you master seek to when after a video ends.
-
             if (referencePlayerId === null) {
                 dispatch(changeOffsetsReferencePlayerId(id));
                 dispatch(changePlayerOffset(id, { offset: 0 }));
                 break;
             }
 
-            if (areAllCorrectPlayersPlaying(state) || getHasMasterPlayerPendingSeek(state)) {
+            if (areAllCorrectPlayersPlaying(state) || getMasterPendingSeek(prevState) !== null) {
                 break;
             }
 

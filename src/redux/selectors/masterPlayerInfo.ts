@@ -60,7 +60,7 @@ export const getIsMasterPlayerMuted = createSelector(
     getOr(false, 'isMuted'),
 );
 
-export const getHasMasterPlayerPendingSeek = createSelector(
+export const getMasterPendingSeek = createSelector(
     getMasterPlayerInfo,
-    getOr(false, 'hasPendingSeek'),
+    getOr(null, 'pendingSeek'),
 );

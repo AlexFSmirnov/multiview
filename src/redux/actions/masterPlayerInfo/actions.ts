@@ -109,11 +109,12 @@ export const masterPlayerUnmute = (): MasterPlayerUnmutedAction => ({
     type: MASTER_PLAYER_UNMUTED,
 });
 
-export const masterPlayerSetSeekPending = (): MasterPlayerPendingSeekSetAction => ({
+export const masterPlayerSetPendingSeek = (seekToSeconds: number): MasterPlayerPendingSeekSetAction => ({
     type: MASTER_PLAYER_PENDING_SEEK_SET,
+    payload: { seekToSeconds },
 });
 
-export const masterPlayerRemoveSeekPending = (): MasterPlayerPendingSeekRemovedAction => ({
+export const masterPlayerRemovePendingSeek = (): MasterPlayerPendingSeekRemovedAction => ({
     type: MASTER_PLAYER_PENDING_SEEK_REMOVED,
 });
 
@@ -143,7 +144,7 @@ export const stopPlayback = (): AppThunkAction => (dispatch, getState) => {
 export const seekTo = (seconds: number): AppThunkAction => (dispatch, getState) => {
     const state = getState();
 
-    dispatch(masterPlayerSetSeekPending());
+    dispatch(masterPlayerSetPendingSeek(seconds));
 
     Object.entries(getPlayersInfoState(state)).forEach(([playerId, playerInfo]) => {
         const { playedSeconds, durationSeconds } = playerInfo;

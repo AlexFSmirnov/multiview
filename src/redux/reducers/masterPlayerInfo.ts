@@ -23,7 +23,6 @@ export interface MasterPlayerInfoState {
     isPlaying: boolean;
     isBuffering: boolean;
     hasEnded: boolean;
-    hasPendingSeek: boolean;
 
     durationSeconds: number;
     playedSeconds: number;
@@ -33,12 +32,13 @@ export interface MasterPlayerInfoState {
 
     volume: number;
     isMuted: boolean;
+
+    pendingSeek: number | null;
 }
 const masterPlayerInfoInitialState: MasterPlayerInfoState = {
     isReady: false,
     isPlaying: false,
     isBuffering: false,
-    hasPendingSeek: true,
     hasEnded: false,
     durationSeconds: 0,
     playedSeconds: 0,
@@ -47,6 +47,7 @@ const masterPlayerInfoInitialState: MasterPlayerInfoState = {
     loadedFraction: 0,
     volume: 1,
     isMuted: false,
+    pendingSeek: null,
 };
 
 export const masterPlayerInfoReducer = (state = masterPlayerInfoInitialState, action: MasterPlayerInfoAction) => {
@@ -67,7 +68,7 @@ export const masterPlayerInfoReducer = (state = masterPlayerInfoInitialState, ac
             return { ...state, isBuffering: true };
 
         case MASTER_PLAYER_STOPPED_BUFFERING:
-            return { ...state, isBuffering: false, hasPendingSeek: false };
+            return { ...state, isBuffering: false };
 
         case MASTER_PLAYER_ENDED:
             return { ...state, hasEnded: true };
@@ -82,10 +83,10 @@ export const masterPlayerInfoReducer = (state = masterPlayerInfoInitialState, ac
             return { ...state, isMuted: false };
 
         case MASTER_PLAYER_PENDING_SEEK_SET:
-            return { ...state, hasPendingSeek: true };
+            return { ...state, pendingSeek: action.payload.seekToSeconds };
 
         case MASTER_PLAYER_PENDING_SEEK_REMOVED:
-            return { ...state, hasPendingSeek: false };
+            return { ...state, pendingSeek: null };
 
         case MASTER_PLAYER_DURATION_UPDATED:
         case MASTER_PLAYER_PLAYED_TIME_UPDATED:

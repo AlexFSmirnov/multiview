@@ -23,10 +23,12 @@ import {
     masterPlayerUpdateDuration,
     masterPlayerUpdatePlayedTime,
     masterPlayerUpdateLoadedTime,
+    MASTER_PLAYER_PLAYED_TIME_UPDATED,
+    masterPlayerRemovePendingSeek,
 } from '../actions/masterPlayerInfo';
 import { getOffsets, getPlayerOffset } from '../selectors';
 import { getPlayerDurationSeconds, getPlayerInfo, getPlayersInfoState } from '../selectors/playersInfo';
-import { getMasterPlayerDurationSeconds } from '../selectors/masterPlayerInfo';
+import { getMasterPendingSeek, getMasterPlayerDurationSeconds, getMasterPlayerPlayedSeconds } from '../selectors/masterPlayerInfo';
 
 const everyOtherPlayer = (condition: (playerInfo: PlayerInfo) => boolean, state: State, currentId: string) => (
     Object.entries(getPlayersInfoState(state)).every(([id, playerInfo]) => id === currentId || condition(playerInfo))
@@ -141,6 +143,17 @@ export const masterPlayerMiddleware: Middleware<{}, State, AppThunkDispatch> = s
             }
 
             break;
+
+        case MASTER_PLAYER_PLAYED_TIME_UPDATED:
+            const pendingSeek = getMasterPendingSeek(state);
+            const playedSeconds = getMasterPlayerPlayedSeconds(state);
+
+            if (pendingSeek && Math.abs(playedSeconds - pendingSeek) < 1) {
+                dispatch(masterPlayerRemovePendingSeek());
+            }
+
+            break;
+
 
         case VIDEO_ADDED:
         case VIDEOS_ADDED:
