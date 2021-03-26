@@ -1,4 +1,5 @@
-import { ThunkAction } from 'redux-thunk';
+import { AnyAction } from 'redux';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { MasterPlayerInfoAction } from './actions/masterPlayerInfo';
 import { MasterPlayerInfoState } from './reducers/masterPlayerInfo';
 import { PlayersInfoAction } from './actions/playersInfo';
@@ -15,7 +16,9 @@ export interface State {
     videos: VideosState;
 }
 
-export type Action = MasterPlayerInfoAction | PlayersInfoAction | OffsetsAction | VideosAction;
+export type Action = AnyAction & (MasterPlayerInfoAction | PlayersInfoAction | OffsetsAction | VideosAction);
 
 export type AppThunkAction<R = void> = ThunkAction<R, State, {}, Action>;
 export type AppAsyncThunkAction<R = void> = AppThunkAction<Promise<R>>;
+
+export type AppThunkDispatch = ThunkDispatch<State, {}, Action>;

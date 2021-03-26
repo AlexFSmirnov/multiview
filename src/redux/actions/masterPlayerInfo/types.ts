@@ -12,6 +12,8 @@ export const MASTER_PLAYER_PROGRESS_UPDATED = 'MASTER_PLAYER_PROGRESS_UPDATED';
 export const MASTER_PLAYER_VOLUME_UPDATED = 'MASTER_PLAYER_VOLUME_UPDATED';
 export const MASTER_PLAYER_MUTED = 'MASTER_PLAYER_MUTED';
 export const MASTER_PLAYER_UNMUTED = 'MASTER_PLAYER_UNMUTED';
+export const MASTER_PLAYER_PENDING_SEEK_SET = 'MASTER_PLAYER_PENDING_SEEK_SET';
+export const MASTER_PLAYER_PENDING_SEEK_REMOVED = 'MASTER_PLAYER_PENDING_SEEK_REMOVED';
 
 export interface MasterPlayerReadyAction {
     type: typeof MASTER_PLAYER_READY;
@@ -89,9 +91,17 @@ export interface MasterPlayerUnmutedAction {
     type: typeof MASTER_PLAYER_UNMUTED;
 }
 
+export interface MasterPlayerPendingSeekSetAction {
+    type: typeof MASTER_PLAYER_PENDING_SEEK_SET;
+}
+
+export interface MasterPlayerPendingSeekRemovedAction {
+    type: typeof MASTER_PLAYER_PENDING_SEEK_REMOVED;
+}
+
 export type MasterPlayerInfoAction = (
     MasterPlayerReadyAction | MasterPlayerNotReadyAction | MasterPlayerStartedPlayingAction | MasterPlayerStoppedPlayingAction |
     MasterPlayerStartedBufferingAction | MasterPlayerStoppedBufferingAction | MasterPlayerEndedAction | MasterPlayerDurationUpdatedAction |
     MasterPlayerPlayedTimeUpdatedAction | MasterPlayerLoadedTimeUpdatedAction | MasterPlayerProgressUpdatedAction |
-    MasterPlayerVolumeUpdatedAction | MasterPlayerMutedAction | MasterPlayerUnmutedAction
+    MasterPlayerVolumeUpdatedAction | MasterPlayerMutedAction | MasterPlayerUnmutedAction | MasterPlayerPendingSeekSetAction | MasterPlayerPendingSeekRemovedAction
 );

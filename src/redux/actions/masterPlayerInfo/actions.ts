@@ -18,6 +18,8 @@ import {
     MasterPlayerVolumeUpdatedAction,
     MasterPlayerMutedAction,
     MasterPlayerUnmutedAction,
+    MasterPlayerPendingSeekSetAction,
+    MasterPlayerPendingSeekRemovedAction,
     MASTER_PLAYER_READY,
     MASTER_PLAYER_NOT_READY,
     MASTER_PLAYER_STARTED_PLAYING,
@@ -32,6 +34,8 @@ import {
     MASTER_PLAYER_VOLUME_UPDATED,
     MASTER_PLAYER_MUTED,
     MASTER_PLAYER_UNMUTED,
+    MASTER_PLAYER_PENDING_SEEK_SET,
+    MASTER_PLAYER_PENDING_SEEK_REMOVED,
 } from './types';
 
 export const masterPlayerReady = (): MasterPlayerReadyAction => ({
@@ -105,6 +109,14 @@ export const masterPlayerUnmute = (): MasterPlayerUnmutedAction => ({
     type: MASTER_PLAYER_UNMUTED,
 });
 
+export const masterPlayerSetSeekPending = (): MasterPlayerPendingSeekSetAction => ({
+    type: MASTER_PLAYER_PENDING_SEEK_SET,
+});
+
+export const masterPlayerRemoveSeekPending = (): MasterPlayerPendingSeekRemovedAction => ({
+    type: MASTER_PLAYER_PENDING_SEEK_REMOVED,
+});
+
 export const startPlayback = (): AppThunkAction => (dispatch, getState) => {
     const state = getState();
 
@@ -130,6 +142,8 @@ export const stopPlayback = (): AppThunkAction => (dispatch, getState) => {
 
 export const seekTo = (seconds: number): AppThunkAction => (dispatch, getState) => {
     const state = getState();
+
+    dispatch(masterPlayerSetSeekPending());
 
     Object.entries(getPlayersInfoState(state)).forEach(([playerId, playerInfo]) => {
         const { playedSeconds, durationSeconds } = playerInfo;

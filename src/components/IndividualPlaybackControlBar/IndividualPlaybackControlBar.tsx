@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { State } from '../../redux/types';
-import { playerStartPlaying, playerStopPlaying, playerUpdateVolume, playerMute, playerUnmute, playerPushPendingSeek } from '../../redux/actions/playersInfo';
+import { playerStartPlaying, playerStopPlaying, playerUpdateVolume, playerMute, playerUnmute, playerPushPendingSeek, playerStartBuffering } from '../../redux/actions/playersInfo';
 import {
     getIsPlayerPlaying,
     getIsPlayerBuffering,
@@ -34,6 +34,7 @@ interface DispatchProps {
     playerMute: (id: string) => void;
     playerUnmute: (id: string) => void;
     playerPushPendingSeek: (id: string, { seekToSeconds }: { seekToSeconds: number }) => void;
+    playerStartBuffering: (id: string) => void;
 }
 
 export type IndividualPlaybackControlBarProps = OwnProps & StateProps & DispatchProps;
@@ -47,6 +48,7 @@ const IndividualPlaybackControlBar: React.FC<IndividualPlaybackControlBarProps> 
     playerMute,
     playerUnmute,
     playerPushPendingSeek,
+    playerStartBuffering,
     ...other
 }) => {
     const handleMuteUnmute = () => {
@@ -57,13 +59,18 @@ const IndividualPlaybackControlBar: React.FC<IndividualPlaybackControlBarProps> 
         }
     };
 
+    const handleSeek = (seekToSeconds: number) => {
+        playerStartBuffering(id);
+        playerPushPendingSeek(id, { seekToSeconds });
+    };
+
     const playbackControlBarProps = {
         isMuted,
         onPlay: () => playerStartPlaying(id),
         onPause: () => playerStopPlaying(id),
         onMuteUnmute: handleMuteUnmute,
         onVolumeChange: (volume: number) => playerUpdateVolume(id, { volume }),
-        onSeek: (seekToSeconds: number) => playerPushPendingSeek(id, { seekToSeconds }),
+        onSeek: handleSeek,
 
         actions: <IndividualPlaybackControlBarActions />,
 
@@ -90,5 +97,6 @@ export default connect<StateProps, DispatchProps, OwnProps, State>(
         playerMute,
         playerUnmute,
         playerPushPendingSeek,
+        playerStartBuffering,
     },
 )(IndividualPlaybackControlBar);

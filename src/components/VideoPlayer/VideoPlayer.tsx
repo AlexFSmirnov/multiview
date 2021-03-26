@@ -14,7 +14,7 @@ import {
     playerUpdateProgress,
     playerPopPendingSeek,
 } from '../../redux/actions/playersInfo';
-import { getIsPlayerPlaying, getIsPlayerBuffering, getPlayerVolume, getPlayerPendingSeeks, getIsPlayerMuted } from '../../redux/selectors/playersInfo';
+import { getIsPlayerPlaying, getPlayerVolume, getPlayerPendingSeeks, getIsPlayerMuted } from '../../redux/selectors/playersInfo';
 import { State } from '../../redux/types';
 import { ReactPlayerWrapper, VideoPlayerContainer } from './style';
 import { PlayerControlOverlay } from '../PlayerControlOverlay';
@@ -29,7 +29,6 @@ interface OwnProps {
 
 interface StateProps {
     isPlaying: boolean;
-    isBuffering: boolean;
     isMasterBuffering: boolean;
     volume: number;
     masterVolume: number;
@@ -59,7 +58,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     width,
     height,
     isPlaying,
-    isBuffering,
     isMasterBuffering,
     volume,
     masterVolume,
@@ -83,6 +81,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         initializePlayer(id);
     }, [id, initializePlayer]);
 
+    // TODO: Fire onProgress events manually 
     useEffect(() => {
         const { current: player } = playerRef;
 
@@ -116,11 +115,11 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const handlePlayerProgress = ({ played, loaded, playedSeconds, loadedSeconds }: { played: number; loaded: number; playedSeconds: number; loadedSeconds: number }) => {
         playerUpdateProgress(id, { playedSeconds, playedFraction: played, loadedSeconds, loadedFraction: loaded });
 
-        if (!isBuffering && loadedSeconds < playedSeconds) {
+        if (loadedSeconds < playedSeconds) {
             playerStartBuffering(id);
         }
 
-        if (isBuffering && loadedSeconds >= playedSeconds) {
+        if (loadedSeconds >= playedSeconds) {
             playerStopBuffering(id);
         }
     };
@@ -165,7 +164,6 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 export default connect<StateProps, DispatchProps, OwnProps, State>(
     (state, { id }) => ({
         isPlaying: getIsPlayerPlaying(id)(state),
-        isBuffering: getIsPlayerBuffering(id)(state),
         isMasterBuffering: getIsMasterPlayerBuffering(state),
         volume: getPlayerVolume(id)(state),
         masterVolume: getMasterPlayerVolume(state),

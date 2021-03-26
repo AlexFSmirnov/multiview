@@ -47,7 +47,6 @@ export const playersInfoReducer = (state = playersInfoInitialState, action: Play
             return { ...state, [action.payload.id]: {
                 ...state[action.payload.id],
                 isReady: true,
-                isBuffering: false,
             } };
 
         case PLAYER_STARTED_PLAYING:

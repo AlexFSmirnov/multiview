@@ -1,5 +1,5 @@
 import { Middleware } from 'redux';
-import { Action, State } from '../types';
+import { Action, AppThunkDispatch, State } from '../types';
 import { VIDEOS_ADDED, VIDEO_ADDED } from '../actions/videos';
 import { PLAYER_OFFSET_CHANGED } from '../actions/offsets';
 import {
@@ -32,10 +32,10 @@ const everyOtherPlayer = (condition: (playerInfo: PlayerInfo) => boolean, state:
     Object.entries(getPlayersInfoState(state)).every(([id, playerInfo]) => id === currentId || condition(playerInfo))
 );
 
-export const masterPlayerMiddleware: Middleware<{}, State> = store => next => (action: Action) => {
-    next(action);
-
+export const masterPlayerMiddleware: Middleware<{}, State, AppThunkDispatch> = store => next => (action: Action) => {
     const { dispatch, getState } = store;
+
+    next(action);
     const state = getState();
 
     switch (action.type) {

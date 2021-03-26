@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const VolumeControlContainer = styled.div<{ isSliderVisible: boolean }>`
-    width: ${props => props.isSliderVisible ? 108 : 30}px;
+    width: ${props => props.isSliderVisible ? 114 : 30}px;
     height: 30px;
     overflow: hidden;
 
