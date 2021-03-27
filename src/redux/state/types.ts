@@ -1,9 +1,9 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { MasterPlayerInfoAction, MasterPlayerInfoState } from './masterPlayerInfo';
-import { PlayersInfoAction, PlayersInfoState } from './playersInfo';
-import { OffsetsAction, OffsetsState } from './offsets';
-import { SettingsAction, SettingsState } from './settings';
-import { VideosAction, VideosState } from './videos';
+import { MasterPlayerInfoAction, MasterPlayerInfoState } from './masterPlayerInfo/types';
+import { PlayersInfoAction, PlayersInfoState } from './playersInfo/types';
+import { OffsetsAction, OffsetsState } from './offsets/types';
+import { SettingsAction, SettingsState } from './settings/types';
+import { VideosAction, VideosState } from './videos/types';
 
 export interface State {
     masterPlayerInfo: MasterPlayerInfoState;

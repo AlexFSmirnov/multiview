@@ -1,7 +1,7 @@
 import { AppThunkAction } from '../types';
-import { getPlayerOffset } from '../offsets';
-import { getPlayersInfoState, shouldPlayerCurrentlyPlay } from '../playersInfo';
-import { playerEndVideo, playerPushPendingSeek, playerRestartVideo, playerStartPlaying, playerStopPlaying } from '../playersInfo';
+import { playerEndVideo, playerPushPendingSeek, playerRestartVideo, playerStartPlaying, playerStopPlaying } from '../playersInfo/actions';
+import { getPlayersInfoState, shouldPlayerCurrentlyPlay } from '../playersInfo/selectors';
+import { getPlayerOffset } from '../offsets/selectors';
 import { getMasterPlayerInfo } from './selectors';
 import {
     MasterPlayerReadyAction,
