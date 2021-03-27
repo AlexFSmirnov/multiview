@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { getOr } from 'lodash/fp';
-import { State, MasterPlayerInfoState } from '../types';
+import { State } from '../types';
+import { MasterPlayerInfoState } from './types';
 
 export const getMasterPlayerInfo = (state: State) => state.masterPlayerInfo;
 

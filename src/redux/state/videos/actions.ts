@@ -1,4 +1,4 @@
-import { Video, VideoAddedAction, VideosAddedAction, VideoRemovedAction, VIDEO_ADDED, VIDEOS_ADDED, VIDEO_REMOVED} from '../types';
+import { Video, VideoAddedAction, VideosAddedAction, VideoRemovedAction, VIDEO_ADDED, VIDEOS_ADDED, VIDEO_REMOVED} from './types';
 
 export const addVideo = (url: string): VideoAddedAction => ({
     type: VIDEO_ADDED,

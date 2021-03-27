@@ -17,7 +17,7 @@ import {
     MASTER_PLAYER_UNMUTED,
     MASTER_PLAYER_PENDING_SEEK_SET,
     MASTER_PLAYER_PENDING_SEEK_REMOVED,
-} from '../types';
+} from './types';
 
 const masterPlayerInfoInitialState: MasterPlayerInfoState = {
     isReady: false,

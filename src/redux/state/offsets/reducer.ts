@@ -1,4 +1,4 @@
-import { OffsetsState, OffsetsAction, OFFSETS_REFERENCE_PLAYER_ID_CHANGED, PLAYER_OFFSET_CHANGED } from '../types';
+import { OffsetsState, OffsetsAction, OFFSETS_REFERENCE_PLAYER_ID_CHANGED, PLAYER_OFFSET_CHANGED } from './types';
 
 export const offsetsInitialState: OffsetsState = {
     referencePlayerId: null,

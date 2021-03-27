@@ -1,6 +1,6 @@
 import { omit } from 'lodash/fp';
 import { v4 as uuidv4 } from 'uuid';
-import { VideosState, VideosAction, VIDEO_ADDED, VIDEOS_ADDED, VIDEO_REMOVED } from '../types';
+import { VideosState, VideosAction, VIDEO_ADDED, VIDEOS_ADDED, VIDEO_REMOVED } from './types';
 
 const videosInitialState: VideosState = {};
 

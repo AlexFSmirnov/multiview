@@ -6,7 +6,7 @@ import {
     SETTINGS_FULLSCREEN_EXITED,
     SETTINGS_CONTROLS_MODE_CHANGED,
     SETTINGS_FOCUSED_PLAYER_ID_CHANGED,
-} from '../types';
+} from './types';
 
 const settingsInitialState: SettingsState = {
     isFullscreen: false,

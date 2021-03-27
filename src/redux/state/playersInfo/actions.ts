@@ -33,7 +33,7 @@ import {
     PLAYER_UNMUTED,
     PLAYER_PENDING_SEEK_PUSHED,
     PLAYER_PENDING_SEEK_POPPED,
-} from '../types';
+} from './types';
 
 export const initializePlayer = (id: string): PlayerInitializedAction => ({
     type: PLAYER_INITIALIZED,

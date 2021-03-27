@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { get } from 'lodash/fp';
-import { State, SettingsState, ControlsMode } from '../types';
+import { State } from '../types';
+import { SettingsState, ControlsMode } from './types';
 
 export const getSettingsState = (state: State) => state.settings;
 

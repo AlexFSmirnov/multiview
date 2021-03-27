@@ -1,6 +1,6 @@
-import { getIsFullscreen } from '../selectors';
+import { AppThunkAction } from '../types';
+import { getIsFullscreen } from './selectors';
 import {
-    AppThunkAction,
     ControlsMode,
     SettingsFullscreenEnteredAction,
     SettingsFullscreenExitedAction,
@@ -10,7 +10,7 @@ import {
     SETTINGS_FULLSCREEN_EXITED,
     SETTINGS_CONTROLS_MODE_CHANGED,
     SETTINGS_FOCUSED_PLAYER_ID_CHANGED,
-} from '../types';
+} from './types';
 
 export const enterFullscreen = (): SettingsFullscreenEnteredAction => ({
     type: SETTINGS_FULLSCREEN_ENTERED,
