@@ -1,7 +1,16 @@
 import { useRef, useEffect } from 'react';
 import { connect } from 'react-redux';
 import ReactPlayer from 'react-player';
-import { Video } from '../../redux/actions/videos';
+import { State, Video } from '../../redux/types';
+import {
+    getIsPlayerPlaying,
+    getPlayerVolume,
+    getPlayerPendingSeeks,
+    getIsPlayerMuted,
+    getIsMasterPlayerBuffering,
+    getIsMasterPlayerMuted,
+    getMasterPlayerVolume,
+} from '../../redux/selectors';
 import {
     initializePlayer,
     playerReady,
@@ -13,12 +22,9 @@ import {
     playerUpdateDuration,
     playerUpdateProgress,
     playerPopPendingSeek,
-} from '../../redux/actions/playersInfo';
-import { getIsPlayerPlaying, getPlayerVolume, getPlayerPendingSeeks, getIsPlayerMuted } from '../../redux/selectors/playersInfo';
-import { State } from '../../redux/types';
-import { ReactPlayerWrapper, VideoPlayerContainer } from './style';
+} from '../../redux/actions';
 import { PlayerControlOverlay } from '../PlayerControlOverlay';
-import { getIsMasterPlayerBuffering, getIsMasterPlayerMuted, getMasterPlayerVolume } from '../../redux/selectors/masterPlayerInfo';
+import { ReactPlayerWrapper, VideoPlayerContainer } from './style';
 
 interface OwnProps {
     id: string;

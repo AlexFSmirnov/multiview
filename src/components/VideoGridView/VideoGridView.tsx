@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import ResizeObserver from 'resize-observer-polyfill';
-import { Video } from '../../redux/actions/videos';
+import { Video } from '../../redux/types';
 import { getOptimalGridPlayerSize } from '../../utils/getOptimalGridPlayerSize';
 import { VideoPlayer } from '../VideoPlayer';
 import { VideoGridViewContainer } from './style';

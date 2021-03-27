@@ -1,3 +1,11 @@
+export interface OffsetsState {
+    // Reference player always is the first one to play ("the least offset").
+    referencePlayerId: string | null;
+
+    // All offsets should be negative (meaning all non-reference players will be offset "to the future")
+    offsets: Record<string, number>;
+}
+
 export const OFFSETS_REFERENCE_PLAYER_ID_CHANGED = 'OFFSETS_REFERENCE_PLAYER_ID_CHANGED';
 export const PLAYER_OFFSET_CHANGED = 'PLAYER_OFFSET_CHANGED';
 

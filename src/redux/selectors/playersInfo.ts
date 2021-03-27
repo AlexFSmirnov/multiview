@@ -1,9 +1,8 @@
 import memoize from 'fast-memoize';
 import { createSelector } from 'reselect';
 import { compose, entries, get, getOr, reduce } from 'lodash/fp';
-import { State } from '../types';
-import { playerInfoInitialState, PlayersInfoState } from '../reducers/playersInfo';
-import { PlayerInfo } from '../actions/playersInfo';
+import { State, PlayerInfo, PlayersInfoState } from '../types';
+import { playerInfoInitialState } from '../reducers/playersInfo';
 import { getPlayerOffset } from './offsets';
 import { getMasterPlayerPlayedSeconds } from './masterPlayerInfo';
 

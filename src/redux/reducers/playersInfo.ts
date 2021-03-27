@@ -1,5 +1,6 @@
 import {
     PlayerInfo,
+    PlayersInfoState,
     PlayersInfoAction,
     PLAYER_INITIALIZED,
     PLAYER_READY,
@@ -18,9 +19,8 @@ import {
     PLAYER_UNMUTED,
     PLAYER_PENDING_SEEK_PUSHED,
     PLAYER_PENDING_SEEK_POPPED,
-} from '../actions/playersInfo';
+} from '../types';
 
-export type PlayersInfoState = Record<string, PlayerInfo>;
 export const playersInfoInitialState: PlayersInfoState = {};
 
 export const playerInfoInitialState: PlayerInfo = {

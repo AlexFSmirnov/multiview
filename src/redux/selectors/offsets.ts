@@ -1,8 +1,7 @@
 import memoize from 'fast-memoize';
 import { createSelector } from 'reselect';
 import { get, getOr } from 'lodash/fp';
-import { State } from '../types';
-import { OffsetsState } from '../reducers/offsets';
+import { State, OffsetsState } from '../types';
 
 export const getOffsetsState = (state: State) => state.offsets;
 

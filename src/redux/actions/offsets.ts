@@ -1,6 +1,5 @@
-import { getOffsets } from '../../selectors';
-import { AppThunkAction } from '../../types';
-import { OffsetsReferencePlayerIdChangedAction, PlayerOffsetChangedAction, OFFSETS_REFERENCE_PLAYER_ID_CHANGED, PLAYER_OFFSET_CHANGED } from './types';
+import { getOffsets } from '../selectors';
+import { AppThunkAction, OffsetsReferencePlayerIdChangedAction, PlayerOffsetChangedAction, OFFSETS_REFERENCE_PLAYER_ID_CHANGED, PLAYER_OFFSET_CHANGED } from '../types';
 
 export const changeOffsetsReferencePlayerId = (referenceId: string): OffsetsReferencePlayerIdChangedAction => ({
     type: OFFSETS_REFERENCE_PLAYER_ID_CHANGED,

@@ -1,8 +1,11 @@
 import { Middleware } from 'redux';
-import { Action, AppThunkDispatch, State } from '../types';
-import { VIDEOS_ADDED, VIDEO_ADDED } from '../actions/videos';
-import { PLAYER_OFFSET_CHANGED } from '../actions/offsets';
 import {
+    Action,
+    AppThunkDispatch,
+    State,
+    VIDEOS_ADDED,
+    VIDEO_ADDED,
+    PLAYER_OFFSET_CHANGED,
     PlayerInfo,
     PLAYER_LOADED_TIME_UPDATED,
     PLAYER_PLAYED_TIME_UPDATED,
@@ -12,7 +15,18 @@ import {
     PLAYER_STARTED_PLAYING,
     PLAYER_STOPPED_BUFFERING,
     PLAYER_STOPPED_PLAYING,
-} from '../actions/playersInfo';
+    MASTER_PLAYER_PLAYED_TIME_UPDATED,
+} from '../types';
+import {
+    getOffsets,
+    getPlayerOffset,
+    getPlayersInfoState,
+    getPlayerDurationSeconds,
+    getPlayerInfo,
+    getMasterPendingSeek,
+    getMasterPlayerDurationSeconds,
+    getMasterPlayerPlayedSeconds,
+} from '../selectors';
 import {
     masterPlayerReady,
     masterPlayerNotReady,
@@ -23,12 +37,8 @@ import {
     masterPlayerUpdateDuration,
     masterPlayerUpdatePlayedTime,
     masterPlayerUpdateLoadedTime,
-    MASTER_PLAYER_PLAYED_TIME_UPDATED,
     masterPlayerRemovePendingSeek,
-} from '../actions/masterPlayerInfo';
-import { getOffsets, getPlayerOffset } from '../selectors';
-import { getPlayerDurationSeconds, getPlayerInfo, getPlayersInfoState } from '../selectors/playersInfo';
-import { getMasterPendingSeek, getMasterPlayerDurationSeconds, getMasterPlayerPlayedSeconds } from '../selectors/masterPlayerInfo';
+} from '../actions';
 
 const everyOtherPlayer = (condition: (playerInfo: PlayerInfo) => boolean, state: State, currentId: string) => (
     Object.entries(getPlayersInfoState(state)).every(([id, playerInfo]) => id === currentId || condition(playerInfo))

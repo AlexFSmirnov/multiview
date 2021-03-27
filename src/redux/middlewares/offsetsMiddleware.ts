@@ -1,10 +1,25 @@
 import { Middleware } from 'redux';
-import { Action, AppThunkDispatch, State } from '../types';
-import { changeOffsetsReferencePlayerId, changePlayerOffset, normalizeOffsets } from '../actions/offsets';
-import { playerStartPlaying, PLAYER_PLAYED_TIME_UPDATED, PLAYER_PROGRESS_UPDATED } from '../actions/playersInfo';
-import { areAllCorrectPlayersPlaying, getPlayersInfoState, shouldPlayerCurrentlyPlay } from '../selectors/playersInfo';
-import { getOffsetsReferencePlayerId } from '../selectors';
-import { getMasterPendingSeek, getMasterPlayerPlayedSeconds } from '../selectors/masterPlayerInfo';
+import {
+    Action,
+    AppThunkDispatch,
+    State,
+    PLAYER_PLAYED_TIME_UPDATED,
+    PLAYER_PROGRESS_UPDATED,
+} from '../types';
+import {
+    areAllCorrectPlayersPlaying,
+    getPlayersInfoState,
+    shouldPlayerCurrentlyPlay,
+    getOffsetsReferencePlayerId,
+    getMasterPendingSeek,
+    getMasterPlayerPlayedSeconds,
+} from '../selectors';
+import {
+    changeOffsetsReferencePlayerId,
+    changePlayerOffset,
+    normalizeOffsets,
+    playerStartPlaying,
+} from '../actions';
 
 export const offsetsMiddleware: Middleware<{}, State, AppThunkDispatch> = store => next => (action: Action) => {
     const { dispatch, getState } = store;

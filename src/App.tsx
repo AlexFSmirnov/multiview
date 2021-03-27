@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { connect } from 'react-redux';
+import { createStructuredSelector } from 'reselect';
 import { unstable_createMuiStrictModeTheme as createMuiTheme, ThemeProvider, CssBaseline } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
-import { State } from './redux/types';
-import { Video } from './redux/actions/videos';
+import { State, Video } from './redux/types';
+import { getVideos } from './redux/selectors';
 import { AddVideosDialog, AppBar, PlayerControlOverlay, VideoGridView } from './components';
 import { AppContainer, GlobalStyle } from './style';
 
@@ -41,8 +42,8 @@ const App: React.FC<StateProps> = ({ videos }) => {
     );
 };
 
-export default connect(
-    (state: State) => ({
-        videos: state.videos,
+export default connect<StateProps, {}, {}, State>(
+    createStructuredSelector({
+        videos: getVideos,
     }),
 )(App);

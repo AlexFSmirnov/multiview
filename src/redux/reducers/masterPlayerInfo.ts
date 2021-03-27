@@ -1,4 +1,5 @@
 import {
+    MasterPlayerInfoState,
     MasterPlayerInfoAction,
     MASTER_PLAYER_READY,
     MASTER_PLAYER_NOT_READY,
@@ -16,25 +17,8 @@ import {
     MASTER_PLAYER_UNMUTED,
     MASTER_PLAYER_PENDING_SEEK_SET,
     MASTER_PLAYER_PENDING_SEEK_REMOVED,
-} from '../actions/masterPlayerInfo';
+} from '../types';
 
-export interface MasterPlayerInfoState {
-    isReady: boolean;
-    isPlaying: boolean;
-    isBuffering: boolean;
-    hasEnded: boolean;
-
-    durationSeconds: number;
-    playedSeconds: number;
-    playedFraction: number;
-    loadedSeconds: number;
-    loadedFraction: number;
-
-    volume: number;
-    isMuted: boolean;
-
-    pendingSeek: number | null;
-}
 const masterPlayerInfoInitialState: MasterPlayerInfoState = {
     isReady: false,
     isPlaying: false,

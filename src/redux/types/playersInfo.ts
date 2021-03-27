@@ -15,6 +15,7 @@ export interface PlayerInfo {
 
     pendingSeeks: number[];
 }
+export type PlayersInfoState = Record<string, PlayerInfo>;
 
 export const PLAYER_INITIALIZED = 'PLAYER_INITIALIZED';
 export const PLAYER_READY = 'PLAYER_READY';

@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { State } from '../../redux/types';
-import { playerStartPlaying, playerStopPlaying, playerUpdateVolume, playerMute, playerUnmute, playerPushPendingSeek, playerStartBuffering } from '../../redux/actions/playersInfo';
 import {
     getIsPlayerPlaying,
     getIsPlayerBuffering,
@@ -9,7 +8,16 @@ import {
     getPlayerPlayedFraction,
     getPlayerLoadedFraction,
     getIsPlayerMuted,
-} from '../../redux/selectors/playersInfo';
+} from '../../redux/selectors';
+import {
+    playerStartPlaying,
+    playerStopPlaying,
+    playerUpdateVolume,
+    playerMute,
+    playerUnmute,
+    playerPushPendingSeek,
+    playerStartBuffering,
+} from '../../redux/actions';
 import { PlaybackControlBar } from '../PlaybackControlBar';
 import IndividualPlaybackControlBarActions from './IndividualPlaybackControlBarActions';
 

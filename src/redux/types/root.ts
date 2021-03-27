@@ -1,13 +1,9 @@
 import { AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { MasterPlayerInfoAction } from './actions/masterPlayerInfo';
-import { MasterPlayerInfoState } from './reducers/masterPlayerInfo';
-import { PlayersInfoAction } from './actions/playersInfo';
-import { PlayersInfoState } from './reducers/playersInfo';
-import { OffsetsAction } from './actions/offsets';
-import { OffsetsState } from './reducers/offsets';
-import { VideosAction } from './actions/videos';
-import { VideosState } from './reducers/videos';
+import { MasterPlayerInfoAction, MasterPlayerInfoState } from './masterPlayerInfo';
+import { PlayersInfoAction, PlayersInfoState } from './playersInfo';
+import { OffsetsAction, OffsetsState } from './offsets';
+import { VideosAction, VideosState } from './videos';
 
 export interface State {
     masterPlayerInfo: MasterPlayerInfoState;

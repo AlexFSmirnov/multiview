@@ -1,8 +1,5 @@
-import { getPlayerOffset } from '../../selectors';
-import { getMasterPlayerInfo } from '../../selectors/masterPlayerInfo';
-import { getPlayersInfoState, shouldPlayerCurrentlyPlay } from '../../selectors/playersInfo';
-import { AppThunkAction } from '../../types';
-import { playerEndVideo, playerPushPendingSeek, playerRestartVideo, playerStartPlaying, playerStopPlaying } from '../playersInfo';
+import { AppThunkAction } from '../types';
+import { getPlayerOffset, getMasterPlayerInfo, getPlayersInfoState, shouldPlayerCurrentlyPlay } from '../selectors';
 import {
     MasterPlayerReadyAction,
     MasterPlayerNotReadyAction,
@@ -36,7 +33,8 @@ import {
     MASTER_PLAYER_UNMUTED,
     MASTER_PLAYER_PENDING_SEEK_SET,
     MASTER_PLAYER_PENDING_SEEK_REMOVED,
-} from './types';
+} from '../types';
+import { playerEndVideo, playerPushPendingSeek, playerRestartVideo, playerStartPlaying, playerStopPlaying } from './playersInfo';
 
 export const masterPlayerReady = (): MasterPlayerReadyAction => ({
     type: MASTER_PLAYER_READY,

@@ -2,6 +2,8 @@ export interface Video {
     url: string;
 }
 
+export type VideosState = Record<string, Video>;
+
 export const VIDEO_ADDED = 'VIDEO_ADDED';
 export const VIDEOS_ADDED = 'VIDEOS_ADDED';
 export const VIDEO_REMOVED = 'VIDEO_REMOVED';

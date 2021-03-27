@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { State } from '../../redux/types';
-import { startPlayback, stopPlayback, seekTo, masterPlayerUpdateVolume, masterPlayerMute, masterPlayerUnmute } from '../../redux/actions/masterPlayerInfo';
 import {
     getIsMasterPlayerBuffering,
     getIsMasterPlayerMuted,
@@ -10,7 +9,15 @@ import {
     getMasterPlayerLoadedFraction,
     getMasterPlayerPlayedFraction,
     getMasterPlayerVolume,
-} from '../../redux/selectors/masterPlayerInfo';
+} from '../../redux/selectors';
+import {
+    startPlayback,
+    stopPlayback,
+    seekTo,
+    masterPlayerUpdateVolume,
+    masterPlayerMute,
+    masterPlayerUnmute,
+} from '../../redux/actions';
 import { PlaybackControlBar } from '../PlaybackControlBar';
 import MasterPlaybackControlBarActions from './MasterPlaybackControlBarActions';
 

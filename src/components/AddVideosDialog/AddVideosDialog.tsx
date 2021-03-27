@@ -5,7 +5,8 @@ import { omit } from 'lodash/fp';
 import { useDropzone } from 'react-dropzone';
 import { useTheme, Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography, IconButton } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
-import { addVideos, Video } from '../../redux/actions/videos';
+import { Video } from '../../redux/types';
+import { addVideos } from '../../redux/actions';
 import { AddFilesContainer, FileItemContainer, FilesListContainer, OrDividerContainer, OrDividerLine, OrDividerTextContainer, UrlTextFieldContainer } from './style';
 
 interface OwnProps {

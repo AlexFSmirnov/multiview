@@ -1,3 +1,21 @@
+export interface MasterPlayerInfoState {
+    isReady: boolean;
+    isPlaying: boolean;
+    isBuffering: boolean;
+    hasEnded: boolean;
+
+    durationSeconds: number;
+    playedSeconds: number;
+    playedFraction: number;
+    loadedSeconds: number;
+    loadedFraction: number;
+
+    volume: number;
+    isMuted: boolean;
+
+    pendingSeek: number | null;
+}
+
 export const MASTER_PLAYER_READY = 'MASTER_PLAYER_READY';
 export const MASTER_PLAYER_NOT_READY = 'MASTER_PLAYER_NOT_READY';
 export const MASTER_PLAYER_STARTED_PLAYING = 'MASTER_PLAYER_STARTED_PLAYING';
