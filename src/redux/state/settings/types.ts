@@ -3,15 +3,22 @@ export enum ControlsMode {
     Individual = 'Individual',
 }
 
+export enum Layout {
+    Grid = 'Grid',
+    Focused = 'Focused',
+}
+
 export interface SettingsState {
     isFullscreen: boolean;
     controlsMode: ControlsMode;
+    layout: Layout;
     focusedPlayerId: string | null;
 }
 
 export const SETTINGS_FULLSCREEN_ENTERED = 'SETTINGS_FULLSCREEN_ENTERED';
 export const SETTINGS_FULLSCREEN_EXITED = 'SETTINGS_FULLSCREEN_EXITED';
 export const SETTINGS_CONTROLS_MODE_CHANGED = 'SETTINGS_CONTROLS_MODE_CHANGED';
+export const SETTINGS_LAYOUT_CHANGED = 'SETTINGS_LAYOUT_CHANGED';
 export const SETTINGS_FOCUSED_PLAYER_ID_CHANGED = 'SETTINGS_FOCUSED_PLAYER_ID_CHANGED';
 
 export interface SettingsFullscreenEnteredAction {
@@ -29,6 +36,13 @@ export interface SettingsControlsModeChangedAction {
     };
 }
 
+export interface SettingsLayoutChangedAction {
+    type: typeof SETTINGS_LAYOUT_CHANGED;
+    payload: {
+        layout: Layout;
+    };
+}
+
 export interface SettingsFocusedPlayerIdChangedAction {
     type: typeof SETTINGS_FOCUSED_PLAYER_ID_CHANGED;
     payload: {
@@ -37,5 +51,6 @@ export interface SettingsFocusedPlayerIdChangedAction {
 }
 
 export type SettingsAction = (
-    SettingsFullscreenEnteredAction | SettingsFullscreenExitedAction | SettingsControlsModeChangedAction | SettingsFocusedPlayerIdChangedAction
+    SettingsFullscreenEnteredAction | SettingsFullscreenExitedAction | SettingsControlsModeChangedAction |
+    SettingsLayoutChangedAction | SettingsFocusedPlayerIdChangedAction
 );

@@ -2,13 +2,16 @@ import { AppThunkAction } from '../types';
 import { getIsFullscreen } from './selectors';
 import {
     ControlsMode,
+    Layout,
     SettingsFullscreenEnteredAction,
     SettingsFullscreenExitedAction,
     SettingsControlsModeChangedAction,
+    SettingsLayoutChangedAction,
     SettingsFocusedPlayerIdChangedAction,
     SETTINGS_FULLSCREEN_ENTERED,
     SETTINGS_FULLSCREEN_EXITED,
     SETTINGS_CONTROLS_MODE_CHANGED,
+    SETTINGS_LAYOUT_CHANGED,
     SETTINGS_FOCUSED_PLAYER_ID_CHANGED,
 } from './types';
 
@@ -23,6 +26,11 @@ export const setFullscreenOff = (): SettingsFullscreenExitedAction => ({
 export const changeControlsMode = (controlsMode: ControlsMode): SettingsControlsModeChangedAction => ({
     type: SETTINGS_CONTROLS_MODE_CHANGED,
     payload: { controlsMode },
+});
+
+export const changeLayout = (layout: Layout): SettingsLayoutChangedAction => ({
+    type: SETTINGS_LAYOUT_CHANGED,
+    payload: { layout },
 });
 
 export const changeFocusedPlayerId = (focusedPlayerId: string | null): SettingsFocusedPlayerIdChangedAction => ({

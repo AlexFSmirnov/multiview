@@ -25,6 +25,7 @@ export type PlayerControlOverlayProps = OwnProps & StateProps & DispatchProps;
 const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({ id, isFullscreen, controlsMode }) => {
     const [isControlBarVisible, setIsControlBarVisible] = useState(false);
 
+    // TODO: Smart hide based on whether the player is playing.
     const handleMouseEnter = () => {
         setIsControlBarVisible(true);
     };
