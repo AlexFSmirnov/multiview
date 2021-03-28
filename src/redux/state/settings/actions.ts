@@ -12,11 +12,11 @@ import {
     SETTINGS_FOCUSED_PLAYER_ID_CHANGED,
 } from './types';
 
-export const enterFullscreen = (): SettingsFullscreenEnteredAction => ({
+export const setFullscreenOn = (): SettingsFullscreenEnteredAction => ({
     type: SETTINGS_FULLSCREEN_ENTERED,
 });
 
-export const exitFullscreen = (): SettingsFullscreenExitedAction => ({
+export const setFullscreenOff = (): SettingsFullscreenExitedAction => ({
     type: SETTINGS_FULLSCREEN_EXITED,
 });
 
@@ -29,6 +29,16 @@ export const changeFocusedPlayerId = (focusedPlayerId: string | null): SettingsF
     type: SETTINGS_FOCUSED_PLAYER_ID_CHANGED,
     payload: { focusedPlayerId },
 });
+
+export const enterFullscreen = (): AppThunkAction => dispatch => {
+    dispatch(setFullscreenOn());
+    dispatch(changeControlsMode(ControlsMode.Grouped));
+};
+
+export const exitFullscreen = (): AppThunkAction => dispatch => {
+    dispatch(setFullscreenOff());
+    dispatch(changeControlsMode(ControlsMode.Individual));
+};
 
 export const toggleFullscreen = (): AppThunkAction => (dispatch, getState) => {
     const isFullscreen = getIsFullscreen(getState());

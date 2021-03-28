@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { connect } from 'react-redux';
-import { State } from '../../redux/types';
+import { createStructuredSelector } from 'reselect';
+import { getControlsMode, getIsFullscreen } from '../../redux/selectors';
+import { ControlsMode, State } from '../../redux/types';
 import { IndividualPlaybackControlBar } from '../IndividualPlaybackControlBar';
 import { MasterPlaybackControlBar } from '../MasterPlaybackControlBar';
 import { PlayerControlOverlayContainer, PlaybackControlBarWrapper, PlaybackControlBarFlexSpacer, PlaybackControlOverlayBottomShadow } from './style';
-
-// TODO: generalize for master player too (for now idk which props this will need).
 
 interface OwnProps {
     id?: string;
 }
 
 interface StateProps {
-
+    isFullscreen: boolean;
+    controlsMode: ControlsMode;
 }
 
 interface DispatchProps {
@@ -21,7 +22,7 @@ interface DispatchProps {
 
 export type PlayerControlOverlayProps = OwnProps & StateProps & DispatchProps;
 
-const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({ id }) => {
+const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({ id, isFullscreen, controlsMode }) => {
     const [isControlBarVisible, setIsControlBarVisible] = useState(false);
 
     const handleMouseEnter = () => {
@@ -32,11 +33,11 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({ id }) => {
         setIsControlBarVisible(false);
     };
 
-    const isFullscreen = false;
-    const isBlockingPointerEvents = !!id;
 
     const isMaster = !id;
-    const isOverlaid = !isMaster || isFullscreen;
+
+    const isOverlaid = (isMaster && isFullscreen) || !isMaster;
+    const isBlockingPointerEvents = (isMaster && controlsMode === ControlsMode.Grouped) || !isMaster;
 
     const playbackControlOverlayContainerProps = {
         isBlockingPointerEvents,
@@ -62,8 +63,9 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({ id }) => {
 };
 
 export default connect<StateProps, DispatchProps, OwnProps, State>(
-    state => ({
-
+    createStructuredSelector({
+        isFullscreen: getIsFullscreen,
+        controlsMode: getControlsMode,
     }),
     {
 

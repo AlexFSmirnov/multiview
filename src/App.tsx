@@ -4,7 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import { unstable_createMuiStrictModeTheme as createMuiTheme, ThemeProvider, CssBaseline } from '@material-ui/core';
 import { red } from '@material-ui/core/colors';
 import { State, Video } from './redux/types';
-import { getVideos } from './redux/selectors';
+import { getIsFullscreen, getVideos } from './redux/selectors';
 import { AddVideosDialog, AppBar, PlayerControlOverlay, VideoGridView } from './components';
 import { AppContainer, GlobalStyle } from './style';
 

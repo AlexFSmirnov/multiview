@@ -36,7 +36,6 @@ export const PlaybackControlOverlayBottomShadow = styled.div<WithVisibility>`
 
     height: 30%;
 
-    /* box-shadow: 0 0 100px black; */
     background: linear-gradient(0deg, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.1) 70%, rgba(0, 0, 0, 0));
 
     transition: opacity 200ms;
