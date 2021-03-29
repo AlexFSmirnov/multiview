@@ -8,6 +8,10 @@ import { getIsFullscreen } from '../../redux/selectors';
 import { toggleFullscreen } from '../../redux/actions';
 import MasterPlaybackControlBarSettingsMenu from './MasterPlaybackControlBarSettingsMenu';
 
+interface OwnProps {
+    isVisible: boolean;
+}
+
 interface StateProps {
     isFullscreen: boolean;
 }
@@ -16,20 +20,20 @@ interface DispatchProps {
     toggleFullscreen: () => void;
 }
 
-export type MasterPlaybackControlBarActionsProps = StateProps & DispatchProps;
+export type MasterPlaybackControlBarActionsProps = OwnProps & StateProps & DispatchProps;
 
 const MasterPlaybackControlBarActions: React.FC<MasterPlaybackControlBarActionsProps> = ({
+    isVisible,
     isFullscreen,
     toggleFullscreen,
 }) => {
     const settingsButtonRef = useRef<HTMLButtonElement | null>(null);
     const [isSettingsMenuOpen, setIsSettingsMenuOpen] = useState(false);
-    // TODO: Hide settings when the playback bar is hidden.
 
     const handleSettingsClick = () => setIsSettingsMenuOpen(!isSettingsMenuOpen);
 
     const settingsMenuProps = {
-        isOpen: isSettingsMenuOpen,
+        isOpen: isVisible && isSettingsMenuOpen,
         anchorElement: settingsButtonRef.current,
     };
 

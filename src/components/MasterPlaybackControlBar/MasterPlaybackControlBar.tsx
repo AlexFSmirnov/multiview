@@ -21,6 +21,10 @@ import {
 import { PlaybackControlBar } from '../PlaybackControlBar';
 import MasterPlaybackControlBarActions from './MasterPlaybackControlBarActions';
 
+interface OwnProps {
+    isVisible: boolean;
+}
+
 interface StateProps {
     isPlaying: boolean;
     isBuffering: boolean;
@@ -40,9 +44,10 @@ interface DispatchProps {
     seekTo: (seconds: number) => void;
 }
 
-type MasterPlaybackControlBarProps = StateProps & DispatchProps;
+type MasterPlaybackControlBarProps = OwnProps & StateProps & DispatchProps;
 
 const MasterPlaybackControlBar: React.FC<MasterPlaybackControlBarProps> = ({
+    isVisible,
     isMuted,
     startPlayback,
     stopPlayback,
@@ -68,7 +73,7 @@ const MasterPlaybackControlBar: React.FC<MasterPlaybackControlBarProps> = ({
         onVolumeChange: updateVolume,
         onSeek: seekTo,
 
-        actions: <MasterPlaybackControlBarActions />,
+        actions: <MasterPlaybackControlBarActions isVisible={isVisible} />,
 
         ...other,
     };

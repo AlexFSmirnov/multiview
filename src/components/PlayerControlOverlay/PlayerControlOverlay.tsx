@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
-import { getControlsMode, getIsFullscreen } from '../../redux/selectors';
+import { getControlsMode, getIsFullscreen, getIsMasterPlayerPlaying, getIsPlayerPlaying } from '../../redux/selectors';
 import { ControlsMode, State } from '../../redux/types';
 import { IndividualPlaybackControlBar } from '../IndividualPlaybackControlBar';
 import { MasterPlaybackControlBar } from '../MasterPlaybackControlBar';
@@ -12,6 +11,7 @@ interface OwnProps {
 }
 
 interface StateProps {
+    isPlaying: boolean;
     isFullscreen: boolean;
     controlsMode: ControlsMode;
 }
@@ -22,16 +22,44 @@ interface DispatchProps {
 
 export type PlayerControlOverlayProps = OwnProps & StateProps & DispatchProps;
 
-const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({ id, isFullscreen, controlsMode }) => {
-    const [isControlBarVisible, setIsControlBarVisible] = useState(false);
+const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({ id, isPlaying, isFullscreen, controlsMode }) => {
+    const hideControlsTimeoutId = useRef<number | null>(null);
 
-    // TODO: Smart hide based on whether the player is playing.
+    const [isMouseOverPlayer, setIsMouseOverPlayer] = useState(true);
+    const [isControlBarVisible, setIsControlBarVisible] = useState(true);
+
+    useEffect(() => {
+        if (!id || (id && controlsMode === ControlsMode.Individual)) {
+            setIsControlBarVisible(!isPlaying || isMouseOverPlayer);
+        } else {
+            setIsControlBarVisible(false);
+        }
+    }, [isPlaying, isMouseOverPlayer, controlsMode, id]);
+
     const handleMouseEnter = () => {
-        setIsControlBarVisible(true);
+        setIsMouseOverPlayer(true);
     };
 
     const handleMouseLeave = () => {
-        setIsControlBarVisible(false);
+        setIsMouseOverPlayer(false);
+    };
+
+    const handleMouseMove = () => {
+        if (isMouseOverPlayer) {
+            setIsControlBarVisible(true);
+        }
+
+        if (hideControlsTimeoutId.current) {
+            window.clearTimeout(hideControlsTimeoutId.current);
+        }
+
+        hideControlsTimeoutId.current = window.setTimeout(() => {
+            if (isPlaying) {
+                setIsControlBarVisible(false);
+            }
+
+            hideControlsTimeoutId.current = null;
+        }, 3000);
     };
 
 
@@ -44,6 +72,7 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({ id, isFulls
         isBlockingPointerEvents,
         onMouseEnter: handleMouseEnter,
         onMouseLeave: handleMouseLeave,
+        onMouseMove: handleMouseMove,
     };
 
     return (
@@ -53,7 +82,7 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({ id, isFulls
                 <PlaybackControlBarWrapper isVisible={isControlBarVisible || !isOverlaid}>
                     {id
                         ? <IndividualPlaybackControlBar id={id} />
-                        : <MasterPlaybackControlBar />
+                        : <MasterPlaybackControlBar isVisible={isControlBarVisible || !isOverlaid} />
                     }
                 </PlaybackControlBarWrapper>
             </PlayerControlOverlayContainer>
@@ -64,9 +93,10 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({ id, isFulls
 };
 
 export default connect<StateProps, DispatchProps, OwnProps, State>(
-    createStructuredSelector({
-        isFullscreen: getIsFullscreen,
-        controlsMode: getControlsMode,
+    (state: State, { id }: OwnProps) => ({
+        isPlaying: id ? getIsPlayerPlaying(id)(state) : getIsMasterPlayerPlaying(state),
+        isFullscreen: getIsFullscreen(state),
+        controlsMode: getControlsMode(state),
     }),
     {
 
