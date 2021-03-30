@@ -1,10 +1,11 @@
 import { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
+import { changeFocusedPlayerId, playerStartPlaying, playerStopPlaying, startPlayback, stopPlayback } from '../../redux/actions';
 import { getControlsMode, getIsFullscreen, getIsMasterPlayerPlaying, getIsPlayerPlaying } from '../../redux/selectors';
 import { ControlsMode, State } from '../../redux/types';
 import { IndividualPlaybackControlBar } from '../IndividualPlaybackControlBar';
 import { MasterPlaybackControlBar } from '../MasterPlaybackControlBar';
-import { PlayerControlOverlayContainer, PlaybackControlBarWrapper, PlaybackControlBarFlexSpacer, PlaybackControlOverlayBottomShadow } from './style';
+import { PlayerControlOverlayContainer, PlaybackControlBarWrapper, PlaybackControlBarFlexSpacer, PlaybackControlOverlayBottomShadow, PlayerControlOverlayClickCapture } from './style';
 
 interface OwnProps {
     id?: string;
@@ -17,15 +18,29 @@ interface StateProps {
 }
 
 interface DispatchProps {
-
+    playerStartPlaying: (id: string) => void;
+    playerStopPlaying: (id: string) => void;
+    masterPlayerStartPlaying: () => void;
+    masterPlayerStopPlaying: () => void;
+    changeFocusedPlayerId: (id: string | null) => void;
 }
 
 export type PlayerControlOverlayProps = OwnProps & StateProps & DispatchProps;
 
-const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({ id, isPlaying, isFullscreen, controlsMode }) => {
+const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({
+    id,
+    isPlaying,
+    isFullscreen,
+    controlsMode,
+    playerStartPlaying,
+    playerStopPlaying,
+    masterPlayerStartPlaying,
+    masterPlayerStopPlaying,
+    changeFocusedPlayerId,
+}) => {
     const hideControlsTimeoutId = useRef<number | null>(null);
 
-    const [isMouseOverPlayer, setIsMouseOverPlayer] = useState(true);
+    const [isMouseOverPlayer, setIsMouseOverPlayer] = useState(false);
     const [isControlBarVisible, setIsControlBarVisible] = useState(true);
 
     useEffect(() => {
@@ -38,10 +53,12 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({ id, isPlayi
 
     const handleMouseEnter = () => {
         setIsMouseOverPlayer(true);
+        changeFocusedPlayerId(id || null);
     };
 
     const handleMouseLeave = () => {
         setIsMouseOverPlayer(false);
+        changeFocusedPlayerId(null);
     };
 
     const handleMouseMove = () => {
@@ -62,9 +79,23 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({ id, isPlayi
         }, 3000);
     };
 
+    const handleClick = () => {
+        if (isPlaying) {
+            if (id) {
+                playerStopPlaying(id);
+            } else {
+                masterPlayerStopPlaying();
+            }
+        } else {
+            if (id) {
+                playerStartPlaying(id);
+            } else {
+                masterPlayerStartPlaying();
+            }
+        }
+    };
 
     const isMaster = !id;
-
     const isOverlaid = (isMaster && isFullscreen) || !isMaster;
     const isBlockingPointerEvents = (isMaster && controlsMode === ControlsMode.Grouped) || !isMaster;
 
@@ -79,6 +110,7 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({ id, isPlayi
         <>
             <PlayerControlOverlayContainer {...playbackControlOverlayContainerProps}>
                 <PlaybackControlOverlayBottomShadow isVisible={isControlBarVisible && isOverlaid} />
+                <PlayerControlOverlayClickCapture onClick={handleClick} />
                 <PlaybackControlBarWrapper isVisible={isControlBarVisible || !isOverlaid}>
                     {id
                         ? <IndividualPlaybackControlBar id={id} />
@@ -99,6 +131,10 @@ export default connect<StateProps, DispatchProps, OwnProps, State>(
         controlsMode: getControlsMode(state),
     }),
     {
-
+        playerStartPlaying,
+        playerStopPlaying,
+        masterPlayerStartPlaying: startPlayback,
+        masterPlayerStopPlaying: stopPlayback,
+        changeFocusedPlayerId,
     },
 )(PlayerControlOverlay);

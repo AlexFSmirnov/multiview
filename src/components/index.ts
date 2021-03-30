@@ -1,5 +1,6 @@
 export * from './AddVideosDialog';
 export * from './AppBar';
+export * from './KeyboardEventHandler';
 export * from './PlayerControlOverlay';
 export * from './VideoFocusedView';
 export * from './VideoGridView';
