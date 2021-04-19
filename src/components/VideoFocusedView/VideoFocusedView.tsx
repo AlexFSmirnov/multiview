@@ -1,3 +1,4 @@
+import ResizeObserver from 'resize-observer-polyfill';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -83,7 +84,12 @@ const VideoFocusedView: React.FC<VideoFocusedViewProps> = ({
     }, [mainPlayerIds, secondaryPlayerIds, mainPlayersHeightFraction]);
 
     useEffect(() => {
-        updatePlayerPositions();
+        const { current: container } = containerRef;
+        if (container) {
+            updatePlayerPositions();
+
+            new ResizeObserver(updatePlayerPositions).observe(container);
+        }
     }, [containerRef, videos, isFullscreen, updatePlayerPositions]);
 
     const handleWindowMouseMove = (event: MouseEvent) => {

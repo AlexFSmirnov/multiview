@@ -28,7 +28,6 @@ export const offsetsMiddleware: Middleware<{}, State, AppThunkDispatch> = store 
     next(action);
     const state = getState();
 
-    // TODO: Fix offsets for when a new video is added.
     switch (action.type) {
         case PLAYER_PLAYED_TIME_UPDATED:
         case PLAYER_PROGRESS_UPDATED:

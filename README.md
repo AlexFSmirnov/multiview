@@ -10,9 +10,9 @@ View multiple videos on the same page
 - [x] Disable overlay button
 - [ ] Pop-up indicators for mouse/keyboard controls  
 - [ ] Buffering indicators
-- [ ] Focused view  
-  - [ ] Focused view drag-to-resize
-- [ ] Individual player actions (move up/down for focused view, Delete (with confirmation) for both)  
+- [x] Focused view  
+  - [x] Focused view drag-to-resize
+- [x] Individual player actions (move up/down for focused view, Delete (with confirmation) for both)  
 - [ ] Starting screen  
 - [ ] (custom) Icons, title, text, PWA  
 - [ ] Url middleware (remembers video urls and offsets)  

@@ -1,5 +1,6 @@
+import memoize from 'fast-memoize';
 import { createSelector } from 'reselect';
-import { get, getOr } from 'lodash/fp';
+import { contains, get, getOr } from 'lodash/fp';
 import { State } from '../types';
 import { getPlayersInfoState } from '../playersInfo/selectors';
 import { getMasterPlayerInfo } from '../masterPlayerInfo/selectors';
@@ -31,6 +32,18 @@ export const getSecondaryPlayerIds = createSelector<State, SettingsState, string
     getSettingsState,
     get('secondaryPlayerIds'),
 );
+
+const getIsPlayerMainBase = (id: string) => createSelector<State, string[], boolean>(
+    getMainPlayerIds,
+    contains(id),
+);
+export const getIsPlayerMain = memoize(getIsPlayerMainBase);
+
+const getIsPlayerSecondaryBase = (id: string) => createSelector<State, string[], boolean>(
+    getSecondaryPlayerIds,
+    contains(id),
+);
+export const getIsPlayerSecondary = memoize(getIsPlayerSecondaryBase);
 
 export const getFocusedPlayerId = createSelector<State, SettingsState, string | null>(
     getSettingsState,

@@ -1,45 +1,129 @@
-import { IconButton, Tooltip } from '@material-ui/core';
-import { VisibilityOff } from '@material-ui/icons';
+import { useState } from 'react';
 import { connect } from 'react-redux';
-import { State } from '../../redux/types';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Tooltip } from '@material-ui/core';
+import { VisibilityOff, ArrowUpward, ArrowDownward, CenterFocusWeak, Delete } from '@material-ui/icons';
+import { State, Layout } from '../../redux/types';
+import { addPlayerToSecondaryPlayers, addPlayerToMainPlayers, makePlayerMain, removeVideo } from '../../redux/actions';
+import { getLayout, getIsPlayerMain } from '../../redux/selectors';
 
 interface OwnProps {
+    id: string;
     onHide?: () => void;
 }
 
 interface StateProps {
-
+    layout: Layout;
+    isMainPlayer: boolean;
 }
 
 interface DispatchProps {
-
+    addPlayerToMainPlayers: (id: string) => void;
+    addPlayerToSecondaryPlayers: (id: string) => void;
+    makePlayerMain: (id: string) => void;
+    removeVideo: (id: string) => void;
 }
 
 export type IndividualPlaybackControlBarActionsProps = OwnProps & StateProps & DispatchProps;
 
 const IndividualPlaybackControlBarActions: React.FC<IndividualPlaybackControlBarActionsProps> = ({
+    id,
     onHide,
+    layout,
+    isMainPlayer,
+    addPlayerToMainPlayers,
+    addPlayerToSecondaryPlayers,
+    makePlayerMain,
+    removeVideo,
 }) => {
+    const [isDeleteConfirmationDialogShown, setIsDeleteConfirmationDialogShown] = useState(false);
+
+    const showDeleteConfirmationDialog = () => setIsDeleteConfirmationDialogShown(true);
+    const hideDeleteConfirmationDialog = () => setIsDeleteConfirmationDialogShown(false);
+
+    const handleFocusButtonClick = () => {
+        makePlayerMain(id);
+    };
+
+    const handleMoveButtonClick = () => {
+        if (isMainPlayer) {
+            addPlayerToSecondaryPlayers(id);
+        } else {
+            addPlayerToMainPlayers(id);
+        }
+    };
+
     const handleHideButtonClick = () => {
         if (onHide) {
             onHide();
         }
     };
 
+    const handleDeleteButtonClick = () => {
+        removeVideo(id);
+    };
+
     return (
         <>
+            {layout === Layout.Focused ? (
+                <>
+                    {!isMainPlayer ? (
+                        <>
+                            <Tooltip title="Focus">
+                                <IconButton size="small" onClick={handleFocusButtonClick}>
+                                    <CenterFocusWeak fontSize="small" />
+                                </IconButton>
+                            </Tooltip>
+                            <div style={{ width: '4px' }} />
+                        </>
+                    ) : null}
+
+                    <Tooltip title={isMainPlayer ? 'Move down' : 'Move up'}>
+                        <IconButton size="small" onClick={handleMoveButtonClick}>
+                            {isMainPlayer ? <ArrowDownward fontSize="small" /> : <ArrowUpward fontSize="small" />}
+                        </IconButton>
+                    </Tooltip>
+                    <div style={{ width: '4px' }} />
+                </>
+            ) : null}
             <Tooltip title="Hide controls overlay">
                 <IconButton size="small" onClick={handleHideButtonClick}>
                     <VisibilityOff fontSize="small" />
                 </IconButton>
             </Tooltip>
+            <div style={{ width: '4px' }} />
+            <Tooltip title="Remove video">
+                <IconButton size="small" onClick={showDeleteConfirmationDialog}>
+                    <Delete fontSize="small" />
+                </IconButton>
+            </Tooltip>
 
             <div style={{ width: '8px' }} />
+
+            <Dialog open={isDeleteConfirmationDialogShown}>
+                <DialogTitle>Confirm deletion</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Are you sure you want to delete this video?
+                    </DialogContentText>
+                    <DialogActions>
+                        <Button onClick={hideDeleteConfirmationDialog} color="default">Cancel</Button>
+                        <Button onClick={handleDeleteButtonClick} color="primary" variant="contained">Delete</Button>
+                    </DialogActions>
+                </DialogContent>
+            </Dialog>
         </>
     );
 };
 
 export default connect<StateProps, DispatchProps, OwnProps, State>(
-    null,
-    {},
+    (state, ownProps) => ({
+        layout: getLayout(state),
+        isMainPlayer: getIsPlayerMain(ownProps.id)(state),
+    }),
+    {
+        addPlayerToMainPlayers,
+        addPlayerToSecondaryPlayers,
+        makePlayerMain,
+        removeVideo,
+    },
 )(IndividualPlaybackControlBarActions);

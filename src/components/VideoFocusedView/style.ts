@@ -42,7 +42,7 @@ export const VideoFocusedViewDivider = styled.div<VideoFocusedViewDividerProps>`
     }
 
     cursor: ns-resize;
-    z-index: 10000;
+    z-index: 1;
 `;
 
 export const VideoFocusedViewDividerDashes = styled.div`

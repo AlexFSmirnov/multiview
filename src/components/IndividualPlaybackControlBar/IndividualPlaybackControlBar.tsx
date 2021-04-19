@@ -82,7 +82,7 @@ const IndividualPlaybackControlBar: React.FC<IndividualPlaybackControlBarProps> 
         onVolumeChange: (volume: number) => playerUpdateVolume(id, { volume }),
         onSeek: handleSeek,
 
-        actions: <IndividualPlaybackControlBarActions onHide={onHide} />,
+        actions: <IndividualPlaybackControlBarActions id={id} onHide={onHide} />,
 
         ...other,
     };
