@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { PlayerPosition } from './types';
 
-export const VideoFocusedViewContainer = styled.div`
+export const PlayersViewContainer = styled.div`
     position: relative;
 
     width: 100%;
@@ -10,11 +10,11 @@ export const VideoFocusedViewContainer = styled.div`
     overflow: hidden;
 `;
 
-interface VideoFocusedViewPlayerWrapperProps extends PlayerPosition {
+interface PlayersViewPlayerWrapperProps extends PlayerPosition {
     padding: number;
 }
 
-export const VideoFocusedViewPlayerWrapper = styled.div<VideoFocusedViewPlayerWrapperProps>`
+export const PlayersViewPlayerWrapper = styled.div<PlayersViewPlayerWrapperProps>`
     position: absolute;
     top: ${props => props.top}px;
     left: ${props => props.left}px;
@@ -23,11 +23,11 @@ export const VideoFocusedViewPlayerWrapper = styled.div<VideoFocusedViewPlayerWr
     padding: ${props => props.padding}px;
 `;
 
-interface VideoFocusedViewDividerProps {
+interface PlayersViewDividerProps {
     heightFraction: number;
 }
 
-export const VideoFocusedViewDivider = styled.div<VideoFocusedViewDividerProps>`
+export const PlayersViewDivider = styled.div<PlayersViewDividerProps>`
     position: absolute;
     top: ${props => props.heightFraction * 100}%;
     left: 0;
@@ -45,7 +45,7 @@ export const VideoFocusedViewDivider = styled.div<VideoFocusedViewDividerProps>`
     z-index: 1;
 `;
 
-export const VideoFocusedViewDividerDashes = styled.div`
+export const PlayersViewDividerDashes = styled.div`
     position: absolute;
     top: 3.5px;
     left: 16px;

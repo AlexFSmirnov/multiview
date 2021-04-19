@@ -1,36 +1,33 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { State, Video } from '../../redux/types';
 import { getPlayerGridPositions } from '../../utils/getPlayerGridPositions';
-import { getIsFullscreen, getMainPlayerIds, getSecondaryPlayerIds } from '../../redux/selectors';
+import { State, VideosState, Layout } from '../../redux/types';
+import { getIsFullscreen, getLayout, getMainPlayerIds, getSecondaryPlayerIds, getVideos } from '../../redux/selectors';
 import { VideoPlayer } from '../VideoPlayer';
 import { PlayerPosition } from './types';
-import {
-    VideoFocusedViewContainer,
-    VideoFocusedViewDivider,
-    VideoFocusedViewDividerDashes,
-    VideoFocusedViewPlayerWrapper,
-} from './style';
+import { PlayersViewContainer, PlayersViewDivider, PlayersViewDividerDashes, PlayersViewPlayerWrapper } from './style';
 
 interface OwnProps {
-    videos: Record<string, Video>;
-    padding: number;
-    minGroupHeight?: number;
+    padding?: number;
+    minFocusedGroupHeight?: number;
 }
 
 interface StateProps {
+    layout: Layout;
+    videos: VideosState;
     isFullscreen: boolean;
     mainPlayerIds: string[];
     secondaryPlayerIds: string[];
 }
 
-export type VideoFocusedViewProps = OwnProps & StateProps;
+export type PlayersViewProps = OwnProps & StateProps;
 
-const VideoFocusedView: React.FC<VideoFocusedViewProps> = ({
+const PlayersView: React.FC<PlayersViewProps> = ({
+    padding = 8,
+    minFocusedGroupHeight = 32,
+    layout,
     videos,
-    padding,
-    minGroupHeight = 32,
     isFullscreen,
     mainPlayerIds,
     secondaryPlayerIds,
@@ -40,7 +37,7 @@ const VideoFocusedView: React.FC<VideoFocusedViewProps> = ({
     const [mainPlayersHeightFraction, setMainPlayersHeightFraction] = useState(0.75);
     const [playerPositions, setPlayerPositions] = useState<Record<string, PlayerPosition>>({});
 
-    const updatePlayerPositions = useCallback(() => {
+    const updatePlayersFocusedPosition = useCallback(() => {
         const { current: container } = containerRef;
         if (container) {
             const { width: containerWidth, height: containerHeight } = container.getBoundingClientRect();
@@ -82,12 +79,39 @@ const VideoFocusedView: React.FC<VideoFocusedViewProps> = ({
         }
     }, [mainPlayerIds, secondaryPlayerIds, mainPlayersHeightFraction]);
 
-    useEffect(() => {
+    const updatePlayersGridPosition = useCallback(() => {
         const { current: container } = containerRef;
         if (container) {
-            updatePlayerPositions();
+            const { width: containerWidth, height: containerHeight } = container.getBoundingClientRect();
+
+            const playerPositions = getPlayerGridPositions({
+                containerWidth,
+                containerHeight,
+                numberOfPlayers: Object.keys(videos).length,
+            });
+
+            const keyedPlayerPositions = Object.keys(videos).reduce(
+                (positions, id, index) => ({
+                    ...positions,
+                    [id]: playerPositions[index],
+                }),
+                {},
+            );
+
+            setPlayerPositions(keyedPlayerPositions);
         }
-    }, [containerRef, videos, isFullscreen, updatePlayerPositions]);
+    }, [videos]);
+
+    useEffect(() => {
+        switch (layout) {
+            case Layout.Focused:
+                updatePlayersFocusedPosition();
+                break;
+            case Layout.Grid:
+                updatePlayersGridPosition();
+                break;
+        }
+    }, [containerRef, layout, videos, isFullscreen, updatePlayersFocusedPosition, updatePlayersGridPosition]);
 
     const handleWindowMouseMove = (event: MouseEvent) => {
         const { current: container } = containerRef;
@@ -96,7 +120,7 @@ const VideoFocusedView: React.FC<VideoFocusedViewProps> = ({
             const { height: containerHeight, y: containerY } = container.getBoundingClientRect();
 
             const relativeMouseY = mouseY - containerY;
-            const clampedMouseY = Math.max(minGroupHeight, Math.min(containerHeight - minGroupHeight, relativeMouseY));
+            const clampedMouseY = Math.max(minFocusedGroupHeight, Math.min(containerHeight - minFocusedGroupHeight, relativeMouseY));
 
             setMainPlayersHeightFraction(clampedMouseY / containerHeight);
         }
@@ -119,28 +143,32 @@ const VideoFocusedView: React.FC<VideoFocusedViewProps> = ({
     };
 
     return (
-        <VideoFocusedViewContainer ref={containerRef}>
-            <VideoFocusedViewDivider {...dividerProps}>
-                <VideoFocusedViewDividerDashes />
-            </VideoFocusedViewDivider>
+        <PlayersViewContainer ref={containerRef}>
+            {layout === Layout.Focused ? (
+                <PlayersViewDivider {...dividerProps}>
+                    <PlayersViewDividerDashes />
+                </PlayersViewDivider>
+            ) : null}
 
             {Object.entries(videos).map(([id, video]) => (
                 playerPositions[id]
                     ? (
-                        <VideoFocusedViewPlayerWrapper key={id} padding={padding} {...playerPositions[id]}>
+                        <PlayersViewPlayerWrapper key={id} padding={padding} {...playerPositions[id]}>
                             <VideoPlayer id={id} video={video} width={playerPositions[id].width - padding * 2} height={playerPositions[id].height - padding * 2} />
-                        </VideoFocusedViewPlayerWrapper>
+                        </PlayersViewPlayerWrapper>
                     )
                     : null
             ))}
-        </VideoFocusedViewContainer>
+        </PlayersViewContainer>
     );
 };
 
 export default connect<StateProps, {}, OwnProps, State>(
     createStructuredSelector({
+        layout: getLayout,
+        videos: getVideos,
         isFullscreen: getIsFullscreen,
         mainPlayerIds: getMainPlayerIds,
         secondaryPlayerIds: getSecondaryPlayerIds,
     }),
-)(VideoFocusedView);
+)(PlayersView);
