@@ -22,6 +22,16 @@ export const getLayout = createSelector<State, SettingsState, Layout>(
     get('layout'),
 );
 
+export const getMainPlayerIds = createSelector<State, SettingsState, string[]>(
+    getSettingsState,
+    get('mainPlayerIds'),
+);
+
+export const getSecondaryPlayerIds = createSelector<State, SettingsState, string[]>(
+    getSettingsState,
+    get('secondaryPlayerIds'),
+);
+
 export const getFocusedPlayerId = createSelector<State, SettingsState, string | null>(
     getSettingsState,
     get('focusedPlayerId'),

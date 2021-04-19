@@ -1,7 +1,7 @@
 import thunk from 'redux-thunk';
 import { createStore, applyMiddleware } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { masterPlayerMiddleware, offsetsMiddleware } from './middlewares';
+import { masterPlayerMiddleware, offsetsMiddleware, playerGroupsMiddleware } from './middlewares';
 import { rootReducer } from './state';
 
 export const store = createStore(
@@ -10,5 +10,6 @@ export const store = createStore(
         thunk,
         offsetsMiddleware,
         masterPlayerMiddleware,
+        playerGroupsMiddleware,
     )),
 );

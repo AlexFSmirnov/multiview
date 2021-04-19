@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
-import { IconButton, Tooltip, Fab } from '@material-ui/core';
+import { Tooltip, Fab } from '@material-ui/core';
 import { Visibility } from '@material-ui/icons';
 import { changeFocusedPlayerId, playerStartPlaying, playerStopPlaying, startPlayback, stopPlayback } from '../../redux/actions';
 import { getControlsMode, getIsFullscreen, getIsMasterPlayerPlaying, getIsPlayerPlaying } from '../../redux/selectors';

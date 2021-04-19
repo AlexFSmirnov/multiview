@@ -4,7 +4,6 @@ import {
     AppThunkDispatch,
     State,
     VIDEOS_ADDED,
-    VIDEO_ADDED,
     PLAYER_OFFSET_CHANGED,
     PlayerInfo,
     PLAYER_LOADED_TIME_UPDATED,
@@ -165,7 +164,6 @@ export const masterPlayerMiddleware: Middleware<{}, State, AppThunkDispatch> = s
             break;
 
 
-        case VIDEO_ADDED:
         case VIDEOS_ADDED:
             dispatch(masterPlayerNotReady());
             break;

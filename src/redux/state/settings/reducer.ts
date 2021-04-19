@@ -8,6 +8,9 @@ import {
     SETTINGS_CONTROLS_MODE_CHANGED,
     SETTINGS_LAYOUT_CHANGED,
     SETTINGS_FOCUSED_PLAYER_ID_CHANGED,
+    SETTINGS_MAIN_PLAYER_IDS_CHANGED,
+    SETTINGS_SECONDARY_PLAYER_IDS_CHANGED,
+    SETTINGS_MAIN_AND_SECONDARY_PLAYER_IDS_CHANGED,
 } from './types';
 
 const settingsInitialState: SettingsState = {
@@ -15,6 +18,8 @@ const settingsInitialState: SettingsState = {
     controlsMode: ControlsMode.Individual,
     layout: Layout.Focused,
     focusedPlayerId: null,
+    mainPlayerIds: [],
+    secondaryPlayerIds: [],
 };
 
 export const settingsReducer = (state = settingsInitialState, action: SettingsAction) => {
@@ -28,6 +33,9 @@ export const settingsReducer = (state = settingsInitialState, action: SettingsAc
         case SETTINGS_CONTROLS_MODE_CHANGED:
         case SETTINGS_LAYOUT_CHANGED:
         case SETTINGS_FOCUSED_PLAYER_ID_CHANGED:
+        case SETTINGS_MAIN_PLAYER_IDS_CHANGED:
+        case SETTINGS_SECONDARY_PLAYER_IDS_CHANGED:
+        case SETTINGS_MAIN_AND_SECONDARY_PLAYER_IDS_CHANGED:
             return { ...state, ...action.payload };
 
         default:
