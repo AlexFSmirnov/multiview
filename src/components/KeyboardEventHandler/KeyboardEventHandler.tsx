@@ -84,8 +84,6 @@ const KeyboardEventHandler: React.FC<KeyboardEventHandlerProps> = ({
             return;
         }
 
-        console.log(e);
-
         let shouldPreventDefault = true;
         switch (e.code) {
             case 'Space':

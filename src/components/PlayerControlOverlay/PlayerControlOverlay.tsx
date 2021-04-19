@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { Tooltip, Fab } from '@material-ui/core';
 import { Visibility } from '@material-ui/icons';
@@ -46,6 +46,24 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({
     const [isMouseOverPlayer, setIsMouseOverPlayer] = useState(false);
     const [isControlBarVisible, setIsControlBarVisible] = useState(true);
 
+    const updateHideTimeout = useCallback(() => {
+        if (hideControlsTimeoutId.current) {
+            window.clearTimeout(hideControlsTimeoutId.current);
+        }
+
+        hideControlsTimeoutId.current = window.setTimeout(() => {
+            if (isPlaying) {
+                setIsControlBarVisible(false);
+            }
+
+            hideControlsTimeoutId.current = null;
+        }, 3000);
+    }, [isPlaying]);
+
+    useEffect(() => {
+        updateHideTimeout();
+    }, [isPlaying, updateHideTimeout]);
+
     useEffect(() => {
         if (!id || (id && controlsMode === ControlsMode.Individual)) {
             setIsControlBarVisible(!isPlaying || isMouseOverPlayer);
@@ -69,17 +87,7 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({
             setIsControlBarVisible(true);
         }
 
-        if (hideControlsTimeoutId.current) {
-            window.clearTimeout(hideControlsTimeoutId.current);
-        }
-
-        hideControlsTimeoutId.current = window.setTimeout(() => {
-            if (isPlaying) {
-                setIsControlBarVisible(false);
-            }
-
-            hideControlsTimeoutId.current = null;
-        }, 3000);
+        updateHideTimeout();
     };
 
     const handleClick = () => {
@@ -90,6 +98,8 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({
                 masterPlayerStopPlaying();
             }
         } else {
+            updateHideTimeout();
+
             if (id) {
                 playerStartPlaying(id);
             } else {
@@ -107,6 +117,7 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({
 
     const playbackControlOverlayContainerProps = {
         isBlockingPointerEvents,
+        isCursorHidden: !isControlBarVisible,
         onMouseEnter: handleMouseEnter,
         onMouseLeave: handleMouseLeave,
         onMouseMove: handleMouseMove,
