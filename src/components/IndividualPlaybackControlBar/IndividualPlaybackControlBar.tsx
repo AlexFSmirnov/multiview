@@ -23,6 +23,7 @@ import IndividualPlaybackControlBarActions from './IndividualPlaybackControlBarA
 
 interface OwnProps {
     id: string;
+    onHide?: () => void;
 }
 
 interface StateProps {
@@ -50,6 +51,7 @@ export type IndividualPlaybackControlBarProps = OwnProps & StateProps & Dispatch
 const IndividualPlaybackControlBar: React.FC<IndividualPlaybackControlBarProps> = ({
     id,
     isMuted,
+    onHide,
     playerStartPlaying,
     playerStopPlaying,
     playerUpdateVolume,
@@ -80,7 +82,7 @@ const IndividualPlaybackControlBar: React.FC<IndividualPlaybackControlBarProps> 
         onVolumeChange: (volume: number) => playerUpdateVolume(id, { volume }),
         onSeek: handleSeek,
 
-        actions: <IndividualPlaybackControlBarActions />,
+        actions: <IndividualPlaybackControlBarActions onHide={onHide} />,
 
         ...other,
     };

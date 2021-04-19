@@ -1,11 +1,13 @@
 import { useEffect, useState, useRef } from 'react';
 import { connect } from 'react-redux';
+import { IconButton, Tooltip, Fab } from '@material-ui/core';
+import { Visibility } from '@material-ui/icons';
 import { changeFocusedPlayerId, playerStartPlaying, playerStopPlaying, startPlayback, stopPlayback } from '../../redux/actions';
 import { getControlsMode, getIsFullscreen, getIsMasterPlayerPlaying, getIsPlayerPlaying } from '../../redux/selectors';
 import { ControlsMode, State } from '../../redux/types';
 import { IndividualPlaybackControlBar } from '../IndividualPlaybackControlBar';
 import { MasterPlaybackControlBar } from '../MasterPlaybackControlBar';
-import { PlayerControlOverlayContainer, PlaybackControlBarWrapper, PlaybackControlBarFlexSpacer, PlaybackControlOverlayBottomShadow, PlayerControlOverlayClickCapture } from './style';
+import { PlayerControlOverlayContainer, PlaybackControlBarWrapper, PlaybackControlBarFlexSpacer, PlaybackControlOverlayBottomShadow, PlayerControlOverlayClickCapture, MinimizedButtonContainer } from './style';
 
 interface OwnProps {
     id?: string;
@@ -40,6 +42,7 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({
 }) => {
     const hideControlsTimeoutId = useRef<number | null>(null);
 
+    const [isMinimized, setIsMinimized] = useState(false);
     const [isMouseOverPlayer, setIsMouseOverPlayer] = useState(false);
     const [isControlBarVisible, setIsControlBarVisible] = useState(true);
 
@@ -95,6 +98,9 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({
         }
     };
 
+    const handleHide = () => setIsMinimized(true);
+    const handleShow = () => setIsMinimized(false);
+
     const isMaster = !id;
     const isOverlaid = (isMaster && isFullscreen) || !isMaster;
     const isBlockingPointerEvents = (isMaster && controlsMode === ControlsMode.Grouped) || !isMaster;
@@ -106,6 +112,18 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({
         onMouseMove: handleMouseMove,
     };
 
+    if (isMinimized) {
+        return (
+            <MinimizedButtonContainer>
+                <Tooltip title="Show controls overlay">
+                    <Fab size="small" onClick={handleShow}>
+                        <Visibility fontSize="small" />
+                    </Fab>
+                </Tooltip>
+            </MinimizedButtonContainer>
+        );
+    }
+
     return (
         <>
             <PlayerControlOverlayContainer {...playbackControlOverlayContainerProps}>
@@ -113,7 +131,7 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({
                 <PlayerControlOverlayClickCapture onClick={handleClick} />
                 <PlaybackControlBarWrapper isVisible={isControlBarVisible || !isOverlaid}>
                     {id
-                        ? <IndividualPlaybackControlBar id={id} />
+                        ? <IndividualPlaybackControlBar id={id} onHide={handleHide} />
                         : <MasterPlaybackControlBar isVisible={isControlBarVisible || !isOverlaid} />
                     }
                 </PlaybackControlBarWrapper>

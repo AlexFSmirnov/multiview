@@ -53,3 +53,13 @@ export const PlayerControlOverlayClickCapture = styled.div`
 export const PlaybackControlBarFlexSpacer = styled.div`
     height: 46px;
 `;
+
+export const MinimizedButtonContainer = styled.div`
+    position: absolute;
+
+    top: calc(50% - 20px);
+    right: 8px;
+
+    width: 40px;
+    height: 40px;
+`;
