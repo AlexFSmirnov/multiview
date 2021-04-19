@@ -23,11 +23,7 @@ interface StateProps {
     layout: Layout;
 }
 
-interface DispatchProps {
-
-}
-
-export type AppProps = StateProps & DispatchProps;
+export type AppProps = StateProps;
 
 const App: React.FC<StateProps> = ({ videos, layout }) => {
     const [isAddVideosDialogOpen, setIsAddVideosDialogOpen] = useState(true);
@@ -45,7 +41,7 @@ const App: React.FC<StateProps> = ({ videos, layout }) => {
                 {layout === Layout.Grid ? (
                     <VideoGridView videos={videos} padding={8} />
                 ) : (
-                    <VideoFocusedView videos={videos} />
+                    <VideoFocusedView videos={videos} padding={8} />
                 )}
                 <PlayerControlOverlay />
             </AppContainer>
