@@ -159,7 +159,8 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     return (
         <VideoPlayerContainer width={width} height={height}>
             <ReactPlayerWrapper>
-                <ReactPlayer {...playerProps}/>
+                {/* <ReactPlayer {...playerProps}/> */}
+                <div style={{ width, height, backgroundColor: 'white' }} />
             </ReactPlayerWrapper>
             <PlayerControlOverlay id={id} />
         </VideoPlayerContainer>

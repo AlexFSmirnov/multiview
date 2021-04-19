@@ -5,7 +5,9 @@ export const formatSeconds = (totalSeconds: number) => {
     const minutes = Math.floor((roundedSeconds % (60 * 60)) / 60);
     const seconds = roundedSeconds % 60;
 
+    const paddedHours = hours > 0 ? `${hours}:` : '';
+    const paddedMinutes = (hours > 0 && minutes < 10) ? `0${minutes}` : `${minutes}:`;
     const paddedSeconds = seconds < 10 ? `0${seconds}` : seconds;
 
-    return `${hours > 0 ? `${hours}:` : ''}${minutes}:${paddedSeconds}`
+    return `${paddedHours}${paddedMinutes}${paddedSeconds}`;
 };
