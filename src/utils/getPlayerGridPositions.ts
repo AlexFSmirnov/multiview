@@ -9,7 +9,7 @@ export interface GetPlayerGridPositionsProps {
 
 export const getPlayerGridPositions = ({ playerWidth, playerHeight, containerWidth, containerHeight, numberOfPlayers, alignToRight }: GetPlayerGridPositionsProps) => {
     const cols = Math.floor(containerWidth / playerWidth);
-    const rows = Math.floor(containerHeight / playerHeight);
+    const rows = Math.ceil(numberOfPlayers / cols);
 
     return Array.from({ length: numberOfPlayers }).map((_, i) => {
         const row = Math.floor(i / cols);

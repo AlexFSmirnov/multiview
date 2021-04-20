@@ -339,7 +339,7 @@ const PlayersView: React.FC<PlayersViewProps> = ({
                     id,
                     video,
                     width: playerPosition.width - padding * 2,
-                    height: playerPosition.height - padding * 2,
+                    height: playerPosition.height - (padding * 2 / 16 * 9),
                     shadow: isOverlaidSecondary,
                 };
 

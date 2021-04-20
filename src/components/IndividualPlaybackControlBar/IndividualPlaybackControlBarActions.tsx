@@ -138,7 +138,7 @@ const IndividualPlaybackControlBarActions: React.FC<IndividualPlaybackControlBar
 
                     <Menu anchorEl={settingsButtonRef.current} open={isSettingsMenuOpen} onClose={handleSettingsMenuHide} onClick={handleSettingsMenuHide}>
                         {actions.map(({ isShown, title, icon, onClick }) => isShown ? (
-                            <MenuItem dense key="title" onClick={onClick}>
+                            <MenuItem dense key={title} onClick={onClick}>
                                 <ListItemIcon>
                                     {icon}
                                 </ListItemIcon>

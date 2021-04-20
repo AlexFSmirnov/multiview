@@ -21,7 +21,11 @@ export const PlayersViewPlayerWrapper = styled.div<PlayersViewPlayerWrapperProps
     left: ${props => props.left}px;
     width: ${props => props.width}px;
     height: ${props => props.height}px;
-    padding: ${props => props.padding}px;
+
+    padding-left: ${props => props.padding}px;
+    padding-right: ${props => props.padding}px;
+    padding-top: ${props => (props.padding / 16 * 9)}px;
+    padding-bottom: ${props => (props.padding / 16 * 9)}px;
 
     ${props => props.zIndex ? `z-index: ${props.zIndex};` : ''}
 
