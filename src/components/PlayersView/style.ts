@@ -12,6 +12,7 @@ export const PlayersViewContainer = styled.div`
 
 interface PlayersViewPlayerWrapperProps extends PlayerPosition {
     padding: number;
+    zIndex?: number;
 }
 
 export const PlayersViewPlayerWrapper = styled.div<PlayersViewPlayerWrapperProps>`
@@ -21,6 +22,8 @@ export const PlayersViewPlayerWrapper = styled.div<PlayersViewPlayerWrapperProps
     width: ${props => props.width}px;
     height: ${props => props.height}px;
     padding: ${props => props.padding}px;
+
+    ${props => props.zIndex ? `z-index: ${props.zIndex};` : ''}
 
     transition: 300ms;
 `;

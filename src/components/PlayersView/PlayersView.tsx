@@ -324,21 +324,23 @@ const PlayersView: React.FC<PlayersViewProps> = ({
                 </PlayersOverlayViewGrabber>
             ) : null}
 
-            {[...mainPlayerIds, ...secondaryPlayerIds].map(id => {
+            {Object.entries(videos).map(([id, video]) => {
                 const playerPosition = getPlayerPosition(id);
+                const isOverlaidSecondary = layout === Layout.Overlay && secondaryPlayerIds.indexOf(id) !== -1;
 
                 const wrapperProps = {
                     key: id,
                     padding,
+                    zIndex: isOverlaidSecondary ? 2 : undefined,
                     ...playerPosition,
                 };
 
                 const playerProps = {
                     id,
-                    video: videos[id],
+                    video,
                     width: playerPosition.width - padding * 2,
                     height: playerPosition.height - padding * 2,
-                    shadow: layout === Layout.Overlay && secondaryPlayerIds.indexOf(id) !== -1,
+                    shadow: isOverlaidSecondary,
                 };
 
                 return (

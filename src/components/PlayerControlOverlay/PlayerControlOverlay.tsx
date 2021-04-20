@@ -7,7 +7,14 @@ import { getControlsMode, getIsFullscreen, getIsMasterPlayerPlaying, getIsPlayer
 import { ControlsMode, State } from '../../redux/types';
 import { IndividualPlaybackControlBar } from '../IndividualPlaybackControlBar';
 import { MasterPlaybackControlBar } from '../MasterPlaybackControlBar';
-import { PlayerControlOverlayContainer, PlaybackControlBarWrapper, PlaybackControlBarFlexSpacer, PlaybackControlOverlayBottomShadow, PlayerControlOverlayClickCapture, MinimizedButtonContainer } from './style';
+import {
+    PlayerControlOverlayContainer,
+    PlaybackControlBarWrapper,
+    PlaybackControlBarFlexSpacer,
+    PlaybackControlOverlayBottomShadow,
+    PlayerControlOverlayClickCapture,
+    MinimizedButtonContainer,
+} from './style';
 
 interface OwnProps {
     id?: string;
