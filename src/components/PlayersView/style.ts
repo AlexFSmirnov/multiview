@@ -82,7 +82,7 @@ export const PlayersOverlayViewGrabber = styled.div<PlayersOverlayViewGrabberPro
     }
 
     cursor: ew-resize;
-    z-index: 1;
+    z-index: 3;
 `;
 
 export const PlayersOverlayViewGrabberDashes = styled.div<{ color: string }>`

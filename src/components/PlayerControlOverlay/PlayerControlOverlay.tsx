@@ -129,6 +129,7 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({
     const playbackControlOverlayContainerProps = {
         isBlockingPointerEvents,
         isCursorHidden: !isControlBarVisible,
+        zIndex: isMaster ? 3 : undefined,
         onMouseEnter: handleMouseEnter,
         onMouseLeave: handleMouseLeave,
         onMouseMove: handleMouseMove,

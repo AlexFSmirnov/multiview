@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 
-export const PlayerControlOverlayContainer = styled.div<{ isBlockingPointerEvents: boolean; isCursorHidden: boolean }>`
+interface PlayerControlOverlayContainerProps {
+    isBlockingPointerEvents: boolean;
+    isCursorHidden: boolean;
+    zIndex?: number;
+}
+
+export const PlayerControlOverlayContainer = styled.div<PlayerControlOverlayContainerProps>`
     position: absolute;
     top: 0;
     left: 0;
@@ -9,6 +15,8 @@ export const PlayerControlOverlayContainer = styled.div<{ isBlockingPointerEvent
 
     pointer-events: ${props => props.isBlockingPointerEvents ? 'initial' : 'none' };
     ${props => props.isCursorHidden ? 'cursor: none;' :''}
+
+    ${props => props.zIndex ? `z-index: ${props.zIndex};` : ''}
 
     overflow: hidden;
 `;
