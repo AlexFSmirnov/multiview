@@ -1,3 +1,4 @@
+import { omit } from 'lodash/fp';
 import {
     PlayerInfo,
     PlayersInfoState,
@@ -19,6 +20,7 @@ import {
     PLAYER_UNMUTED,
     PLAYER_PENDING_SEEK_PUSHED,
     PLAYER_PENDING_SEEK_POPPED,
+    PLAYER_DELETED,
 } from './types';
 
 export const playersInfoInitialState: PlayersInfoState = {};
@@ -155,6 +157,9 @@ export const playersInfoReducer = (state = playersInfoInitialState, action: Play
                     ...state[action.payload.id].pendingSeeks.slice(1),
                 ],
             } };
+
+        case PLAYER_DELETED:
+            return omit(action.payload.id, state);
 
         default:
             return state;

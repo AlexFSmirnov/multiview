@@ -1,4 +1,5 @@
-import { OffsetsState, OffsetsAction, OFFSETS_REFERENCE_PLAYER_ID_CHANGED, PLAYER_OFFSET_CHANGED } from './types';
+import { omit } from 'lodash/fp';
+import { OffsetsState, OffsetsAction, OFFSETS_REFERENCE_PLAYER_ID_CHANGED, PLAYER_OFFSET_CHANGED, PLAYER_OFFSET_REMOVED } from './types';
 
 export const offsetsInitialState: OffsetsState = {
     referencePlayerId: null,
@@ -18,6 +19,12 @@ export const offsetsReducer = (state = offsetsInitialState, action: OffsetsActio
                     ...state.offsets,
                     [id]: offset,
                 },
+            };
+
+        case PLAYER_OFFSET_REMOVED:
+            return {
+                ...state,
+                offsets: omit(action.payload.id, state.offsets),
             };
 
         default:

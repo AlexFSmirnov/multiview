@@ -34,6 +34,7 @@ export const PLAYER_MUTED = 'PLAYER_MUTED';
 export const PLAYER_UNMUTED = 'PLAYER_UNMUTED';
 export const PLAYER_PENDING_SEEK_PUSHED = 'PLAYER_PENDING_SEEK_PUSHED';
 export const PLAYER_PENDING_SEEK_POPPED = 'PLAYER_PENDING_SEEK_POPPED';
+export const PLAYER_DELETED = 'PLAYER_DELETED';
 
 interface WithId {
     id: string;
@@ -141,9 +142,15 @@ export interface PlayerPendingSeekPoppedAction {
     payload: WithId;
 }
 
+export interface PlayerDeletedAction {
+    type: typeof PLAYER_DELETED;
+    payload: WithId;
+}
+
 export type PlayersInfoAction = (
     PlayerInitializedAction | PlayerReadyAction | PlayerStartedPlayingAction | PlayerStoppedPlayingAction |
     PlayerStartedBufferingAction | PlayerStoppedBufferingAction | PlayerVideoEndedAction | PlayerVideoRestartedAction |
     PlayerDurationUpdatedAction | PlayerPlayedTimeUpdatedAction | PlayerLoadedTimeUpdatedAction | PlayerProgressUpdatedAction |
-    PlayerVolumeUpdatedAction | PlayerPendingSeekPushedAction | PlayerPendingSeekPoppedAction | PlayerMutedAction | PlayerUnmutedAction
+    PlayerVolumeUpdatedAction | PlayerPendingSeekPushedAction | PlayerPendingSeekPoppedAction | PlayerMutedAction |
+    PlayerUnmutedAction | PlayerDeletedAction
 );

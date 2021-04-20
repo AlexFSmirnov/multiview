@@ -5,8 +5,10 @@ import {
     State,
     PLAYER_PLAYED_TIME_UPDATED,
     PLAYER_PROGRESS_UPDATED,
+    VIDEO_DELETED,
 } from '../types';
 import {
+    getOffsets,
     areAllCorrectPlayersPlaying,
     getPlayersInfoState,
     shouldPlayerCurrentlyPlay,
@@ -19,6 +21,7 @@ import {
     changePlayerOffset,
     normalizeOffsets,
     playerStartPlaying,
+    removePlayerOffset,
 } from '../actions';
 
 export const offsetsMiddleware: Middleware<{}, State, AppThunkDispatch> = store => next => (action: Action) => {
@@ -28,11 +31,25 @@ export const offsetsMiddleware: Middleware<{}, State, AppThunkDispatch> = store 
     next(action);
     const state = getState();
 
+    const referencePlayerId = getOffsetsReferencePlayerId(state);
+
     switch (action.type) {
+        case VIDEO_DELETED:
+            const { id: removedId } = action.payload;
+
+            dispatch(removePlayerOffset(removedId));
+
+            if (Object.keys(getOffsets(prevState)).length === 1) {
+                dispatch(changeOffsetsReferencePlayerId(null));
+            } else {
+                dispatch(normalizeOffsets());
+            }
+
+            break;
+
         case PLAYER_PLAYED_TIME_UPDATED:
         case PLAYER_PROGRESS_UPDATED:
             const { id } = action.payload;
-            const referencePlayerId = getOffsetsReferencePlayerId(state);
 
             if (referencePlayerId === null) {
                 dispatch(changeOffsetsReferencePlayerId(id));

@@ -3,9 +3,10 @@ import {
     Action,
     AppThunkDispatch,
     State,
-    VIDEOS_ADDED,
-    PLAYER_OFFSET_CHANGED,
     PlayerInfo,
+    VIDEOS_ADDED,
+    VIDEO_DELETED,
+    PLAYER_OFFSET_CHANGED,
     PLAYER_LOADED_TIME_UPDATED,
     PLAYER_PLAYED_TIME_UPDATED,
     PLAYER_PROGRESS_UPDATED,
@@ -37,6 +38,7 @@ import {
     masterPlayerUpdatePlayedTime,
     masterPlayerUpdateLoadedTime,
     masterPlayerRemovePendingSeek,
+    masterPlayerUpdateProgress,
 } from '../actions';
 
 const everyOtherPlayer = (condition: (playerInfo: PlayerInfo) => boolean, state: State, currentId: string) => (
@@ -163,9 +165,20 @@ export const masterPlayerMiddleware: Middleware<{}, State, AppThunkDispatch> = s
 
             break;
 
-
         case VIDEOS_ADDED:
             dispatch(masterPlayerNotReady());
+            break;
+
+        case VIDEO_DELETED:
+            if (Object.keys(getOffsets(state)).length === 1) {
+                dispatch(masterPlayerUpdateDuration(0));
+                dispatch(masterPlayerUpdateProgress({
+                    playedSeconds: 0,
+                    playedFraction: 0,
+                    loadedSeconds: 0,
+                    loadedFraction: 0,
+                }));
+            }
             break;
     }
 };

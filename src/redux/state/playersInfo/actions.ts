@@ -16,6 +16,7 @@ import {
     PlayerUnmutedAction,
     PlayerPendingSeekPushedAction,
     PlayerPendingSeekPoppedAction,
+    PlayerDeletedAction,
     PLAYER_INITIALIZED,
     PLAYER_READY,
     PLAYER_STARTED_PLAYING,
@@ -33,6 +34,7 @@ import {
     PLAYER_UNMUTED,
     PLAYER_PENDING_SEEK_PUSHED,
     PLAYER_PENDING_SEEK_POPPED,
+    PLAYER_DELETED,
 } from './types';
 
 export const initializePlayer = (id: string): PlayerInitializedAction => ({
@@ -127,5 +129,10 @@ export const playerPushPendingSeek = (id: string, { seekToSeconds }: { seekToSec
 
 export const playerPopPendingSeek = (id: string): PlayerPendingSeekPoppedAction => ({
     type: PLAYER_PENDING_SEEK_POPPED,
+    payload: { id },
+});
+
+export const deletePlayer = (id: string): PlayerDeletedAction => ({
+    type: PLAYER_DELETED,
     payload: { id },
 });

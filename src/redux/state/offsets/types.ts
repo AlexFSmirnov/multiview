@@ -8,11 +8,12 @@ export interface OffsetsState {
 
 export const OFFSETS_REFERENCE_PLAYER_ID_CHANGED = 'OFFSETS_REFERENCE_PLAYER_ID_CHANGED';
 export const PLAYER_OFFSET_CHANGED = 'PLAYER_OFFSET_CHANGED';
+export const PLAYER_OFFSET_REMOVED = 'PLAYER_OFFSET_REMOVED';
 
 export interface OffsetsReferencePlayerIdChangedAction {
     type: typeof OFFSETS_REFERENCE_PLAYER_ID_CHANGED;
     payload: {
-        referenceId: string;
+        referenceId: string | null;
     };
 }
 
@@ -24,4 +25,11 @@ export interface PlayerOffsetChangedAction {
     };
 }
 
-export type OffsetsAction = OffsetsReferencePlayerIdChangedAction | PlayerOffsetChangedAction;
+export interface PlayerOffsetRemovedAction {
+    type: typeof PLAYER_OFFSET_REMOVED;
+    payload: {
+        id: string;
+    };
+}
+
+export type OffsetsAction = OffsetsReferencePlayerIdChangedAction | PlayerOffsetChangedAction | PlayerOffsetRemovedAction;

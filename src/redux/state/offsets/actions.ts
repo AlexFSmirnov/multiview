@@ -1,8 +1,8 @@
 import { AppThunkAction } from '../types';
 import { getOffsets } from './selectors';
-import { OffsetsReferencePlayerIdChangedAction, PlayerOffsetChangedAction, OFFSETS_REFERENCE_PLAYER_ID_CHANGED, PLAYER_OFFSET_CHANGED } from './types';
+import { OffsetsReferencePlayerIdChangedAction, PlayerOffsetChangedAction, PlayerOffsetRemovedAction, OFFSETS_REFERENCE_PLAYER_ID_CHANGED, PLAYER_OFFSET_CHANGED, PLAYER_OFFSET_REMOVED } from './types';
 
-export const changeOffsetsReferencePlayerId = (referenceId: string): OffsetsReferencePlayerIdChangedAction => ({
+export const changeOffsetsReferencePlayerId = (referenceId: string | null): OffsetsReferencePlayerIdChangedAction => ({
     type: OFFSETS_REFERENCE_PLAYER_ID_CHANGED,
     payload: { referenceId },
 });
@@ -10,6 +10,11 @@ export const changeOffsetsReferencePlayerId = (referenceId: string): OffsetsRefe
 export const changePlayerOffset = (id: string, { offset }: { offset: number }): PlayerOffsetChangedAction => ({
     type: PLAYER_OFFSET_CHANGED,
     payload: { id, offset },
+});
+
+export const removePlayerOffset = (id: string): PlayerOffsetRemovedAction => ({
+    type: PLAYER_OFFSET_REMOVED,
+    payload: { id },
 });
 
 export const normalizeOffsets = (): AppThunkAction => (dispatch, getState) => {

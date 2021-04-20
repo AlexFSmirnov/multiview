@@ -5,7 +5,7 @@ import {
     State,
     Layout,
     VIDEOS_ADDED,
-    VIDEO_REMOVED,
+    VIDEO_DELETED,
     SETTINGS_LAYOUT_CHANGED,
 } from '../types';
 import {
@@ -36,7 +36,7 @@ export const playerGroupsMiddleware: Middleware<{}, State, AppThunkDispatch> = s
             });
             break;
 
-        case VIDEO_REMOVED:
+        case VIDEO_DELETED:
             if (mainPlayerIds.length === 1 && mainPlayerIds[0] === action.payload.id && secondaryPlayerIds.length > 0) {
                 const newMainPlayerId = secondaryPlayerIds[0];
                 dispatch(setMainAndSecondaryPlayerIds({

@@ -5,7 +5,7 @@ export interface Video {
 export type VideosState = Record<string, Video>;
 
 export const VIDEOS_ADDED = 'VIDEOS_ADDED';
-export const VIDEO_REMOVED = 'VIDEO_REMOVED';
+export const VIDEO_DELETED = 'VIDEO_DELETED';
 
 export interface VideosAddedAction {
     type: typeof VIDEOS_ADDED;
@@ -13,7 +13,7 @@ export interface VideosAddedAction {
 }
 
 export interface VideoRemovedAction {
-    type: typeof VIDEO_REMOVED;
+    type: typeof VIDEO_DELETED;
     payload: {
         id: string;
     };
