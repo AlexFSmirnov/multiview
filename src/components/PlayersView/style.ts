@@ -21,13 +21,15 @@ export const PlayersViewPlayerWrapper = styled.div<PlayersViewPlayerWrapperProps
     width: ${props => props.width}px;
     height: ${props => props.height}px;
     padding: ${props => props.padding}px;
+
+    transition: 300ms;
 `;
 
-interface PlayersViewDividerProps {
+interface PlayersFocusedViewGrabberProps {
     heightFraction: number;
 }
 
-export const PlayersViewDivider = styled.div<PlayersViewDividerProps>`
+export const PlayersFocusedViewGrabber = styled.div<PlayersFocusedViewGrabberProps>`
     position: absolute;
     top: ${props => props.heightFraction * 100}%;
     left: 0;
@@ -45,7 +47,7 @@ export const PlayersViewDivider = styled.div<PlayersViewDividerProps>`
     z-index: 1;
 `;
 
-export const PlayersViewDividerDashes = styled.div`
+export const PlayersFocusedViewGrabberDashes = styled.div`
     position: absolute;
     top: 3.5px;
     left: 16px;
@@ -53,4 +55,39 @@ export const PlayersViewDividerDashes = styled.div`
     height: 0;
 
     border-top: 3px dashed rgba(255, 255, 255, 0.3);
+`;
+
+interface PlayersOverlayViewGrabberProps {
+    top: number;
+    left: number;
+    height: number;
+}
+
+export const PlayersOverlayViewGrabber = styled.div<PlayersOverlayViewGrabberProps>`
+    position: absolute;
+    top: ${props => props.top}px;
+    left: ${props => props.left}px;
+
+    width: 10px;
+    height: ${props => props.height}px;
+
+    opacity: 0;
+    transition: opacity 200ms;
+
+    &:hover {
+        opacity: 1;
+    }
+
+    cursor: ew-resize;
+    z-index: 1;
+`;
+
+export const PlayersOverlayViewGrabberDashes = styled.div<{ color: string }>`
+    position: absolute;
+    top: 4px;
+    left: 2px;
+    bottom: 4px;
+    width: 0;
+
+    border-left: 4px dashed ${props => props.color};
 `;

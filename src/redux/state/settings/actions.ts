@@ -79,7 +79,7 @@ export const toggleFullscreen = (): AppThunkAction => (dispatch, getState) => {
     }
 };
 
-export const addPlayerToMainPlayers = (playerId: string): AppThunkAction => (dispatch, getState) => {
+export const movePlayerToMainPlayers = (playerId: string): AppThunkAction => (dispatch, getState) => {
     const state = getState();
 
     const mainPlayerIds = getMainPlayerIds(state);
@@ -91,7 +91,7 @@ export const addPlayerToMainPlayers = (playerId: string): AppThunkAction => (dis
     }));
 };
 
-export const addPlayerToSecondaryPlayers = (playerId: string): AppThunkAction => (dispatch, getState) => {
+export const movePlayerToSecondaryPlayers = (playerId: string): AppThunkAction => (dispatch, getState) => {
     const state = getState();
 
     const mainPlayerIds = getMainPlayerIds(state);

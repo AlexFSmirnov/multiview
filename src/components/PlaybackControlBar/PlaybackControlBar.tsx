@@ -1,6 +1,6 @@
 import { IconButton, Typography } from '@material-ui/core';
 import { PlayArrow, Pause } from '@material-ui/icons';
-import { formatSeconds } from '../../utils/formatSeconds';
+import { formatSeconds } from '../../utils';
 import { PlaybackSlider } from '../PlaybackSlider';
 import { VolumeControl } from '../VolumeControl';
 import {

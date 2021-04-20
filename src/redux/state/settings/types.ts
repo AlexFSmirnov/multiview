@@ -6,6 +6,7 @@ export enum ControlsMode {
 export enum Layout {
     Grid = 'Grid',
     Focused = 'Focused',
+    Overlay = 'Overlay',
 }
 
 export interface SettingsState {

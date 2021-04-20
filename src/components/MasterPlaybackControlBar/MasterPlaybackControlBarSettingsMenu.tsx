@@ -62,7 +62,7 @@ const MasterPlaybackControlBarSettingsMenu: React.FC<MasterPlaybackControlBarSet
         },
     };
 
-    const settingsMenuContainerHeight = [80, 200, 267][selectedMenuIndex];
+    const settingsMenuContainerHeight = [80, 288, 267][selectedMenuIndex];
 
     const slideBaseProps = {
         appear: false,
@@ -125,6 +125,23 @@ const MasterPlaybackControlBarSettingsMenu: React.FC<MasterPlaybackControlBarSet
                                         <SettingsMenuDescriptionListItemTitleContainer>Focused</SettingsMenuDescriptionListItemTitleContainer>
                                         <SettingsMenuDescriptionListItemSubitleContainer>
                                             One or more big players at the top, the rest in a list of small players at the bottom.
+                                        </SettingsMenuDescriptionListItemSubitleContainer>
+                                    </SettingsMenuDescriptionListItemTextContainer>
+                                </SettingsMenuDescriptionListItemContainer>
+                            </ListItem>
+                            <ListItem button onClick={() => changeLayout(Layout.Overlay)}>
+                                <SettingsMenuDescriptionListItemContainer>
+                                    <SettingsMenuDescriptionListItemCheckmarContainer>
+                                        {layout === Layout.Overlay ? (
+                                            <Icon>
+                                                <Check />
+                                            </Icon>
+                                        ) : null}
+                                    </SettingsMenuDescriptionListItemCheckmarContainer>
+                                    <SettingsMenuDescriptionListItemTextContainer>
+                                        <SettingsMenuDescriptionListItemTitleContainer>Overlay</SettingsMenuDescriptionListItemTitleContainer>
+                                        <SettingsMenuDescriptionListItemSubitleContainer>
+                                            One big player in the middle, the rest in an overlaid list at the top right.
                                         </SettingsMenuDescriptionListItemSubitleContainer>
                                     </SettingsMenuDescriptionListItemTextContainer>
                                 </SettingsMenuDescriptionListItemContainer>

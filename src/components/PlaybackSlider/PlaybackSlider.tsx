@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Typography, useTheme } from '@material-ui/core';
 import { throttle } from 'lodash/fp';
-import { formatSeconds } from '../../utils/formatSeconds';
+import { formatSeconds } from '../../utils';
 import { PlaybackSliderBar, PlaybackSliderContainer, PlaybackSliderInteractionContainer, PlaybackSliderScrubber, PlaybackSliderTimePreviewContainer } from './style'
 
 export interface PlaybackSliderProps {

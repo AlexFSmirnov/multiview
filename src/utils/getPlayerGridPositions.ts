@@ -1,14 +1,13 @@
-import { getOptimalGridPlayerSize } from './getOptimalGridPlayerSize'
-
 export interface GetPlayerGridPositionsProps {
+    playerWidth: number;
+    playerHeight: number;
     containerWidth: number;
     containerHeight: number;
     numberOfPlayers: number;
+    alignToRight?: boolean;
 }
 
-export const getPlayerGridPositions = ({ containerWidth, containerHeight, numberOfPlayers }: GetPlayerGridPositionsProps) => {
-    const { playerWidth, playerHeight } = getOptimalGridPlayerSize({ containerWidth, containerHeight, numberOfPlayers });
-
+export const getPlayerGridPositions = ({ playerWidth, playerHeight, containerWidth, containerHeight, numberOfPlayers, alignToRight }: GetPlayerGridPositionsProps) => {
     const cols = Math.floor(containerWidth / playerWidth);
     const rows = Math.floor(containerHeight / playerHeight);
 
@@ -19,7 +18,11 @@ export const getPlayerGridPositions = ({ containerWidth, containerHeight, number
         const playersInCol = (row === rows - 1) ? (cols - (cols * rows - numberOfPlayers)) : cols;
 
         const topOffset = (containerHeight - rows * playerHeight) / 2;
-        const leftOffset = (containerWidth - playersInCol * playerWidth) / 2;
+        let leftOffset = (containerWidth - playersInCol * playerWidth) / 2;
+
+        if (alignToRight) {
+            leftOffset *= 2;
+        }
 
         const top = row * playerHeight + topOffset;
         const left = col * playerWidth + leftOffset;

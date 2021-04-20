@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Tooltip } from '@material-ui/core';
 import { VisibilityOff, ArrowUpward, ArrowDownward, CenterFocusWeak, Delete } from '@material-ui/icons';
 import { State, Layout } from '../../redux/types';
-import { addPlayerToSecondaryPlayers, addPlayerToMainPlayers, makePlayerMain, removeVideo } from '../../redux/actions';
+import { movePlayerToSecondaryPlayers, movePlayerToMainPlayers, makePlayerMain, removeVideo } from '../../redux/actions';
 import { getLayout, getIsPlayerMain } from '../../redux/selectors';
 
 interface OwnProps {
@@ -17,8 +17,8 @@ interface StateProps {
 }
 
 interface DispatchProps {
-    addPlayerToMainPlayers: (id: string) => void;
-    addPlayerToSecondaryPlayers: (id: string) => void;
+    movePlayerToMainPlayers: (id: string) => void;
+    movePlayerToSecondaryPlayers: (id: string) => void;
     makePlayerMain: (id: string) => void;
     removeVideo: (id: string) => void;
 }
@@ -30,8 +30,8 @@ const IndividualPlaybackControlBarActions: React.FC<IndividualPlaybackControlBar
     onHide,
     layout,
     isMainPlayer,
-    addPlayerToMainPlayers,
-    addPlayerToSecondaryPlayers,
+    movePlayerToMainPlayers,
+    movePlayerToSecondaryPlayers,
     makePlayerMain,
     removeVideo,
 }) => {
@@ -46,9 +46,9 @@ const IndividualPlaybackControlBarActions: React.FC<IndividualPlaybackControlBar
 
     const handleMoveButtonClick = () => {
         if (isMainPlayer) {
-            addPlayerToSecondaryPlayers(id);
+            movePlayerToSecondaryPlayers(id);
         } else {
-            addPlayerToMainPlayers(id);
+            movePlayerToMainPlayers(id);
         }
     };
 
@@ -64,19 +64,19 @@ const IndividualPlaybackControlBarActions: React.FC<IndividualPlaybackControlBar
 
     return (
         <>
+            {((layout === Layout.Focused || layout === Layout.Overlay) && !isMainPlayer) ? (
+                <>
+                    <Tooltip title="Focus">
+                        <IconButton size="small" onClick={handleFocusButtonClick}>
+                            <CenterFocusWeak fontSize="small" />
+                        </IconButton>
+                    </Tooltip>
+                    <div style={{ width: '4px' }} />
+                </>
+            ) : null}
+
             {layout === Layout.Focused ? (
                 <>
-                    {!isMainPlayer ? (
-                        <>
-                            <Tooltip title="Focus">
-                                <IconButton size="small" onClick={handleFocusButtonClick}>
-                                    <CenterFocusWeak fontSize="small" />
-                                </IconButton>
-                            </Tooltip>
-                            <div style={{ width: '4px' }} />
-                        </>
-                    ) : null}
-
                     <Tooltip title={isMainPlayer ? 'Move down' : 'Move up'}>
                         <IconButton size="small" onClick={handleMoveButtonClick}>
                             {isMainPlayer ? <ArrowDownward fontSize="small" /> : <ArrowUpward fontSize="small" />}
@@ -121,8 +121,8 @@ export default connect<StateProps, DispatchProps, OwnProps, State>(
         isMainPlayer: getIsPlayerMain(ownProps.id)(state),
     }),
     {
-        addPlayerToMainPlayers,
-        addPlayerToSecondaryPlayers,
+        movePlayerToMainPlayers,
+        movePlayerToSecondaryPlayers,
         makePlayerMain,
         removeVideo,
     },
