@@ -1,5 +1,6 @@
 {
     "name": "multiview",
+    "homepage": "http://alexfsmirnov.github.io/multiview",
     "version": "0.1.0",
     "private": true,
     "scripts": {

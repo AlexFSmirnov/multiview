@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { AppBar as MaterialAppBar, Button, Slide, Toolbar, Typography } from '@material-ui/core';
-import { ViewQuilt } from '@material-ui/icons';
 import { State } from '../../redux/types';
 import { getIsFullscreen } from '../../redux/selectors';
 
@@ -30,7 +29,7 @@ const AppBar: React.FC<AppBarProps> = ({ onAddVideosClick, isFullscreen }) => {
         <Slide in={!isFullscreen}>
             <MaterialAppBar position="static" color="inherit">
                 <Toolbar variant="dense">
-                    <ViewQuilt />
+                    <img src={`${process.env.PUBLIC_URL}/logo192-clean.png`} alt="Multiview" width="30px" height="30px" />
                     <div style={{ width: '12px' }} />
                     <Typography variant="h6">
                         Multiview
