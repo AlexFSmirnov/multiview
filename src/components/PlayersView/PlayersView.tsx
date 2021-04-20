@@ -43,8 +43,6 @@ const PlayersView: React.FC<PlayersViewProps> = ({
     const [overlayGrabberWidthFraction, setOverlayGrabberWidthFraction] = useState(0.3);
     const [overlayDimensions, setOverlayDimensions] = useState<{ rows: number; cols: number }>({ rows: 0, cols: 0 });
 
-    // TODO: Fix the weird thingy happening when changing focused player in overlay view.
-
     const updatePlayersFocusedPosition = useCallback(() => {
         const { current: container } = containerRef;
         if (container) {
@@ -329,9 +327,23 @@ const PlayersView: React.FC<PlayersViewProps> = ({
             {[...mainPlayerIds, ...secondaryPlayerIds].map(id => {
                 const playerPosition = getPlayerPosition(id);
 
+                const wrapperProps = {
+                    key: id,
+                    padding,
+                    ...playerPosition,
+                };
+
+                const playerProps = {
+                    id,
+                    video: videos[id],
+                    width: playerPosition.width - padding * 2,
+                    height: playerPosition.height - padding * 2,
+                    shadow: layout === Layout.Overlay && secondaryPlayerIds.indexOf(id) !== -1,
+                };
+
                 return (
-                    <PlayersViewPlayerWrapper key={id} padding={padding} {...playerPosition}>
-                        <VideoPlayer id={id} video={videos[id]} width={playerPosition.width - padding * 2} height={playerPosition.height - padding * 2} />
+                    <PlayersViewPlayerWrapper {...wrapperProps}>
+                        <VideoPlayer {...playerProps} />
                     </PlayersViewPlayerWrapper>
                 );
             })}

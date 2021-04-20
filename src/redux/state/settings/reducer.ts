@@ -16,7 +16,7 @@ import {
 const settingsInitialState: SettingsState = {
     isFullscreen: false,
     controlsMode: ControlsMode.Individual,
-    layout: Layout.Focused,
+    layout: Layout.Overlay,
     focusedPlayerId: null,
     mainPlayerIds: [],
     secondaryPlayerIds: [],

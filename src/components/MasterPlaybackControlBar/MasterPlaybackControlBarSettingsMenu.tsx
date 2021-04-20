@@ -112,23 +112,6 @@ const MasterPlaybackControlBarSettingsMenu: React.FC<MasterPlaybackControlBarSet
                                 </SettingsMenuSectionHeader>
                             </ListItem>
                             <Divider style={{ backgroundColor: 'rgba(255, 255, 255, 0.3)' }} />
-                            <ListItem button onClick={() => changeLayout(Layout.Focused)}>
-                                <SettingsMenuDescriptionListItemContainer>
-                                    <SettingsMenuDescriptionListItemCheckmarContainer>
-                                        {layout === Layout.Focused ? (
-                                            <Icon>
-                                                <Check />
-                                            </Icon>
-                                        ) : null}
-                                    </SettingsMenuDescriptionListItemCheckmarContainer>
-                                    <SettingsMenuDescriptionListItemTextContainer>
-                                        <SettingsMenuDescriptionListItemTitleContainer>Focused</SettingsMenuDescriptionListItemTitleContainer>
-                                        <SettingsMenuDescriptionListItemSubitleContainer>
-                                            One or more big players at the top, the rest in a list of small players at the bottom.
-                                        </SettingsMenuDescriptionListItemSubitleContainer>
-                                    </SettingsMenuDescriptionListItemTextContainer>
-                                </SettingsMenuDescriptionListItemContainer>
-                            </ListItem>
                             <ListItem button onClick={() => changeLayout(Layout.Overlay)}>
                                 <SettingsMenuDescriptionListItemContainer>
                                     <SettingsMenuDescriptionListItemCheckmarContainer>
@@ -142,6 +125,23 @@ const MasterPlaybackControlBarSettingsMenu: React.FC<MasterPlaybackControlBarSet
                                         <SettingsMenuDescriptionListItemTitleContainer>Overlay</SettingsMenuDescriptionListItemTitleContainer>
                                         <SettingsMenuDescriptionListItemSubitleContainer>
                                             One big player in the middle, the rest in an overlaid list at the top right.
+                                        </SettingsMenuDescriptionListItemSubitleContainer>
+                                    </SettingsMenuDescriptionListItemTextContainer>
+                                </SettingsMenuDescriptionListItemContainer>
+                            </ListItem>
+                            <ListItem button onClick={() => changeLayout(Layout.Focused)}>
+                                <SettingsMenuDescriptionListItemContainer>
+                                    <SettingsMenuDescriptionListItemCheckmarContainer>
+                                        {layout === Layout.Focused ? (
+                                            <Icon>
+                                                <Check />
+                                            </Icon>
+                                        ) : null}
+                                    </SettingsMenuDescriptionListItemCheckmarContainer>
+                                    <SettingsMenuDescriptionListItemTextContainer>
+                                        <SettingsMenuDescriptionListItemTitleContainer>Focused</SettingsMenuDescriptionListItemTitleContainer>
+                                        <SettingsMenuDescriptionListItemSubitleContainer>
+                                            One or more big players at the top, the rest in a list of small players at the bottom.
                                         </SettingsMenuDescriptionListItemSubitleContainer>
                                     </SettingsMenuDescriptionListItemTextContainer>
                                 </SettingsMenuDescriptionListItemContainer>

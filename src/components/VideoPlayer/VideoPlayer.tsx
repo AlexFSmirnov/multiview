@@ -31,6 +31,7 @@ interface OwnProps {
     video: Video;
     width: number;
     height: number;
+    shadow?: boolean;
 }
 
 interface StateProps {
@@ -63,6 +64,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     video,
     width,
     height,
+    shadow,
     isPlaying,
     isMasterBuffering,
     volume,
@@ -159,7 +161,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     const color = useRef<string>(`rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`);
 
     return (
-        <VideoPlayerContainer width={width} height={height}>
+        <VideoPlayerContainer width={width} height={height} shadow={shadow}>
             <ReactPlayerWrapper>
                 {/* <ReactPlayer {...playerProps}/> */}
                 <div style={{ width, height, backgroundColor: color.current }} />
