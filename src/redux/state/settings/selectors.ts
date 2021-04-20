@@ -45,6 +45,48 @@ const getIsPlayerSecondaryBase = (id: string) => createSelector<State, string[],
 );
 export const getIsPlayerSecondary = memoize(getIsPlayerSecondaryBase);
 
+const canMovePlayerLeftBase = (id: string) => createSelector<State, string[], string[], Layout, boolean>(
+    getMainPlayerIds,
+    getSecondaryPlayerIds,
+    getLayout,
+    (mainPlayerIds, secondaryPlayerIds, layout) => {
+        const indexInMain = mainPlayerIds.indexOf(id);
+        const indexInSecondary = secondaryPlayerIds.indexOf(id);
+
+        if (indexInMain === 0) {
+            return false;
+        }
+
+        if (indexInSecondary === 0 && layout === Layout.Overlay) {
+            return false;
+        }
+        
+        return true;
+    },
+);
+export const canMovePlayerLeft = memoize(canMovePlayerLeftBase);
+
+const canMovePlayerRightBase = (id: string) => createSelector<State, string[], string[], Layout, boolean>(
+    getMainPlayerIds,
+    getSecondaryPlayerIds,
+    getLayout,
+    (mainPlayerIds, secondaryPlayerIds, layout) => {
+        const indexInMain = mainPlayerIds.indexOf(id);
+        const indexInSecondary = secondaryPlayerIds.indexOf(id);
+
+        if (indexInSecondary === secondaryPlayerIds.length - 1) {
+            return false;
+        }
+
+        if (indexInMain === mainPlayerIds.length - 1 && layout === Layout.Overlay) {
+            return false;
+        }
+        
+        return true;
+    },
+);
+export const canMovePlayerRight = memoize(canMovePlayerRightBase);
+
 export const getFocusedPlayerId = createSelector<State, SettingsState, string | null>(
     getSettingsState,
     get('focusedPlayerId'),

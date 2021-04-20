@@ -31,8 +31,19 @@ export const PlaybackControlBarProgressTextWrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
+
+    user-select: none;
 `;
 
 export const PlaybackControlBarButtonsSpacer = styled.div`
     flex: 1;
+`;
+
+export const PlaybackControlBarActionsWrapper = styled.div`
+    height: 28px;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: center;
 `;

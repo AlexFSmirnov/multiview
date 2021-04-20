@@ -16,5 +16,5 @@ View multiple videos on the same page
 - [ ] Starting screen  
 - [ ] (custom) Icons, title, text, PWA  
 - [ ] Url middleware (remembers video urls and offsets)  
-- [ ] Move videos left/right in different views
+- [x] Move videos left/right in different views
 - [ ] Animated playback controls (probably not though)  

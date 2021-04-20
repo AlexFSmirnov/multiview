@@ -180,7 +180,7 @@ const PlayersView: React.FC<PlayersViewProps> = ({
                 numberOfPlayers: Object.keys(videos).length,
             });
 
-            const keyedPlayerPositions = Object.keys(videos).reduce(
+            const keyedPlayerPositions = [...mainPlayerIds, ...secondaryPlayerIds].reduce(
                 (positions, id, index) => ({
                     ...positions,
                     [id]: playerPositions[index],
@@ -190,7 +190,7 @@ const PlayersView: React.FC<PlayersViewProps> = ({
 
             setPlayerPositions(keyedPlayerPositions);
         }
-    }, [videos]);
+    }, [videos, mainPlayerIds, secondaryPlayerIds]);
 
     useEffect(() => {
         switch (layout) {

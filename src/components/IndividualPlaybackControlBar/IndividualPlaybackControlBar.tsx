@@ -24,6 +24,9 @@ import IndividualPlaybackControlBarActions from './IndividualPlaybackControlBarA
 interface OwnProps {
     id: string;
     onHide?: () => void;
+
+    playerWidth?: number;
+    playerHeight?: number;
 }
 
 interface StateProps {
@@ -59,6 +62,8 @@ const IndividualPlaybackControlBar: React.FC<IndividualPlaybackControlBarProps> 
     playerUnmute,
     playerPushPendingSeek,
     playerStartBuffering,
+    playerWidth,
+    playerHeight,
     ...other
 }) => {
     const handleMuteUnmute = () => {
@@ -74,6 +79,8 @@ const IndividualPlaybackControlBar: React.FC<IndividualPlaybackControlBarProps> 
         playerPushPendingSeek(id, { seekToSeconds });
     };
 
+    const dense = playerWidth ? playerWidth < 320 : false;
+
     const playbackControlBarProps = {
         isMuted,
         onPlay: () => playerStartPlaying(id),
@@ -82,7 +89,7 @@ const IndividualPlaybackControlBar: React.FC<IndividualPlaybackControlBarProps> 
         onVolumeChange: (volume: number) => playerUpdateVolume(id, { volume }),
         onSeek: handleSeek,
 
-        actions: <IndividualPlaybackControlBarActions id={id} onHide={onHide} />,
+        actions: <IndividualPlaybackControlBarActions id={id} onHide={onHide} dense={dense} />,
 
         ...other,
     };

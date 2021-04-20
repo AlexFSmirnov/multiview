@@ -9,6 +9,7 @@ import {
     PlaybackControlBarInnerWrapper,
     PlaybackControlBarProgressTextWrapper,
     PlaybackControlBarButtonsSpacer,
+    PlaybackControlBarActionsWrapper,
 } from './style';
 
 interface PlaybackControlBarProps {
@@ -92,7 +93,9 @@ const PlaybackControlBar: React.FC<PlaybackControlBarProps> = ({
 
                     <PlaybackControlBarButtonsSpacer />
 
-                    {actions}
+                    <PlaybackControlBarActionsWrapper>
+                        {actions}
+                    </PlaybackControlBarActionsWrapper>
                 </PlaybackControlBarInnerWrapper>
             </PlaybackControlBarOuterWrapper>
         </PlaybackControlBarContainer>

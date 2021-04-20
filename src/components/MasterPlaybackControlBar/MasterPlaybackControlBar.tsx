@@ -23,6 +23,8 @@ import MasterPlaybackControlBarActions from './MasterPlaybackControlBarActions';
 
 interface OwnProps {
     isVisible: boolean;
+    playerWidth?: number;
+    playerHeight?: number;
 }
 
 interface StateProps {

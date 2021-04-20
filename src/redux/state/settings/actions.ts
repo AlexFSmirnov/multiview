@@ -1,5 +1,5 @@
 import { AppThunkAction } from '../types';
-import { getIsFullscreen, getMainPlayerIds, getSecondaryPlayerIds } from './selectors';
+import { getIsFullscreen, getLayout, getMainPlayerIds, getSecondaryPlayerIds } from './selectors';
 import {
     ControlsMode,
     Layout,
@@ -112,5 +112,69 @@ export const makePlayerMain = (playerId: string): AppThunkAction => (dispatch, g
     dispatch(setMainAndSecondaryPlayerIds({
         mainPlayerIds: [playerId],
         secondaryPlayerIds: [...mainPlayerIds, ...secondaryPlayerIds].filter(id => id !== playerId),
+    }));
+};
+
+export const movePlayerLeft = (playerId: string): AppThunkAction => (dispatch, getState) => {
+    const state = getState();
+
+    const layout = getLayout(state);
+    let mainPlayerIds = [...getMainPlayerIds(state)];
+    let secondaryPlayerIds = [...getSecondaryPlayerIds(state)];
+
+    const indexInMain = mainPlayerIds.indexOf(playerId);
+    const indexInSecondary = secondaryPlayerIds.indexOf(playerId);
+
+    if (indexInMain > 0) {
+        mainPlayerIds[indexInMain] = mainPlayerIds[indexInMain - 1];
+        mainPlayerIds[indexInMain - 1] = playerId;
+    } else if (indexInSecondary > 0) {
+        secondaryPlayerIds[indexInSecondary] = secondaryPlayerIds[indexInSecondary - 1];
+        secondaryPlayerIds[indexInSecondary - 1] = playerId;
+    } else if (indexInSecondary === 0) {
+        if (layout === Layout.Grid) {
+            secondaryPlayerIds[0] = mainPlayerIds[mainPlayerIds.length - 1];
+            mainPlayerIds[mainPlayerIds.length - 1] = playerId;
+        } else {
+            mainPlayerIds = [...mainPlayerIds, playerId];
+            secondaryPlayerIds = secondaryPlayerIds.slice(1, secondaryPlayerIds.length);
+        }
+    }
+
+    dispatch(setMainAndSecondaryPlayerIds({
+        mainPlayerIds: [...mainPlayerIds],
+        secondaryPlayerIds: [...secondaryPlayerIds],
+    }));
+};
+
+export const movePlayerRight = (playerId: string): AppThunkAction => (dispatch, getState) => {
+    const state = getState();
+
+    const layout = getLayout(state);
+    let mainPlayerIds = [...getMainPlayerIds(state)];
+    let secondaryPlayerIds = [...getSecondaryPlayerIds(state)];
+
+    const indexInMain = mainPlayerIds.indexOf(playerId);
+    const indexInSecondary = secondaryPlayerIds.indexOf(playerId);
+
+    if (indexInMain !== -1 && indexInMain < mainPlayerIds.length - 1) {
+        mainPlayerIds[indexInMain] = mainPlayerIds[indexInMain + 1];
+        mainPlayerIds[indexInMain + 1] = playerId;
+    } else if (indexInMain === mainPlayerIds.length - 1) {
+        if (layout === Layout.Grid) {
+            mainPlayerIds[indexInMain] = secondaryPlayerIds[0];
+            secondaryPlayerIds[0] = playerId;
+        } else {
+            mainPlayerIds = mainPlayerIds.slice(0, mainPlayerIds.length - 1);
+            secondaryPlayerIds = [playerId, ...secondaryPlayerIds];
+        }
+    } else if (indexInSecondary !== -1 && indexInSecondary < secondaryPlayerIds.length - 1) {
+        secondaryPlayerIds[indexInSecondary] = secondaryPlayerIds[indexInSecondary + 1];
+        secondaryPlayerIds[indexInSecondary + 1] = playerId;
+    }
+
+    dispatch(setMainAndSecondaryPlayerIds({
+        mainPlayerIds: [...mainPlayerIds],
+        secondaryPlayerIds: [...secondaryPlayerIds],
     }));
 };

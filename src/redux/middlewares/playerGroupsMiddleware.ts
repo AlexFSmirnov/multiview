@@ -3,8 +3,10 @@ import {
     Action,
     AppThunkDispatch,
     State,
+    Layout,
     VIDEOS_ADDED,
     VIDEO_REMOVED,
+    SETTINGS_LAYOUT_CHANGED,
 } from '../types';
 import {
     movePlayerToMainPlayers,
@@ -48,6 +50,25 @@ export const playerGroupsMiddleware: Middleware<{}, State, AppThunkDispatch> = s
                 mainPlayerIds: mainPlayerIds.filter(id => id !== action.payload.id),
                 secondaryPlayerIds: secondaryPlayerIds.filter(id => id !== action.payload.id),
             }));
+            break;
+
+        case SETTINGS_LAYOUT_CHANGED:
+            if (action.payload.layout === Layout.Overlay) {
+                if (mainPlayerIds.length > 1) {
+                    dispatch(setMainAndSecondaryPlayerIds({
+                        mainPlayerIds: [mainPlayerIds[0]],
+                        secondaryPlayerIds: [...mainPlayerIds.slice(1), ...secondaryPlayerIds],
+                    }));
+                }
+
+                if (mainPlayerIds.length === 0) {
+                    dispatch(setMainAndSecondaryPlayerIds({
+                        mainPlayerIds: [secondaryPlayerIds[0]],
+                        secondaryPlayerIds: [...secondaryPlayerIds.slice(1)],
+                    }));
+                }
+            }
+
             break;
     }
 

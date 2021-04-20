@@ -156,12 +156,15 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
         },
     };
 
+    const color = useRef<string>(`rgb(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255})`);
+
     return (
         <VideoPlayerContainer width={width} height={height}>
             <ReactPlayerWrapper>
-                <ReactPlayer {...playerProps}/>
+                {/* <ReactPlayer {...playerProps}/> */}
+                <div style={{ width, height, backgroundColor: color.current }} />
             </ReactPlayerWrapper>
-            <PlayerControlOverlay id={id} />
+            <PlayerControlOverlay id={id} width={width} height={height} />
         </VideoPlayerContainer>
     );
 };

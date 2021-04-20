@@ -11,6 +11,8 @@ import { PlayerControlOverlayContainer, PlaybackControlBarWrapper, PlaybackContr
 
 interface OwnProps {
     id?: string;
+    width?: number;
+    height?: number;
 }
 
 interface StateProps {
@@ -31,6 +33,8 @@ export type PlayerControlOverlayProps = OwnProps & StateProps & DispatchProps;
 
 const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({
     id,
+    width,
+    height,
     isPlaying,
     isFullscreen,
     controlsMode,
@@ -142,8 +146,8 @@ const PlayerControlOverlay: React.FC<PlayerControlOverlayProps> = ({
                 <PlayerControlOverlayClickCapture onClick={handleClick} />
                 <PlaybackControlBarWrapper isVisible={isControlBarVisible || !isOverlaid}>
                     {id
-                        ? <IndividualPlaybackControlBar id={id} onHide={handleHide} />
-                        : <MasterPlaybackControlBar isVisible={isControlBarVisible || !isOverlaid} />
+                        ? <IndividualPlaybackControlBar id={id} onHide={handleHide} playerWidth={width} playerHeight={height} />
+                        : <MasterPlaybackControlBar isVisible={isControlBarVisible || !isOverlaid} playerWidth={width} playerHeight={height} />
                     }
                 </PlaybackControlBarWrapper>
             </PlayerControlOverlayContainer>
