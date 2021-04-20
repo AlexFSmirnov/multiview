@@ -92,6 +92,16 @@ const PlaybackSlider: React.FC<PlaybackSliderProps> = ({ playedFraction, loadedF
         onMouseUp: handleMouseUp,
     };
 
+    if (durationSeconds === null || durationSeconds === Infinity) {
+        return (
+            <PlaybackSliderInteractionContainer style={{ cursor: 'initial '}}>
+                <PlaybackSliderContainer wide={false}>
+                    <PlaybackSliderBar progress={1} color="rgba(255, 255, 255, 0.2)" />
+                </PlaybackSliderContainer>
+            </PlaybackSliderInteractionContainer>
+        );
+    }
+
     return (
         <PlaybackSliderInteractionContainer {...interactionContainerProps}>
             <PlaybackSliderContainer wide={isInteractable} ref={sliderContainerRef}>

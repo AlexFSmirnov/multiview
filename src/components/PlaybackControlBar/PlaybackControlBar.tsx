@@ -71,6 +71,8 @@ const PlaybackControlBar: React.FC<PlaybackControlBarProps> = ({
         onVolumeChange,
     };
 
+    const isLive = (durationSeconds === null || durationSeconds === Infinity);
+
     return (
         <PlaybackControlBarContainer>
             <PlaybackSlider {...playbackSliderProps} />
@@ -83,13 +85,15 @@ const PlaybackControlBar: React.FC<PlaybackControlBarProps> = ({
 
                     <VolumeControl {...volumeControlProps} />
 
-                    <PlaybackControlBarProgressTextWrapper>
-                        <Typography variant="body2">{formatSeconds(Math.round(playedFraction * durationSeconds))}</Typography>
-                        <div style={{ width: '4px' }} />
-                        <Typography variant="body2"> / </Typography>
-                        <div style={{ width: '4px' }} />
-                        <Typography variant="body2">{formatSeconds(durationSeconds)}</Typography>
-                    </PlaybackControlBarProgressTextWrapper>
+                    {!isLive ? (
+                        <PlaybackControlBarProgressTextWrapper>
+                            <Typography variant="body2">{formatSeconds(Math.round(playedFraction * durationSeconds))}</Typography>
+                            <div style={{ width: '4px' }} />
+                            <Typography variant="body2"> / </Typography>
+                            <div style={{ width: '4px' }} />
+                            <Typography variant="body2">{formatSeconds(durationSeconds)}</Typography>
+                        </PlaybackControlBarProgressTextWrapper>
+                    ) : null}
 
                     <PlaybackControlBarButtonsSpacer />
 
