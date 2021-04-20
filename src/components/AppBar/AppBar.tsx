@@ -29,7 +29,7 @@ const AppBar: React.FC<AppBarProps> = ({ onAddVideosClick, isFullscreen }) => {
         <Slide in={!isFullscreen}>
             <MaterialAppBar position="static" color="inherit">
                 <Toolbar variant="dense">
-                    <img src={`${process.env.PUBLIC_URL}/logo192-clean.png`} alt="Multiview" width="30px" height="30px" />
+                    <img src={`${process.env.PUBLIC_URL}/logo192.png`} alt="Multiview" width="30px" height="30px" />
                     <div style={{ width: '12px' }} />
                     <Typography variant="h6">
                         Multiview
